@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ExrResultActivity"></activity>
+        <activity android:name=".AdminVideoManageActivity"></activity>
+        <activity android:name=".TrainerVideoListActivity" />
+        <activity android:name=".TrainerVideoRegActivity" />
+        <activity android:name=".DayExrProgramDetailRegActivity" />
+        <activity android:name=".ExrResultActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".DayExrProgramRegActivity" />

@@ -7,6 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+//메모장
+/*
+파란 버튼 백그라운드: @drawable/button_background1
+버튼의 텍스트 사이즈: 18sp
+버튼 마진: 15dp
+ */
 public class MainActivity extends AppCompatActivity {
     //승혁
     Button	 btn1;
@@ -117,13 +123,20 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn22) {
             intent = new Intent(this, ExrResultActivity.class);
         } else if (v == btn23) {
-        } else if (v == btn24) {
+        }
+        //조란
+        else if (v == btn24) {
             intent = new Intent(this, ExrProgramRegActivity.class);
         } else if (v == btn25) {
+            intent = new Intent(this, DayExrProgramRegActivity.class);
         } else if (v == btn26) {
+            intent = new Intent(this, DayExrProgramDetailRegActivity.class);
         } else if (v == btn27) {
+            intent = new Intent(this, TrainerVideoRegActivity.class);
         } else if (v == btn28) {
+            intent = new Intent(this, TrainerVideoListActivity.class);
         } else if (v == btn29) {
+            intent = new Intent(this, AdminVideoManageActivity.class);
         } else if (v == btn30) {
         } else if (v == btn31) {
         }
