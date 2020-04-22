@@ -11,7 +11,7 @@
         android:id="@+id/tr_video_thumb_img"
         android:layout_width="wrap_content"
         android:layout_height="150dp"
-        app:srcCompat="@drawable/video" />
+        app:srcCompat="@drawable/video_thumb" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:layout_width="20dp"
             android:layout_height="30dp"
             android:layout_gravity="right"
-            app:srcCompat="@drawable/del_btn" />
+            app:srcCompat="@drawable/delete_btn" />
 
     </LinearLayout>
 </LinearLayout>
