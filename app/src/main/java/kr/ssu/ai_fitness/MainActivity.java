@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn20) {
         } else if (v == btn21) {
         } else if (v == btn22) {
+            intent = new Intent(this, ExrResultActivity.class);
         } else if (v == btn23) {
         } else if (v == btn24) {
             intent = new Intent(this, ExrProgramRegActivity.class);
