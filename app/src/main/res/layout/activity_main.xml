@@ -157,7 +157,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:text="Button" />
+                    android:text="로그인" />
 
                 <Button
                     android:id="@+id/button17"

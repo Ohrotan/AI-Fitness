@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn14) {
         } else if (v == btn15) {
         } else if (v == btn16) {
+            intent = new Intent(this, LoginActivity.class);
         } else if (v == btn17) {
         } else if (v == btn18) {
         } else if (v == btn19) {
