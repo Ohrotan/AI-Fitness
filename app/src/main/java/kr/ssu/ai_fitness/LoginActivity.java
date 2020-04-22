@@ -41,16 +41,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);  //액티비티 이동
             }
         });
-//
-//        //계정생성 버튼 클릭
-//        btn_signup.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);    //계정 생성 화면으로 넘어가도록 설정
-//                startActivity(intent);
-//
-//            }
-//        });
+
+        //계정생성 버튼 클릭
+        btn_signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);    //계정 생성 화면으로 넘어가도록 설정
+                startActivity(intent);
+
+            }
+        });
     }
 }

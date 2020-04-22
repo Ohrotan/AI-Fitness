@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignupActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btn_signup_complete"
+        android:layout_marginTop="20dp">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="4">
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="이메일"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_email"
+                android:layout_width="250dp"
+                android:layout_columnSpan="3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:inputType="textEmailAddress"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="비밀번호"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_password"
+                android:layout_width="250dp"
+                android:layout_columnSpan="3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="비밀번호 확인"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_password_check"
+                android:layout_width="250dp"
+                android:layout_columnSpan="3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="이름"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_name"
+                android:layout_width="250dp"
+                android:layout_columnSpan="3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="신장"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_height"
+                android:layout_width="90dp"
+                android:layout_columnSpan="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:inputType="numberDecimal"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_columnSpan="2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="cm"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="체중"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_weight"
+                android:layout_width="90dp"
+                android:layout_columnSpan="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:inputType="numberDecimal"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_columnSpan="2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="kg"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="체지방률"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_fat"
+                android:layout_width="90dp"
+                android:layout_columnSpan="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:inputType="numberDecimal"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_columnSpan="2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="%"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="골격근량"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_muscle"
+                android:layout_width="90dp"
+                android:layout_columnSpan="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:inputType="numberDecimal"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_columnSpan="2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="%"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="나이"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_age"
+                android:layout_width="90dp"
+                android:layout_columnSpan="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:inputType="number"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_columnSpan="2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="세"
+                android:textSize="15sp" />
+
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="유형"
+                android:textSize="15sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_signup_trainer_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="3"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="트레이너" />
+
+                <RadioButton
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="회원" />
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_columnSpan="1"
+                android:layout_gravity="fill"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="성별"
+                android:textSize="15sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_signup_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="3"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="남" />
+
+                <RadioButton
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="여" />
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_columnSpan="4"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:text="프로필사진등록"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_photo_path"
+                android:layout_width="200dp"
+                android:layout_columnSpan="3"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_background1"
+                android:hint="사진을 등록해주세요"
+                android:singleLine="true"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btn_signup_photo_path"
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:layout_columnSpan="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_background1"
+                android:text="찾기"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:layout_columnSpan="4"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:text="자기소개"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_signup_intro"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_columnSpan="4"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/edittext_background1"
+                android:gravity="top"
+                android:hint="내용을 입력해주세요"
+                android:maxLines="8"
+                android:textSize="15sp" />
+
+        </GridLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_signup_complete"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:text="회원가입 완료하기"
+        android:textSize="15sp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="60dp"
+        android:background="@color/accent"/>
+</RelativeLayout>
