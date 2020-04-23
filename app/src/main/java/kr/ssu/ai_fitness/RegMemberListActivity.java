@@ -47,11 +47,11 @@ public class RegMemberListActivity  extends AppCompatActivity {
         RegMemberListAdapter adapterMember = new RegMemberListAdapter(memberList);
         recyclerViewMember.setAdapter(adapterMember);
 
-        RecyclerView recyclerViewTrainer = findViewById(R.id.regMemberListRecyclerviewTrainer);
-        recyclerViewTrainer.setLayoutManager(new LinearLayoutManager(this));
+        //RecyclerView recyclerViewTrainer = findViewById(R.id.regMemberListRecyclerviewTrainer);
+        //recyclerViewTrainer.setLayoutManager(new LinearLayoutManager(this));
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        RegMemberListAdapter adapterTrainer = new RegMemberListAdapter(trainerList);
-        recyclerViewTrainer.setAdapter(adapterTrainer);
+        //RegMemberListAdapter adapterTrainer = new RegMemberListAdapter(trainerList);
+        //recyclerViewTrainer.setAdapter(adapterTrainer);
     }
 }
