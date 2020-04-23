@@ -54,7 +54,7 @@
                 android:layout_below="@id/memberText"
                 android:scrollbars="vertical" />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/trainerText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/trainerText"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical" />-->
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 
