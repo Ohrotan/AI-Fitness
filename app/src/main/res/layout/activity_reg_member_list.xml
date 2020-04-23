@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:subtitle="안녕하세요"
+        app:subtitleTextAppearance="@style/ToolbarSubTitleText"
+        app:title="회원님!"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        tools:ignore="MissingConstraints">
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="0.2dp"
+        android:layout_below="@id/toolbar"
+        android:background="@color/darkGray"
+        android:visibility="visible" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/regMemberListScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/separator">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/memberText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:text="회원"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/regMemberListRecyclerviewMember"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/memberText"
+                android:scrollbars="vertical" />
+
+            <!--<TextView
+                android:id="@+id/trainerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/regMemberListRecyclerviewMember"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
+                android:text="트레이너"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/regMemberListRecyclerviewTrainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/trainerText"
+                android:scrollbars="vertical" />-->
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

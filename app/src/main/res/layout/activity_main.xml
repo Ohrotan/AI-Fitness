@@ -88,56 +88,56 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:text="Button" />
+                    android:text="프로그램 등록한 회원 목록" />
 
                 <Button
                     android:id="@+id/button9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:text="Button" />
+                    android:text="프로그램 등록한 회원 상세보기" />
 
                 <Button
                     android:id="@+id/button10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:text="Button" />
+                    android:text="개인 프로필 조회" />
 
                 <Button
                     android:id="@+id/button11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:text="Button" />
+                    android:text="개인 프로필 수정" />
 
                 <Button
                     android:id="@+id/button12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:text="Button" />
+                    android:text="트레이너 프로필 조회" />
 
                 <Button
                     android:id="@+id/button13"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:text="Button" />
+                    android:text="트레이너 목록 조회" />
 
                 <Button
                     android:id="@+id/button14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:text="Button" />
+                    android:text="전체 회원 목록 조회, 삭제" />
 
                 <Button
                     android:id="@+id/button15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="onClick"
-                    android:text="Button" />
+                    android:text="설정화면" />
             </LinearLayout>
 
             <LinearLayout
