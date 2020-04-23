@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -17,23 +17,61 @@
         app:titleTextAppearance="@style/ToolbarTitleText"
         tools:ignore="MissingConstraints">
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <View
         android:id="@+id/separator"
         android:layout_width="wrap_content"
         android:layout_height="0.2dp"
-        android:background="@color/darkGray"
-        android:visibility="visible"
         android:layout_below="@id/toolbar"
-        />
+        android:background="@color/darkGray"
+        android:visibility="visible" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/reg_member_list_recyclerview"
-        android:layout_height="match_parent"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/regMemberListScrollView"
         android:layout_width="match_parent"
-        android:scrollbars="vertical"
-        android:layout_below="@id/separator"
-        />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/separator">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/memberText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:text="회원"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/regMemberListRecyclerviewMember"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/memberText"
+                android:scrollbars="vertical" />
+
+            <TextView
+                android:id="@+id/trainerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/regMemberListRecyclerviewMember"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
+                android:text="트레이너"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/regMemberListRecyclerviewTrainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/trainerText"
+                android:scrollbars="vertical" />
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>
