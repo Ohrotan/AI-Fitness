@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AdminVideoManageActivity"></activity>
+        <activity android:name=".AdminProgramManageActivity"></activity>
+        <activity android:name=".TrainerExrProgramActivity" />
+        <activity android:name=".MemberAllExrProgramListActivity" />
+        <activity android:name=".ExrProgramDetailActivity" />
+        <activity android:name=".MemberExrProgramListActivity" />
+        <activity android:name=".AdminVideoManageActivity" />
         <activity android:name=".TrainerVideoListActivity" />
         <activity android:name=".TrainerVideoRegActivity" />
         <activity android:name=".DayExrProgramDetailRegActivity" />
@@ -18,7 +23,7 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".DayExrProgramRegActivity" />
         <activity android:name=".ExrProgramRegActivity" />
-        <activity android:name=".RegMemberListActivity"/>
+        <activity android:name=".RegMemberListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
