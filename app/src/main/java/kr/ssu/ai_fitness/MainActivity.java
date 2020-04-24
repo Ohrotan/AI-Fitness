@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn22) {
             intent = new Intent(this, ExrResultActivity.class);
         } else if (v == btn23) {
+            intent = new Intent(this, ChattingListActivity.class);
         }
         //조란
         else if (v == btn24) {
