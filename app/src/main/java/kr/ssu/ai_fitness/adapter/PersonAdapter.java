@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.listener.OnPersonItemClickListener;
-import kr.ssu.ai_fitness.model.Person;
+import kr.ssu.ai_fitness.dto.Person;
 
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder> {
 

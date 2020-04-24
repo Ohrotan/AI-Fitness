@@ -1,4 +1,4 @@
-package kr.ssu.ai_fitness.model;
+package kr.ssu.ai_fitness.dto;
 
 public class Person {
     private String name;
