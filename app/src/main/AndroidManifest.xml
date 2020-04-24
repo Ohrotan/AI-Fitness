@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChattingListActivity"></activity>
+        <activity android:name=".ChattingListActivity" />
         <activity android:name=".ChattingActivity" />
         <activity android:name=".AdminProgramManageActivity" />
         <activity android:name=".TrainerExrProgramActivity" />
