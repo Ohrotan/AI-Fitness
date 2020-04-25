@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, HomeActivity.class);
         } else if (v == btn19) {
         } else if (v == btn20) {
+            intent = new Intent(this, BeforeDayExrProgramActivity.class);
         } else if (v == btn21) {
         } else if (v == btn22) {
             intent = new Intent(this, ExrResultActivity.class);
