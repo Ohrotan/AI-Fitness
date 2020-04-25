@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn17) {
             intent = new Intent(this, SignupActivity.class);
         } else if (v == btn18) {
+            intent = new Intent(this, HomeActivity.class);
         } else if (v == btn19) {
         } else if (v == btn20) {
         } else if (v == btn21) {
