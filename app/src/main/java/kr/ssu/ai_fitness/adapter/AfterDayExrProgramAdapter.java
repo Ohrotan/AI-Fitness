@@ -12,25 +12,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
-import kr.ssu.ai_fitness.dto.DayProgramVideoList;
+import kr.ssu.ai_fitness.dto.MemberExrHistory;
 
-public class BeforeDayExrProgramAdapter extends RecyclerView.Adapter<BeforeDayExrProgramAdapter.ViewHolder> {
+public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrProgramAdapter.ViewHolder> {
 
-    private ArrayList<DayProgramVideoList> items = new ArrayList<DayProgramVideoList>();
+    private ArrayList<MemberExrHistory> items = new ArrayList<MemberExrHistory>();
 
-    public void addItem(DayProgramVideoList item) {
+    public void addItem(MemberExrHistory item) {
         items.add(item);
     }
 
-    public void setItems(ArrayList<DayProgramVideoList> items) {
+    public void setItems(ArrayList<MemberExrHistory> items) {
         this.items = items;
     }
 
-    public DayProgramVideoList getItem(int position) {
+    public MemberExrHistory getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position, DayProgramVideoList item) {
+    public void setItem(int position, MemberExrHistory item) {
         items.set(position, item);
     }
 
@@ -38,15 +38,17 @@ public class BeforeDayExrProgramAdapter extends RecyclerView.Adapter<BeforeDayEx
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.item_before_day_exr_program, parent, false);
+        View itemView = inflater.inflate(R.layout.item_after_day_exr_program, parent, false);
 
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        DayProgramVideoList item = items.get(position);
+        MemberExrHistory item = items.get(position);
         holder.setItem(item);
+
+        //*****사용자가 회원이면 피드백버튼 안보이게, 트레이너이면 보이게 설정해줘야 함
     }
 
     @Override
@@ -56,22 +58,22 @@ public class BeforeDayExrProgramAdapter extends RecyclerView.Adapter<BeforeDayEx
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
-        TextView exrName;
-        TextView exrCount;
+        TextView date;
+        TextView feedback;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            image = itemView.findViewById(R.id.item_before_day_exr_program_image);
-            exrName = itemView.findViewById(R.id.item_before_day_exr_program_name);
-            exrCount = itemView.findViewById(R.id.item_before_day_exr_program_count);
+            image = itemView.findViewById(R.id.item_after_day_exr_program_image);
+            date = itemView.findViewById(R.id.item_after_day_exr_program_date);
+            feedback = itemView.findViewById(R.id.item_after_day_exr_program_feedback);
         }
 
-        public void setItem(DayProgramVideoList item) {
+        public void setItem(MemberExrHistory item) {
             //*****item에서 사진 데이터 빼내서 profile에 세팅해줘야함
-            exrName.setText(item.getName());
-            exrCount.setText(item.getCount() + " X " + item.getSet() + " set");
+            date.setText(item.getDate());
+            feedback.setText(item.getFeedback());
         }
     }
 }

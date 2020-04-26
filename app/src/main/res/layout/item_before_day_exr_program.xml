@@ -8,7 +8,7 @@
     android:layout_marginRight="10dp">
 
     <ImageView
-        android:id="@+id/item_day_exr_program_image"
+        android:id="@+id/item_before_day_exr_program_image"
         android:layout_width="160dp"
         android:layout_height="120dp"
         app:srcCompat="@drawable/ic_slow_motion_video_black_24dp" />
@@ -21,7 +21,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/item_day_exr_program_exr_name"
+            android:id="@+id/item_before_day_exr_program_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="스쿼트"
@@ -29,7 +29,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/item_day_exr_program_exr_count"
+            android:id="@+id/item_before_day_exr_program_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
