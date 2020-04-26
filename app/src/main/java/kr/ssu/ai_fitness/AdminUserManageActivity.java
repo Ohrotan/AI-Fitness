@@ -47,7 +47,7 @@ public class AdminUserManageActivity extends AppCompatActivity {
         recyclerViewMember.setLayoutManager(new LinearLayoutManager(this));
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        AdminUserManageAdapter adapterMember = new AdminUserManageAdapter();
+        AdminUserManageAdapter adapterMember = new AdminUserManageAdapter(getApplication());
 
         adapterMember.addItem(String.format("류제호"));
         adapterMember.addItem(String.format("최승혁"));
@@ -66,7 +66,7 @@ public class AdminUserManageActivity extends AppCompatActivity {
         recyclerViewTrainer.setLayoutManager(new LinearLayoutManager(this));
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        RegMemberListAdapter adapterTrainer = new RegMemberListAdapter();
+        AdminUserManageAdapter adapterTrainer = new AdminUserManageAdapter(getApplication());
 
         adapterTrainer.addItem(String.format("류제호T"));
         adapterTrainer.addItem(String.format("최승혁T"));

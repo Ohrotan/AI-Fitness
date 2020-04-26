@@ -20,14 +20,26 @@
             android:layout_marginLeft="15dp"
             tools:ignore="MissingConstraints" />
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/regMemberListNext"
             android:layout_width="20dip"
             android:layout_height="20dip"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/next_dark_gray" />
+            android:src="@drawable/next_dark_gray" />-->
+
+        <Button
+            android:id="@+id/memberDelete"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_centerVertical="true"
+            android:text="삭제"
+            android:textColor="@color/white"
+            android:background="@drawable/button_background4"
+             />
 
     </RelativeLayout>
 
