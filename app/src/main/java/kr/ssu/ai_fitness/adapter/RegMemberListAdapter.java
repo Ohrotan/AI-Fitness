@@ -1,27 +1,31 @@
-package kr.ssu.ai_fitness;
+package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import kr.ssu.ai_fitness.R;
+
 public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdapter.ViewHolder> {
 
-    private ArrayList<String> mData = null ;
+    private ArrayList<String> mData = new ArrayList<String>() ;
+
+    public void addItem(String item) {
+        mData.add(item);
+    }
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView regMemberListItem ;
         //ImageButton regMemberListNextIcon;
 
-        ViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView) ;
 
             // 뷰 객체에 대한 참조. (hold strong reference)
@@ -46,9 +50,10 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
     }
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    RegMemberListAdapter(ArrayList<String> list) {
+    /*RegMemberListAdapter(ArrayList<String> list) {
+
         mData = list ;
-    }
+    }*/
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
@@ -73,6 +78,7 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
+
         return mData.size() ;
     }
 }
