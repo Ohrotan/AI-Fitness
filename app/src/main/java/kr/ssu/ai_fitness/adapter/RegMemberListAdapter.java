@@ -4,25 +4,34 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.RegMemberListActivity;
 
 public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdapter.ViewHolder> {
 
     private ArrayList<String> mData = new ArrayList<String>() ;
+    private Context mContext;
 
     public void addItem(String item) {
         mData.add(item);
     }
 
+    public RegMemberListAdapter(Context c){
+        this.mContext = c;
+    }
+
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView regMemberListItem ;
+        ImageView alarmDot;
         //ImageButton regMemberListNextIcon;
 
         public ViewHolder(View itemView) {
@@ -37,7 +46,8 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
                 public void onClick(View V){
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
-                        mData.set(pos, "item clicked. pos = " + pos);
+                        //mData.set(pos, "item clicked. pos = " + pos);
+                        Toast.makeText(mContext, "Item Chosen", Toast.LENGTH_SHORT).show();
 
                         notifyItemChanged(pos);
                     }

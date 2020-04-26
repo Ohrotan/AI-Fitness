@@ -46,7 +46,7 @@ public class RegMemberListActivity  extends AppCompatActivity {
         recyclerViewRegMember.setLayoutManager(new LinearLayoutManager(this));
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        RegMemberListAdapter adapterMember = new RegMemberListAdapter();
+        RegMemberListAdapter adapterMember = new RegMemberListAdapter(getApplication());
 
         adapterMember.addItem(String.format("류제호"));
         adapterMember.addItem(String.format("최승혁"));
