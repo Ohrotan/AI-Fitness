@@ -37,21 +37,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!--<TextView
+            <TextView
                 android:id="@+id/memberText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
-                android:text="회원"
-                android:textSize="30sp"
-                android:textStyle="bold" />-->
+                android:text="회원목록"
+                android:textColor="@color/darkGray"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/regMemberListRecyclerviewMember"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
+                android:layout_below="@id/memberText"
                 android:scrollbars="vertical" />
 
             <!--<TextView

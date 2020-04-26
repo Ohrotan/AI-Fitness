@@ -30,6 +30,7 @@
         <activity android:name=".ExrProgramRegActivity" />
         <activity android:name=".RegMemberListActivity" />
         <activity android:name=".AdminUserManageActivity"/>
+        <activity android:name=".TrainerListActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
