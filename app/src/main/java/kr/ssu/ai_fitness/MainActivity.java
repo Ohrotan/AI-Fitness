@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn11) {
         } else if (v == btn12) {
         } else if (v == btn13) {
+            intent = new Intent(getApplicationContext(), TrainerListActivity.class);
         } else if (v == btn14) {
             intent = new Intent(getApplicationContext(), AdminUserManageActivity.class);
         } else if (v == btn15) {
