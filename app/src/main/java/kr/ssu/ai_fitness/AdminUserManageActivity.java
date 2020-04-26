@@ -8,15 +8,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import kr.ssu.ai_fitness.adapter.AdminUserManageAdapter;
 import kr.ssu.ai_fitness.adapter.RegMemberListAdapter;
 
-public class RegMemberListActivity  extends AppCompatActivity {
+public class AdminUserManageActivity extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reg_member_list);
+        setContentView(R.layout.activity_admin_user_manage);
 
-        ArrayList<String> memberList = new ArrayList<>();
+        //ArrayList<String> memberList = new ArrayList<>();
         ArrayList<String> trainerList = new ArrayList<>();
 
         /*memberList.add(String.format("류제호"));
@@ -42,11 +43,11 @@ public class RegMemberListActivity  extends AppCompatActivity {
         trainerList.add(String.format("김익수T"));*/
 
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-        RecyclerView recyclerViewRegMember = findViewById(R.id.regMemberListRecyclerviewMember);
-        recyclerViewRegMember.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerViewMember = findViewById(R.id.adminUserManageRecyclerviewMember);
+        recyclerViewMember.setLayoutManager(new LinearLayoutManager(this));
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        RegMemberListAdapter adapterMember = new RegMemberListAdapter();
+        AdminUserManageAdapter adapterMember = new AdminUserManageAdapter();
 
         adapterMember.addItem(String.format("류제호"));
         adapterMember.addItem(String.format("최승혁"));
@@ -59,13 +60,25 @@ public class RegMemberListActivity  extends AppCompatActivity {
         adapterMember.addItem(String.format("홍지만"));
         adapterMember.addItem(String.format("김익수"));
 
-        recyclerViewRegMember.setAdapter(adapterMember);
+        recyclerViewMember.setAdapter(adapterMember);
 
-        //RecyclerView recyclerViewTrainer = findViewById(R.id.regMemberListRecyclerviewTrainer);
-        //recyclerViewTrainer.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerViewTrainer = findViewById(R.id.adminUserManageRecyclerviewTrainer);
+        recyclerViewTrainer.setLayoutManager(new LinearLayoutManager(this));
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        //RegMemberListAdapter adapterTrainer = new RegMemberListAdapter(trainerList);
-        //recyclerViewTrainer.setAdapter(adapterTrainer);
+        RegMemberListAdapter adapterTrainer = new RegMemberListAdapter();
+
+        adapterTrainer.addItem(String.format("류제호T"));
+        adapterTrainer.addItem(String.format("최승혁T"));
+        adapterTrainer.addItem(String.format("한관욱T"));
+        adapterTrainer.addItem(String.format("조란T"));
+        adapterTrainer.addItem(String.format("홍길동T"));
+        adapterTrainer.addItem(String.format("장훈T"));
+        adapterTrainer.addItem(String.format("이정진T"));
+        adapterTrainer.addItem(String.format("박동주T"));
+        adapterTrainer.addItem(String.format("홍지만T"));
+        adapterTrainer.addItem(String.format("김익수T"));
+
+        recyclerViewTrainer.setAdapter(adapterTrainer);
     }
 }
