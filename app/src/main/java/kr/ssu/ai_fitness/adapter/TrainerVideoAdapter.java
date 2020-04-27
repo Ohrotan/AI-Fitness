@@ -54,7 +54,7 @@ public class TrainerVideoAdapter extends BaseAdapter {
         //항목 레이아웃 초기화
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.layout_tr_video_item, parent, false);
+            convertView = inflater.inflate(R.layout.item_tr_video, parent, false);
             holder = new TrainerVideoAdapter.ViewHolder();
             holder.img = (ImageView) convertView.findViewById(R.id.tr_video_thumb_img);
             holder.title = (TextView) convertView.findViewById(R.id.tr_video_title_tv);
@@ -65,7 +65,7 @@ public class TrainerVideoAdapter extends BaseAdapter {
         }
 
         item = items.get(position);
-        holder.title.setText(item.title);
+        holder.title.setText(item.getTitle());
 
         return convertView;
     }
