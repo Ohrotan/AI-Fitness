@@ -166,9 +166,4 @@
         android:text="피드백을 기다리고 있어요!"
         android:textColor="@color/red"
         android:id="@+id/feedback"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_centerInParent="true"
-        android:background="@color/darkGray"/>
 </LinearLayout>
