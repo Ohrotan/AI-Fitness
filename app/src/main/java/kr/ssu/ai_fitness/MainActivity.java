@@ -9,6 +9,8 @@ import android.widget.Button;
 
 //메모장
 /*
+계정 비밀번호 최소한이 암호화
+
 파란 버튼 백그라운드: @drawable/button_background1
 버튼의 텍스트 사이즈: 18sp
 버튼 마진: 15dp
