@@ -111,10 +111,14 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn6) {
             intent = new Intent(getApplicationContext(), AdminProgramManageActivity.class);
         } else if (v == btn7) {
-        } else if (v == btn8) {
+        }
+        //제호
+        else if (v == btn8) {
             intent = new Intent(getApplicationContext(), RegMemberListActivity.class);
         } else if (v == btn9) {
+            intent = new Intent(getApplicationContext(), RegMemberDetailActivity.class);
         } else if (v == btn10) {
+            intent = new Intent(getApplicationContext(), ProfileActivity.class);
         } else if (v == btn11) {
         } else if (v == btn12) {
         } else if (v == btn13) {

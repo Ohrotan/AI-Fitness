@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/tab1"
+        app:showAsAction="always"
+        android:icon="@drawable/home_not_selected"
+        android:enabled="true"
+        android:title="홈"
+        android:iconTint="@drawable/item_color"/>
+
+    <item
+        android:id="@+id/tab2"
+        app:showAsAction="always"
+        android:icon="@drawable/workout_not_selected"
+        android:enabled="true"
+        android:title="운동목록"
+        android:iconTint="@drawable/item_color"/>
+
+    <item
+        android:id="@+id/tab3"
+        app:showAsAction="always"
+        android:icon="@drawable/chat_not_selected_01"
+        android:enabled="true"
+        android:title="채팅"
+        android:iconTint="@drawable/item_color"/>
+
+    <item
+        android:id="@+id/tab4"
+        app:showAsAction="always"
+        android:icon="@drawable/setting_not_selected"
+        android:enabled="true"
+        android:title="설정"
+        android:iconTint="@drawable/item_color"/>
+
+</menu>
