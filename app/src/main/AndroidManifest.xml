@@ -32,6 +32,8 @@
         <activity android:name=".AdminUserManageActivity"/>
         <activity android:name=".TrainerListActivity"/>
         <activity android:name=".RegMemberDetailActivity"/>
+        <activity android:name=".ProfileActivity"/>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
