@@ -10,9 +10,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import kr.ssu.ai_fitness.dto.Admin_reg_programView;
+import kr.ssu.ai_fitness.view.Admin_reg_programView;
 import kr.ssu.ai_fitness.dto.Member_reg_program;
-import kr.ssu.ai_fitness.dto.Member_reg_programView;
 
 public class AdminProgramManageActivity extends AppCompatActivity {
 

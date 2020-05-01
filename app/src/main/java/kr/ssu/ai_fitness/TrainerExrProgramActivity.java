@@ -2,7 +2,8 @@ package kr.ssu.ai_fitness;
 
 import androidx.appcompat.app.AppCompatActivity;
 import kr.ssu.ai_fitness.dto.*;
-import androidx.core.content.ContextCompat;
+import kr.ssu.ai_fitness.view.Trainer_reg_programView;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
