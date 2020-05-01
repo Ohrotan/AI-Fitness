@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:subtitle="체지방 다이어트"
+        app:subtitleTextAppearance="@style/ToolbarSubTitleText"
+        app:title="회원님!"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        tools:ignore="MissingConstraints">
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="0.2dp"
+        android:layout_below="@id/toolbar"
+        android:background="@color/darkGray"
+        android:visibility="visible" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/separator">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/topLinearLayout">
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_margin="20dp"
+                    android:id="@+id/memberPicRegMemberDetail"
+                    android:background="@drawable/img_rounding"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bonobono"/>
+
+                <TextView
+                    android:id="@+id/memberNameRegMemberDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="류제호님"
+                    android:textColor="@color/darkGray"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/memberAgeRegMemberDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(남, 26세)"
+                    android:textColor="@color/darkGray"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="3sp"
+                    />
+            </LinearLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/topLinearLayout"
+                android:layout_marginHorizontal="20dp"
+                android:columnCount="4"
+                android:rowCount="2"
+                android:id="@+id/infoGridLayout">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="신장"
+                    android:gravity="center"
+                    android:layout_columnWeight="1"
+                    android:layout_marginTop="5dp"
+                    android:textSize="20dp"
+                    android:textColor="@color/darkGray"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="체중"
+                    android:textSize="20dp"
+                    android:textColor="@color/darkGray"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="5dp"
+                    android:text="근육량"
+                    android:textSize="20dp"
+                    android:textColor="@color/darkGray"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="5dp"
+                    android:text="체지방량"
+                    android:textSize="20dp"
+                    android:textColor="@color/darkGray"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="178cm"
+                    android:textColor="@color/accent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center"
+                    android:textSize="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_gravity="center"
+                    android:text="65kg"
+                    android:textColor="@color/accent"
+                    android:textSize="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:text="19.8%"
+                    android:textColor="@color/accent"
+                    android:textSize="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="12.7%"
+                    android:textColor="@color/accent"
+                    android:layout_gravity="center"
+                    android:textSize="20dp"/>
+                />
+            </GridLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/infoGridLayout"
+                android:layout_alignParentRight="true"
+                android:text="2020.04.01 기준"
+                android:textColor="@color/lightGray"
+                android:layout_marginRight="20dp"
+                android:id="@+id/infoRegDate"/>
+
+            <TextView
+                android:id="@+id/infoSelf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/infoRegDate"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:layout_marginHorizontal="50dp"
+                android:textSize="17sp"
+                android:textColor="@color/darkGray"
+                android:text="안녕하세요 저는 운동을 열심히 하고싶은 ~~~ 입니다.~~~~ 잘 부탁드립니다~~~"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/infoSelf"
+                android:layout_marginLeft="30dp"
+                android:id="@+id/programRegPeriodLinearLayout">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="프로그램 등록 기간 : "
+                    android:textSize="17sp"
+                    android:textColor="@color/darkGray"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/programRegPeriod"
+                    android:text="2020.04.01 ~ 2020.04.08"
+                    android:textSize="17sp"
+                    android:textColor="@color/accent"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/programRegPeriodLinearLayout"
+                android:layout_marginLeft="30dp"
+                android:layout_marginBottom="25dp"
+                android:id="@+id/programProgressLinearLayout">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="진행일수 : "
+                    android:textSize="17sp"
+                    android:textColor="@color/darkGray"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/programProgress"
+                    android:text="2020.04.01 ~ 2020.04.08"
+                    android:textSize="17sp"
+                    android:textColor="@color/accent"
+                    />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/programProgressLinearLayout"
+                android:id="@+id/regMemberDetailRecyclerView"/>
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

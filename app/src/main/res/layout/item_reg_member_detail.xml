@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/regMemberDetailTextItem"
+            android:text="n일차 운동프로그램"
+            android:textSize="25sp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/darkGray"
+            tools:ignore="MissingConstraints" />
+
+
+        <ImageView
+            android:id="@+id/regMemberDetailAlarm"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/exclamation" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="380dp"
+        android:layout_height="0.2dp"
+        android:background="@color/darkGray"
+        android:visibility="visible"
+        android:layout_gravity="center"
+        />
+
+</LinearLayout>

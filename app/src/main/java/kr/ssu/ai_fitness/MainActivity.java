@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn8) {
             intent = new Intent(getApplicationContext(), RegMemberListActivity.class);
         } else if (v == btn9) {
+            intent = new Intent(getApplicationContext(), RegMemberDetailActivity.class);
         } else if (v == btn10) {
         } else if (v == btn11) {
         } else if (v == btn12) {
