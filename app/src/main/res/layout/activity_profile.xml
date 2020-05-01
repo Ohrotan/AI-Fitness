@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
-        app:subtitle="체지방 다이어트"
+        app:subtitle="개인정보"
         app:subtitleTextAppearance="@style/ToolbarSubTitleText"
         app:title="회원님!"
         app:titleTextAppearance="@style/ToolbarTitleText"
@@ -46,26 +46,32 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/bonobono"/>
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:id="@+id/trainerBadge"
-                android:background="@drawable/button_background1"
-                android:layout_toRightOf="@+id/memberPicRegMemberDetail"
-                />
-
-            <TextView
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/trainerBadge"
-                android:layout_alignLeft="@id/trainerBadge"
-                android:layout_alignRight="@id/trainerBadge"
-                android:layout_alignTop="@id/trainerBadge"
-                android:gravity="center"
-                android:text="트레이너"
-                android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:layout_toRightOf="@+id/memberPicRegMemberDetail"
+                android:id="@+id/trainerBadgeLayout">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/trainerBadge"
+                    android:background="@drawable/button_background1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/trainerBadge"
+                    android:layout_alignLeft="@id/trainerBadge"
+                    android:layout_alignRight="@id/trainerBadge"
+                    android:layout_alignTop="@id/trainerBadge"
+                    android:gravity="center"
+                    android:text="트레이너"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"/>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/memberNameRegMemberDetail"
@@ -77,7 +83,7 @@
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:layout_toRightOf="@+id/memberPicRegMemberDetail"
-                android:layout_below="@+id/trainerBadge"
+                android:layout_below="@+id/trainerBadgeLayout"
                 />
 
             <TextView
@@ -92,7 +98,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="13dp"
                 android:layout_toRightOf="@+id/memberNameRegMemberDetail"
-                android:layout_below="@+id/trainerBadge"
+                android:layout_below="@+id/trainerBadgeLayout"
                 />
 
             <ImageButton
@@ -100,7 +106,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/trainerBadge"
+                android:layout_below="@+id/trainerBadgeLayout"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/edit_button_states"/>
@@ -252,47 +258,62 @@
                 android:layout_marginHorizontal="15dp"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/pwdChange"
-                android:text="비밀번호 수정"
-                android:textSize="20sp"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:layout_marginLeft="30dp"
                 android:layout_below="@+id/separator3"
-                android:textColor="@color/darkGray"
-                android:background="?attr/selectableItemBackground"/>
+                android:id="@+id/pwdChangeLayout"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pwdChange"
+                    android:text="비밀번호 수정"
+                    android:textSize="20sp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:layout_marginLeft="30dp"
+                    android:textColor="@color/darkGray"
+                    />
+
+            </RelativeLayout>
 
             <View
                 android:id="@+id/separator4"
                 android:layout_width="wrap_content"
                 android:layout_height="0.2dp"
-                android:layout_below="@id/pwdChange"
+                android:layout_below="@id/pwdChangeLayout"
                 android:background="@color/darkGray"
                 android:visibility="visible"
                 android:layout_marginHorizontal="15dp"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/logout"
-                android:text="로그아웃"
-                android:textSize="20sp"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:layout_marginLeft="30dp"
                 android:layout_below="@+id/separator4"
-                android:textColor="@color/darkGray"
-                android:background="?attr/selectableItemBackground"/>
+                android:id="@+id/logoutLayout"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/logout"
+                    android:text="로그아웃"
+                    android:textSize="20sp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:layout_marginLeft="30dp"
+                    android:textColor="@color/darkGray" />
+
+            </RelativeLayout>
 
             <View
                 android:id="@+id/separator5"
                 android:layout_width="wrap_content"
                 android:layout_height="0.2dp"
-                android:layout_below="@id/logout"
+                android:layout_below="@id/logoutLayout"
                 android:background="@color/darkGray"
                 android:visibility="visible"
                 android:layout_marginHorizontal="15dp"
@@ -317,77 +338,92 @@
                     android:textStyle="bold"
                     android:id="@+id/adminSettingText"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/allMemberManage"
-                    android:text="전체 회원 관리"
-                    android:textSize="20sp"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:layout_marginLeft="30dp"
                     android:layout_below="@+id/adminSettingText"
-                    android:textColor="@color/darkGray"
-                    android:background="?attr/selectableItemBackground"/>
+                    android:id="@+id/allMemberManageLayout"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/allMemberManage"
+                        android:text="전체 회원 관리"
+                        android:textSize="20sp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:layout_marginLeft="30dp"
+                        android:textColor="@color/darkGray" />
+                </RelativeLayout>
 
                 <View
                     android:id="@+id/separator6"
                     android:layout_width="wrap_content"
                     android:layout_height="0.2dp"
-                    android:layout_below="@id/allMemberManage"
+                    android:layout_below="@id/allMemberManageLayout"
                     android:background="@color/darkGray"
                     android:visibility="visible"
                     android:layout_marginHorizontal="15dp"
                     />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/allProgramManage"
-                    android:text="전체 프로그램 관리"
-                    android:textSize="20sp"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:layout_marginLeft="30dp"
                     android:layout_below="@+id/separator6"
-                    android:textColor="@color/darkGray"
-                    android:background="?attr/selectableItemBackground"/>
+                    android:id="@+id/allProgramManageLayout"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/allProgramManage"
+                        android:text="전체 프로그램 관리"
+                        android:textSize="20sp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:layout_marginLeft="30dp"
+                        android:textColor="@color/darkGray" />
+                </RelativeLayout>
 
                 <View
                     android:id="@+id/separator7"
                     android:layout_width="wrap_content"
                     android:layout_height="0.2dp"
-                    android:layout_below="@id/allProgramManage"
+                    android:layout_below="@id/allProgramManageLayout"
                     android:background="@color/darkGray"
                     android:visibility="visible"
                     android:layout_marginHorizontal="15dp"
                     />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/allVideoManage"
-                    android:text="전체 동영상 관리"
-                    android:textSize="20sp"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:layout_marginLeft="30dp"
                     android:layout_below="@+id/separator7"
-                    android:textColor="@color/darkGray"
-                    android:background="?attr/selectableItemBackground"/>
+                    android:id="@+id/allVideoManageLayout"
+                    android:background="?attr/selectableItemBackground">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/allVideoManage"
+                        android:text="전체 동영상 관리"
+                        android:textSize="20sp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:layout_marginLeft="30dp"
+                        android:textColor="@color/darkGray" />
+                </RelativeLayout>
 
-                <View
+                <!--<View
                     android:id="@+id/separator8"
                     android:layout_width="wrap_content"
                     android:layout_height="0.2dp"
-                    android:layout_below="@id/allVideoManage"
+                    android:layout_below="@id/allVideoManageLayout"
                     android:background="@color/darkGray"
                     android:visibility="visible"
                     android:layout_marginHorizontal="15dp"
-                    />
+                    />-->
 
             </RelativeLayout>
-
 
         </RelativeLayout>
 
