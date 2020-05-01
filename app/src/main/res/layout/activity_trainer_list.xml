@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginBottom="?attr/actionBarSize">
+
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -35,7 +36,7 @@
         android:layout_below="@+id/separator"
         android:scrollbars="vertical" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +44,6 @@
         android:layout_marginStart="0dp"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottomnavigationview"
-        app:itemIconTint="@color/accent"
-        app:itemTextColor="@color/accent"/>
+        />-->
 
 </RelativeLayout>
