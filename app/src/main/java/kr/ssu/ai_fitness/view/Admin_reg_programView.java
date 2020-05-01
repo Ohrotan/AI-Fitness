@@ -1,4 +1,4 @@
-package kr.ssu.ai_fitness.dto;
+package kr.ssu.ai_fitness.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
