@@ -2,17 +2,20 @@ package kr.ssu.ai_fitness;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.accounts.Account;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.GridView;
 
 import kr.ssu.ai_fitness.adapter.TrainerVideoAdapter;
+import kr.ssu.ai_fitness.dto.TrainerVideo;
 
 public class TrainerVideoListActivity extends AppCompatActivity {
 
     Button tr_video_reg_btn;
     GridView tr_video_list_view;
     TrainerVideoAdapter trainerVideoAdapter = new TrainerVideoAdapter(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
