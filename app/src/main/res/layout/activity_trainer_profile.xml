@@ -31,12 +31,14 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/separator">
+        android:layout_below="@+id/separator"
+        android:overScrollMode="never">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -264,7 +266,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/regProgramInstruction"
-                android:id="@+id/trainerProfileRecyclerView"/>
+                android:id="@+id/trainerProfileRecyclerView"
+                android:overScrollMode="never"
+                />
 
         </RelativeLayout>
 

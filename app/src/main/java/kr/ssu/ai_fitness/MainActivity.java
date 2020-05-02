@@ -14,6 +14,8 @@ import android.widget.Button;
 파란 버튼 백그라운드: @drawable/button_background1
 버튼의 텍스트 사이즈: 18sp
 버튼 마진: 15dp
+
+db - exr_program 테이블에 title 추가해야됨
  */
 public class MainActivity extends AppCompatActivity {
     //승혁
