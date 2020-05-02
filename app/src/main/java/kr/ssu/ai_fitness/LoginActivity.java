@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,6 +96,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        Log.d("test", "111111");
+
         //서버에서 받아오는 부분
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_LOGIN,
                 new Response.Listener<String>() {
@@ -105,6 +108,9 @@ public class LoginActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);//프로그레스바 안보이게 함
 
                         try {
+
+                            Log.d("test", "222222");
+
                             //response를 json object로 변환함.
                             JSONObject obj = new JSONObject(response);
 
@@ -141,10 +147,17 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             } else {
+
+                                Log.d("test", "333333");
+
                                 //에러일 때도 토스트 메시지 출력
                                 Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
+
+
+                            Log.d("test", "4444444");
+
                             e.printStackTrace();
                         }
                     }
@@ -152,6 +165,9 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
+                        Log.d("test", "5555555");
+
                         Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }) {
