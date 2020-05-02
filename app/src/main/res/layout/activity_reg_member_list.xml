@@ -31,7 +31,8 @@
         android:id="@+id/regMemberListScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/separator">
+        android:layout_below="@+id/separator"
+        android:overScrollMode="never">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -53,7 +54,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/memberText"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical"
+                android:overScrollMode="never"/>
 
             <!--<TextView
                 android:id="@+id/trainerText"

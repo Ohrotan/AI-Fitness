@@ -34,7 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/separator"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:overScrollMode="never"/>
 
     <!--<com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomView"
