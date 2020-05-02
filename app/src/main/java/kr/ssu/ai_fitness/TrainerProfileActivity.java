@@ -31,6 +31,5 @@ public class TrainerProfileActivity extends AppCompatActivity {
 
 
         recyclerViewTrainerProfile.setAdapter(adapter);
-
     }
 }
