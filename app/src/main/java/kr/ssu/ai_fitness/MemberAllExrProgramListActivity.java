@@ -4,11 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import kr.ssu.ai_fitness.dto.*;
 import kr.ssu.ai_fitness.view.Member_reg_programView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 public class MemberAllExrProgramListActivity extends AppCompatActivity {
@@ -19,10 +25,10 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_all_exr_program_list);
 
-        ListView listView = (ListView)findViewById(R.id.listView);
+        final ListView listView = (ListView)findViewById(R.id.listView);
 
 
-        ListAdapter adapter = new ListAdapter();
+        final ListAdapter adapter = new ListAdapter();
         //adapter에 data값
         adapter.addItem(new Member_reg_program("다이어트1", "★★★★☆","★★★★☆","30 명","","","",""));
         adapter.addItem(new Member_reg_program("다이어트2", "★★★★☆","★★★★☆","30 명","","","",""));
@@ -33,6 +39,8 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         //이렇게해서 listView껍데기가 어뎁터에게 몇 개의 데이터가 있고 어떤 뷰를 집어넣어야하는지
         //물어보면 어뎁터가 아래의 코드를 통해 만들어놓은 정보를 종합하여 전달함
+
+
     }
 
     class ListAdapter extends BaseAdapter{
@@ -78,6 +86,14 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
             view.setRate(item.getRating());
             view.setMem_id_cnt(item.getMem_id_cnt());
             //이렇게 해당 position에 맞는 값으로 설정
+
+            RelativeLayout gotoExrProgramDetail = (RelativeLayout)view.findViewById(R.id.gotoExrProgramDetail);
+            gotoExrProgramDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "눌림",Toast.LENGTH_SHORT).show();
+                }
+            });
 
             //그렇게 설정을 잘 해놓은 다음에 view를 반환해야 데이터값이 들어간 레이아웃이 반환
             return view;
