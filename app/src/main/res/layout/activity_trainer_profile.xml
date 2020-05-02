@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
-        app:subtitle="체지방 다이어트"
+        app:subtitle="트레이너 프로필"
         app:subtitleTextAppearance="@style/ToolbarSubTitleText"
         app:title="회원님!"
         app:titleTextAppearance="@style/ToolbarTitleText"
@@ -25,7 +25,8 @@
         android:layout_height="0.2dp"
         android:layout_below="@id/toolbar"
         android:background="@color/darkGray"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:layout_centerHorizontal="true"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -37,52 +38,65 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/topLinearLayout">
+                android:id="@+id/topLayoutTrainerProfile">
 
                 <ImageView
                     android:layout_width="90dp"
                     android:layout_height="90dp"
-                    android:layout_margin="20dp"
-                    android:id="@+id/memberPicRegMemberDetail"
+                    android:layout_margin="18dp"
+                    android:id="@+id/trainerPicTrainerProfile"
                     android:background="@drawable/img_rounding"
                     android:scaleType="fitXY"
                     android:src="@drawable/bonobono"/>
 
                 <TextView
-                    android:id="@+id/memberNameRegMemberDetail"
+                    android:id="@+id/trainerNameTrainerProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="류제호님"
-                    android:textColor="@color/darkGray"
-                    android:textSize="30sp"
+                    android:text="한관욱 트레이너"
+                    android:textColor="@color/accent"
+                    android:textSize="25sp"
                     android:textStyle="bold"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:layout_toEndOf="@+id/trainerPicTrainerProfile"
+                    android:layout_toRightOf="@+id/trainerPicTrainerProfile"
+                    android:layout_marginTop="30dp"/>
 
                 <TextView
-                    android:id="@+id/memberAgeRegMemberDetail"
+                    android:id="@+id/TrainerAgeTrainerProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(남, 26세)"
-                    android:textColor="@color/darkGray"
+                    android:textColor="@color/accent"
                     android:textSize="18sp"
                     android:layout_marginLeft="5dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="3sp"
+                    android:layout_marginTop="38sp"
+                    android:layout_toRightOf="@+id/trainerNameTrainerProfile"
                     />
-            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ratingImageTrainerProfile"
+                    android:layout_width="100dp"
+                    android:layout_height="35dp"
+                    android:layout_toRightOf="@+id/trainerPicTrainerProfile"
+                    android:layout_below="@+id/trainerNameTrainerProfile"
+                    android:layout_marginBottom="30dp"
+                    android:src="@drawable/rating_3"
+                    />
+            </RelativeLayout>
 
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/topLinearLayout"
+                android:layout_below="@+id/topLayoutTrainerProfile"
                 android:layout_marginHorizontal="20dp"
-                android:columnCount="4"
+                android:columnCount="5"
                 android:rowCount="2"
-                android:id="@+id/infoGridLayout">
+                android:id="@+id/infoGridLayoutTrainerProfile">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -90,7 +104,7 @@
                     android:gravity="center"
                     android:layout_columnWeight="1"
                     android:layout_marginTop="5dp"
-                    android:textSize="20dp"
+                    android:textSize="17dp"
                     android:textColor="@color/darkGray"/>
                 <TextView
                     android:layout_width="0dp"
@@ -99,7 +113,7 @@
                     android:gravity="center"
                     android:layout_marginTop="5dp"
                     android:text="체중"
-                    android:textSize="20dp"
+                    android:textSize="17dp"
                     android:textColor="@color/darkGray"/>
                 <TextView
                     android:layout_width="0dp"
@@ -108,7 +122,7 @@
                     android:layout_columnWeight="1"
                     android:layout_margin="5dp"
                     android:text="근육량"
-                    android:textSize="20dp"
+                    android:textSize="17dp"
                     android:textColor="@color/darkGray"/>
                 <TextView
                     android:layout_width="0dp"
@@ -117,7 +131,17 @@
                     android:layout_columnWeight="1"
                     android:layout_margin="5dp"
                     android:text="체지방량"
-                    android:textSize="20dp"
+                    android:textSize="17dp"
+                    android:textColor="@color/darkGray"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="5dp"
+                    android:text="현재 회원"
+                    android:textSize="17dp"
                     android:textColor="@color/darkGray"/>
 
                 <TextView
@@ -127,7 +151,8 @@
                     android:textColor="@color/accent"
                     android:layout_marginBottom="5dp"
                     android:layout_gravity="center"
-                    android:textSize="20dp"/>
+                    android:textSize="17dp"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -135,7 +160,8 @@
                     android:layout_gravity="center"
                     android:text="65kg"
                     android:textColor="@color/accent"
-                    android:textSize="20dp"/>
+                    android:textSize="17dp"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -143,7 +169,8 @@
                     android:layout_gravity="center"
                     android:text="19.8%"
                     android:textColor="@color/accent"
-                    android:textSize="20dp"/>
+                    android:textSize="17dp"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -151,97 +178,93 @@
                     android:text="12.7%"
                     android:textColor="@color/accent"
                     android:layout_gravity="center"
-                    android:textSize="20dp"/>
-                />
+                    android:textSize="17dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="100명"
+                    android:textColor="@color/accent"
+                    android:layout_gravity="center"
+                    android:textSize="17dp"/>
             </GridLayout>
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/infoGridLayout"
+                android:layout_below="@+id/infoGridLayoutTrainerProfile"
                 android:layout_alignParentRight="true"
                 android:text="2020.04.01 기준"
                 android:textColor="@color/lightGray"
                 android:layout_marginRight="20dp"
-                android:id="@+id/infoRegDate"/>
-
-            <TextView
-                android:id="@+id/infoSelf"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/infoRegDate"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp"
-                android:layout_marginHorizontal="50dp"
-                android:textSize="17sp"
-                android:textColor="@color/darkGray"
-                android:text="안녕하세요 저는 운동을 열심히 하고싶은 ~~~ 입니다.~~~~ 잘 부탁드립니다~~~"
-                />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/infoSelf"
-                android:layout_marginLeft="30dp"
-                android:id="@+id/programRegPeriodLinearLayout">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="프로그램 등록 기간 : "
-                    android:textSize="17sp"
-                    android:textColor="@color/darkGray"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/programRegPeriod"
-                    android:text="2020.04.01 ~ 2020.04.08"
-                    android:textSize="17sp"
-                    android:textColor="@color/accent"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/programRegPeriodLinearLayout"
-                android:layout_marginLeft="30dp"
-                android:layout_marginBottom="25dp"
-                android:id="@+id/programProgressLinearLayout">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="진행일수 : "
-                    android:textSize="17sp"
-                    android:textColor="@color/darkGray"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/programProgress"
-                    android:text="2020.04.01 ~ 2020.04.08"
-                    android:textSize="17sp"
-                    android:textColor="@color/accent"
-                    />
-            </LinearLayout>
+                android:id="@+id/infoRegDateTrainerProfile"/>-->
 
             <View
                 android:id="@+id/separator2"
                 android:layout_width="380dp"
                 android:layout_height="0.2dp"
-                android:layout_below="@id/programProgressLinearLayout"
+                android:layout_below="@id/infoGridLayoutTrainerProfile"
+                android:layout_marginTop="20dp"
                 android:background="@color/darkGray"
                 android:visibility="visible"
                 android:layout_centerHorizontal="true"
                 />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator2"
+                android:id="@+id/selfInstruction"
+                android:text="자기소개"
+                android:textColor="@color/accent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:textSize="17sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/infoSelfTrainerProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/selfInstruction"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="13dp"
+                android:layout_marginHorizontal="30dp"
+                android:textSize="17sp"
+                android:textColor="@color/darkGray"
+                android:text="안녕하세요 저는 한관욱 트레이너입니다.\n수상경력 : 이러쿵 저러쿵 \n         어쩌구 저쩌구"
+                />
+
+            <View
+                android:id="@+id/separator3"
+                android:layout_width="380dp"
+                android:layout_height="0.2dp"
+                android:layout_below="@id/infoSelfTrainerProfile"
+                android:layout_marginBottom="5dp"
+                android:background="@color/darkGray"
+                android:visibility="visible"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/separator3"
+                android:id="@+id/regProgramInstruction"
+                android:text="등록된 프로그램 소개"
+                android:textColor="@color/accent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="17sp"
+                android:textStyle="bold"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/programProgressLinearLayout"
-                android:id="@+id/regMemberDetailRecyclerView"/>
+                android:layout_below="@+id/regProgramInstruction"
+                android:id="@+id/trainerProfileRecyclerView"/>
 
         </RelativeLayout>
 

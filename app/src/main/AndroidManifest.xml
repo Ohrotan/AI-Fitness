@@ -39,6 +39,7 @@
         <activity android:name=".TrainerListActivity"/>
         <activity android:name=".RegMemberDetailActivity"/>
         <activity android:name=".ProfileActivity"/>
+        <activity android:name=".TrainerProfileActivity"/>
 
         <activity android:name=".MainActivity">
             <intent-filter>
