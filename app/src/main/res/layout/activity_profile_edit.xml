@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:overScrollMode="never">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:subtitle="회원정보 수정"
+        app:subtitleTextAppearance="@style/ToolbarSubTitleText"
+        app:title="회원님!"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        tools:ignore="MissingConstraints">
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="0.2dp"
+        android:layout_below="@id/toolbar"
+        android:background="@color/darkGray"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/topLinearLayout"
+        android:layout_below="@+id/separator"
+        >
+
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="40dp"
+            android:id="@+id/memberPicProfileEdit"
+            android:background="@drawable/img_rounding"
+            android:scaleType="fitXY"
+            android:src="@drawable/bonobono"/>
+
+        <TextView
+            android:id="@+id/memberNameProfileEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="류제호님"
+            android:textColor="@color/darkGray"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:id="@+id/memberAgeProfileEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(남, 26세)"
+            android:textColor="@color/darkGray"
+            android:textSize="18sp"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="13sp"
+            />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/topLinearLayout"
+        android:background="@drawable/button_background1"
+        android:text="변경"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="55dp"
+        android:id="@+id/editDetailButtonProfileEdit"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editDetailButtonProfileEdit"
+        android:orientation="horizontal"
+        android:id="@+id/heightLayout"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="신장"
+            android:textColor="@color/darkGray"
+            android:textSize="20sp"
+            android:layout_marginLeft="70dp"/>
+
+        <EditText
+            android:id="@+id/heightEditTextProfileEdit"
+            android:layout_width="130dp"
+            android:layout_height="30dp"
+            android:background="@drawable/edittext_background1"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:hint="신장"
+            android:textColorHint="@color/lightGray"
+            android:layout_marginLeft="190dp"
+            android:layout_marginRight="10dp"
+            android:selectAllOnFocus="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/darkGray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cm"
+            android:textColor="@color/darkGray"
+            android:textSize="20sp"
+            android:layout_toRightOf="@+id/heightEditTextProfileEdit"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/heightLayout"
+        android:orientation="horizontal"
+        android:id="@+id/weightLayout"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="체중"
+            android:textColor="@color/darkGray"
+            android:textSize="20sp"
+            android:layout_marginLeft="70dp"/>
+
+        <EditText
+            android:id="@+id/weightEditTextProfileEdit"
+            android:layout_width="130dp"
+            android:layout_height="30dp"
+            android:background="@drawable/edittext_background1"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:hint="체중"
+            android:textColorHint="@color/lightGray"
+            android:layout_marginLeft="190dp"
+            android:layout_marginRight="10dp"
+            android:selectAllOnFocus="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/darkGray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kg"
+            android:textColor="@color/darkGray"
+            android:textSize="20sp"
+            android:layout_toRightOf="@+id/weightEditTextProfileEdit"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/weightLayout"
+        android:orientation="horizontal"
+        android:id="@+id/muscleLayout"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="근육량"
+            android:textColor="@color/darkGray"
+            android:textSize="20sp"
+            android:layout_marginLeft="70dp"
+            />
+
+        <EditText
+            android:id="@+id/muscleEditTextProfileEdit"
+            android:layout_width="130dp"
+            android:layout_height="30dp"
+            android:background="@drawable/edittext_background1"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:hint="근육량"
+            android:textColorHint="@color/lightGray"
+            android:layout_marginLeft="190dp"
+            android:layout_marginRight="10dp"
+            android:selectAllOnFocus="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/darkGray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:textColor="@color/darkGray"
+            android:textSize="20sp"
+            android:layout_toRightOf="@+id/muscleEditTextProfileEdit"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/muscleLayout"
+        android:orientation="horizontal"
+        android:id="@+id/fatLayout"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="체지방량"
+            android:textColor="@color/darkGray"
+            android:textSize="20sp"
+            android:layout_marginLeft="70dp"/>
+
+        <EditText
+            android:id="@+id/fatEditTextProfileEdit"
+            android:layout_width="130dp"
+            android:layout_height="30dp"
+            android:background="@drawable/edittext_background1"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:hint="체지방량"
+            android:textColorHint="@color/lightGray"
+            android:layout_marginLeft="190dp"
+            android:layout_marginRight="10dp"
+            android:selectAllOnFocus="true"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/darkGray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:textColor="@color/darkGray"
+            android:textSize="20sp"
+            android:layout_toRightOf="@+id/fatEditTextProfileEdit"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="자기소개"
+        android:textColor="@color/darkGray"
+        android:textSize="20sp"
+        android:layout_marginLeft="70dp"
+        android:id="@+id/selfInstructionProfileEditText"
+        android:layout_below="@+id/fatLayout"
+        android:layout_marginTop="15dp"/>
+
+    <EditText
+        android:layout_width="280dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/selfInstructionProfileEditText"
+        android:background="@drawable/edittext_background1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:id="@+id/selfInstructionProfileEdit"
+        android:hint="자기소개"
+        android:textColorHint="@color/lightGray"
+        android:textAlignment="viewStart"
+        android:gravity="start"
+        android:singleLine="false"
+        android:inputType="textMultiLine"
+        android:textColor="@color/darkGray"
+        android:padding="5dp"
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/selfInstructionProfileEdit"
+        android:id="@+id/isTrainerLayout"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/isTrainerProfileEdit"
+            android:text="트레이너"
+            android:textSize="20sp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:layout_marginLeft="70dp"
+            android:textColor="@color/darkGray" />
+
+        <Switch
+            android:id="@+id/isTrainerSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="70dp"
+            android:layout_alignParentRight="true"
+            android:paddingTop="15dp"
+            android:paddingBottom="10dp"
+            />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/saveButtonProfileEdit"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/isTrainerLayout"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_background1"
+        android:text="저장"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_margin="15dp"/>
+
+
+</RelativeLayout>
