@@ -40,7 +40,7 @@
         <activity android:name=".RegMemberDetailActivity"/>
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".TrainerProfileActivity"/>
-
+        <activity android:name=".ProfileEditActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

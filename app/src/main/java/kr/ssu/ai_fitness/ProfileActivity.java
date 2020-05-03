@@ -1,6 +1,9 @@
 package kr.ssu.ai_fitness;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -9,10 +12,13 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+
+    final Context context = this;
 
     private RelativeLayout trainerBadge;
     private ImageButton editButton;
@@ -22,6 +28,8 @@ public class ProfileActivity extends AppCompatActivity {
     private RelativeLayout allProgramManage;
     private RelativeLayout allVideoManage;
     private Switch alarmSwitch;
+
+    AlertDialog.Builder logoutDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +52,30 @@ public class ProfileActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "알림 수신 거부", Toast.LENGTH_SHORT).show();
             }
         });
-        pwdChange.setOnClickListener(new RelativeLayout.OnClickListener(){
-            @Override
-            public void onClick(View V){
-                Toast.makeText(getApplicationContext(), "패스워드 변경하기", Toast.LENGTH_SHORT).show();
-            }
-        });
+        pwdChange.setOnClickListener(this);
 
         logout.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
             public void onClick(View V){
-                Toast.makeText(getApplicationContext(), "로그아웃 하기", Toast.LENGTH_SHORT).show();
+                logoutDialog = new AlertDialog.Builder(context);
+                logoutDialog
+                        .setTitle("알림")
+                        .setMessage("로그아웃 하시겠습니까?")
+                        .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) { // 프로그램을 종료한다
+                                //ProfileEditActivity.this.finish();
+                                dialog.cancel();
+                                Toast.makeText(getApplicationContext(), "로그아웃하기", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // 다이얼로그를 취소한다
+                                dialog.cancel();
+                                //isTrainer.setChecked(false);
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -80,5 +101,25 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.pwdChangeLayout:
+                //requestName = nameEt.getText().toString();
+                PwdEditDialog dialog = new PwdEditDialog(this);
+                /*dialog.setDialogListener(new MyDialogListener() {  // MyDialogListener 를 구현
+                    @Override
+                    public void onPositiveClicked(String email, String name) {
 
+                    }
+
+                    @Override
+                    public void onNegativeClicked() {
+                        Log.d("MyDialogListener","onNegativeClicked");
+                    }
+                });*/
+                dialog.show();
+                break;
+        }
+    }
 }

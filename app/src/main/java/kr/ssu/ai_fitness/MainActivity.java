@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn10) {
             intent = new Intent(getApplicationContext(), ProfileActivity.class);
         } else if (v == btn11) {
+            intent = new Intent(getApplicationContext(), ProfileEditActivity.class);
         } else if (v == btn12) {
             intent = new Intent(getApplicationContext(), TrainerProfileActivity.class);
         } else if (v == btn13) {
