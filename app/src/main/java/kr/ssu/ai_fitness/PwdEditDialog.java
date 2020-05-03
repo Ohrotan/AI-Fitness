@@ -62,6 +62,7 @@ public class PwdEditDialog extends Dialog implements View.OnClickListener{
                 cancel();
                 break;
             case R.id.confirmPwdEdit:
+                cancel();
                 break;
         }
     }
