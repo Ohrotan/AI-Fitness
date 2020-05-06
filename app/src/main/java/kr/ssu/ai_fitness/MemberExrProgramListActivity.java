@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.os.Bundle;
 
 public class MemberExrProgramListActivity extends AppCompatActivity {
