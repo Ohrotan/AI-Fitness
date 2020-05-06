@@ -9,6 +9,11 @@ public class DayProgramVideoList {
     private int set;    //운동 세트
     private int order;  //운동 순서
 
+    //어댑터 테스트용
+    public DayProgramVideoList(String name){
+        this.name = name;
+    }
+
     public DayProgramVideoList(String id, String day_id, String video_id, String name, int count, int set, int order) {
         this.id = id;
         this.day_id = day_id;
