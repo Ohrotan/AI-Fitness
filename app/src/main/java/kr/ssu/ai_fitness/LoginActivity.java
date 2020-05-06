@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         //shared preferences에 로그인 정보 있는 경우 곧바로 로그인 처리 해준다.
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, HomeActivity.class));
         }
 
         editText_email = (EditText)findViewById(R.id.et_login_email);
@@ -80,23 +81,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private void userLogin() {
         //이메일과 비밀번호를 스트링으로 받는다.
-        final String email = editText_email.getText().toString();
-        final String password = editText_pwd.getText().toString();
+        final String id = editText_email.getText().toString();
+        final String pwd = editText_pwd.getText().toString();
 
         //입력값 검증
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(id)) {
             editText_email.setError("Please enter your email");   //edittext 끝에 에러 메세지 띄운다.
             editText_email.requestFocus();                        //에러난 부분으로 포커스를 옮겨준다.
             return;
         }
 
-        if (TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(pwd)) {
             editText_pwd.setError("Please enter your password"); //edittext 끝에 에러 메세지 띄운다.
             editText_pwd.requestFocus();                         //에러난 부분으로 포커스를 옮겨준다.
             return;
         }
-
-        Log.d("test", "111111");
 
         //서버에서 받아오는 부분
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_LOGIN,
@@ -108,56 +107,76 @@ public class LoginActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);//프로그레스바 안보이게 함
 
                         try {
-
-                            Log.d("test", "222222");
-
                             //response를 json object로 변환함.
-                            JSONObject obj = new JSONObject(response);
+                            JSONArray obj = new JSONArray(response);
+                            JSONObject userJson = obj.getJSONObject(0);
 
-                            //response 에러가 아니라면
-                            if (!obj.getBoolean("error")) {
-                                //토스트메시지 출력
-                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            //받은 정보를 토대로 user 객체 생성
+                            Member user = new Member(
+                                    userJson.getString("id"),
+                                    userJson.getString("pwd"),
+                                    userJson.getString("name"),
+                                    userJson.getDouble("height"),
+                                    userJson.getDouble("weight"),
+                                    (byte)userJson.getInt("gender"),
+                                    userJson.getString("birth"),
+                                    userJson.getDouble("muscle"),
+                                    userJson.getDouble("fat"),
+                                    userJson.getString("intro"),
+                                    userJson.getString("image"),
+                                    (byte)userJson.getInt("trainer"),
+                                    (byte)userJson.getInt("admin"),
+                                    (byte)userJson.getInt("alarm")
+                            );
 
-                                //response로 부터 user 얻어냄
-                                JSONObject userJson = obj.getJSONObject("user");
+                            //user를 shared preferences에 저장
+                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
-                                //받은 정보를 토대로 user 객체 생성
-                                Member user = new Member(
-                                        userJson.getString("id"),
-                                        userJson.getString("pwd"),
-                                        userJson.getString("name"),
-                                        userJson.getDouble("height"),
-                                        userJson.getDouble("weight"),
-                                        (byte)userJson.getInt("gender"),
-                                        userJson.getString("birth"),
-                                        userJson.getDouble("muscle"),
-                                        userJson.getDouble("fat"),
-                                        userJson.getString("intro"),
-                                        userJson.getString("image"),
-                                        (byte)userJson.getInt("trainer"),
-                                        (byte)userJson.getInt("admin"),
-                                        (byte)userJson.getInt("alarm")
-                                );
+                            //mainactivity로 넘어감
+                            finish();
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
-                                //user를 shared preferences에 저장
-                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
-                                //mainactivity로 넘어감
-                                finish();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            } else {
+                            Log.d("json=>", userJson.getString("id")+userJson.getString("name") );
+                            Toast.makeText(LoginActivity.this, userJson.getString("id"), Toast.LENGTH_SHORT).show();
 
-                                Log.d("test", "333333");
-
-                                //에러일 때도 토스트 메시지 출력
-                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                            }
+//                            //response 에러가 아니라면
+//                            if (!obj.getBoolean("error")) {
+//                                //토스트메시지 출력
+//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+//
+//                                //response로 부터 user 얻어냄
+//                                JSONObject userJson = obj.getJSONObject("user");
+//
+//                                //받은 정보를 토대로 user 객체 생성
+//                                Member user = new Member(
+//                                        userJson.getString("id"),
+//                                        userJson.getString("pwd"),
+//                                        userJson.getString("name"),
+//                                        userJson.getDouble("height"),
+//                                        userJson.getDouble("weight"),
+//                                        (byte)userJson.getInt("gender"),
+//                                        userJson.getString("birth"),
+//                                        userJson.getDouble("muscle"),
+//                                        userJson.getDouble("fat"),
+//                                        userJson.getString("intro"),
+//                                        userJson.getString("image"),
+//                                        (byte)userJson.getInt("trainer"),
+//                                        (byte)userJson.getInt("admin"),
+//                                        (byte)userJson.getInt("alarm")
+//                                );
+//
+//                                //user를 shared preferences에 저장
+//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+//
+//                                //mainactivity로 넘어감
+//                                finish();
+//                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                            } else {
+//                                //에러일 때도 토스트 메시지 출력
+//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+//                            }
                         } catch (JSONException e) {
-
-
-                            Log.d("test", "4444444");
-
                             e.printStackTrace();
                         }
                     }
@@ -165,18 +184,15 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-                        Log.d("test", "5555555");
-
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("password", password);
+                params.put("id", id);
+                params.put("pwd", pwd);
                 return params;
             }
         };
