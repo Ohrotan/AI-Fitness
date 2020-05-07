@@ -9,7 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/btn_signup_complete"
+        android:layout_above="@id/activity_signup_button_complete"
         android:layout_marginTop="20dp">
 
         <GridLayout
@@ -27,7 +27,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_signup_email"
+                android:id="@+id/activity_signup_edittext_email"
                 android:layout_width="250dp"
                 android:layout_columnSpan="3"
                 android:layout_marginLeft="10dp"
@@ -46,8 +46,9 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_signup_password"
+                android:id="@+id/activity_signup_edittext_password"
                 android:layout_width="250dp"
+                android:layout_height="wrap_content"
                 android:layout_columnSpan="3"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
@@ -65,7 +66,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_signup_password_check"
+                android:id="@+id/activity_signup_edittext_check"
                 android:layout_width="250dp"
                 android:layout_columnSpan="3"
                 android:layout_marginLeft="10dp"
@@ -84,7 +85,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_signup_name"
+                android:id="@+id/activity_signup_edittext_name"
                 android:layout_width="250dp"
                 android:layout_columnSpan="3"
                 android:layout_marginLeft="10dp"
@@ -102,7 +103,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_signup_height"
+                android:id="@+id/activity_signup_edittext_height"
                 android:layout_width="90dp"
                 android:layout_columnSpan="1"
                 android:layout_marginLeft="10dp"
@@ -128,7 +129,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_signup_weight"
+                android:id="@+id/activity_signup_edittext_weight"
                 android:layout_width="90dp"
                 android:layout_columnSpan="1"
                 android:layout_marginLeft="10dp"
@@ -154,7 +155,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_signup_fat"
+                android:id="@+id/activity_signup_edittext_fat"
                 android:layout_width="90dp"
                 android:layout_columnSpan="1"
                 android:layout_marginLeft="10dp"
@@ -180,7 +181,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_signup_muscle"
+                android:id="@+id/activity_signup_edittext_muscle"
                 android:layout_width="90dp"
                 android:layout_columnSpan="1"
                 android:layout_marginLeft="10dp"
@@ -202,11 +203,11 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="나이"
+                android:text="출생일"
                 android:textSize="15sp" />
 
-            <EditText
-                android:id="@+id/et_signup_age"
+            <TextView
+                android:id="@+id/activity_signup_edittext_age"
                 android:layout_width="90dp"
                 android:layout_columnSpan="1"
                 android:layout_marginLeft="10dp"
@@ -219,7 +220,6 @@
                 android:layout_columnSpan="2"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="세"
                 android:textSize="15sp" />
 
 
@@ -233,21 +233,24 @@
                 android:textSize="15sp" />
 
             <RadioGroup
-                android:id="@+id/rg_signup_trainer_check"
+                android:id="@+id/activity_signup_radiogroup_trainer_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="3"
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/activity_signup_radiogroup_trainer_button1"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="트레이너" />
 
                 <RadioButton
+                    android:id="@+id/activity_signup_radiogroup_trainer_button2"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="회원" />
+                    android:text="회원"
+                    android:checked="true"/>
 
             </RadioGroup>
 
@@ -261,21 +264,24 @@
                 android:textSize="15sp" />
 
             <RadioGroup
-                android:id="@+id/rg_signup_gender"
+                android:id="@+id/activity_signup_radiogroup_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="3"
                 android:orientation="horizontal">
 
                 <RadioButton
+                    android:id="@+id/activity_signup_radiogroup_gender_button1"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="남" />
 
                 <RadioButton
+                    android:id="@+id/activity_signup_radiogroup_gender_button2"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="여" />
+                    android:text="여"
+                    android:checked="true"/>
 
             </RadioGroup>
 
@@ -286,8 +292,8 @@
                 android:text="프로필사진등록"
                 android:textSize="15sp" />
 
-            <EditText
-                android:id="@+id/et_signup_photo_path"
+            <TextView
+                android:id="@+id/activity_signup_textview_image_path"
                 android:layout_width="200dp"
                 android:layout_columnSpan="3"
                 android:layout_marginLeft="30dp"
@@ -298,7 +304,7 @@
                 android:textSize="15sp" />
 
             <Button
-                android:id="@+id/btn_signup_photo_path"
+                android:id="@+id/activity_signup_button_image_path"
                 android:layout_width="60dp"
                 android:layout_height="20dp"
                 android:layout_columnSpan="1"
@@ -316,7 +322,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/et_signup_intro"
+                android:id="@+id/activity_signup_edittext_intro"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_columnSpan="4"
@@ -334,7 +340,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/btn_signup_complete"
+        android:id="@+id/activity_signup_button_complete"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
@@ -343,4 +349,13 @@
         android:textColor="#ffffff"
         android:layout_marginTop="60dp"
         android:background="@color/accent"/>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/activity_signup_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
 </RelativeLayout>

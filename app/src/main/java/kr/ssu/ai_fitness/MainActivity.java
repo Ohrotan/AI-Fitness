@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+
 //메모장
 /*
 계정 비밀번호 최소한이 암호화
@@ -137,6 +139,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn18) {
             intent = new Intent(this, HomeActivity.class);
         } else if (v == btn19) {
+            if (SharedPrefManager.getInstance(MainActivity.this).isLoggedIn()) {
+                SharedPrefManager.getInstance(MainActivity.this).logout();
+            }
+            return;
         } else if (v == btn20) {
             intent = new Intent(this, BeforeDayExrProgramActivity.class);
         } else if (v == btn21) {
