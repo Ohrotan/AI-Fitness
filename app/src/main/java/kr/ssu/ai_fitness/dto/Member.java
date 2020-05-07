@@ -1,7 +1,8 @@
 package kr.ssu.ai_fitness.dto;
 
 public class Member {
-    private String id;
+    private int id;
+    private String email;
     private String pwd;
     private String name;
     private double height;
@@ -16,8 +17,9 @@ public class Member {
     private byte admin;
     private byte alarm;
 
-    public Member(String id, String pwd, String name, double height, double weight, byte gender, String birth, double muscle, double fat, String intro, String image, byte trainer, byte admin, byte alarm) {
+    public Member(int id, String email, String pwd, String name, double height, double weight, byte gender, String birth, double muscle, double fat, String intro, String image, byte trainer, byte admin, byte alarm) {
         this.id = id;
+        this.email = email;
         this.pwd = pwd;
         this.name = name;
         this.height = height;
@@ -33,8 +35,12 @@ public class Member {
         this.alarm = alarm;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPwd(String pwd) {
@@ -89,8 +95,12 @@ public class Member {
         this.alarm = alarm;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getPwd() {

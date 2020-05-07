@@ -15,6 +15,7 @@ public class SharedPrefManager {
     private static final String SHARED_PREF_NAME = "shared_preferences_user_file";
 
     private static final String id = "id";
+    private static final String email = "email";
     private static final String pwd = "pwd";
     private static final String name = "name";
     private static final String height = "height";
@@ -52,7 +53,8 @@ public class SharedPrefManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //editor를 이용해서 값을 넣어준다.
 
-        editor.putString(id, user.getId());
+        editor.putString(id, String.valueOf(user.getId()));
+        editor.putString(email, user.getEmail());
         editor.putString(pwd, user.getPwd());
         editor.putString(name, user.getName());
         editor.putString(height, String.valueOf(user.getHeight())); //double형은 string으로 저장하고 꺼낼 때 Double.parseDoubble()써야함.
@@ -80,7 +82,8 @@ public class SharedPrefManager {
     public Member getUser() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return new Member(
-                sharedPreferences.getString(id, null),
+                Integer.parseInt(sharedPreferences.getString(id, null)),
+                sharedPreferences.getString(email, null),
                 sharedPreferences.getString(pwd, null),
                 sharedPreferences.getString(name, null),
                 Double.parseDouble(sharedPreferences.getString(height, null)), //double형은 string으로 저장하고 꺼낼 때 Double.parseDouble()써야함.
