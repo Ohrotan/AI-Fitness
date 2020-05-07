@@ -247,6 +247,8 @@ public class SignupActivity extends AppCompatActivity {
 
         //***** birth, iamge 예외처리 추가해야함
 
+        progressBar.setVisibility(View.VISIBLE);
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SIGNUP,
                 new Response.Listener<String>() {
                     @Override
