@@ -5,44 +5,154 @@ import kr.ssu.ai_fitness.dto.*;
 import kr.ssu.ai_fitness.view.Member_reg_programView;
 
 import android.content.Intent;
+import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 import java.util.ArrayList;
 
 public class MemberAllExrProgramListActivity extends AppCompatActivity {
 
     private ListView mListview;
+    private static final String TAG_RESULTS = "result";
+    private static final String TAG_ID = "id";
+    private static final String TAG_MEMID = "mem_id";
+    private static final String TAG_STARTDATE = "start_date";
+    private static final String TAG_ENDDATE = "end_date";
+    private static final String TAG_RATING = "rating";
+    private static final String TAG_DATE = "date";
+
+    JSONArray peoples = null;
+    ListView list;
+    ArrayList<HashMap<String, String>> personList;
+    String myJSON;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_all_exr_program_list);
-
-        final ListView listView = (ListView)findViewById(R.id.listView);
-
-
+        list = (ListView) findViewById(R.id.listView);
+        personList = new ArrayList<HashMap<String, String>>();
+        getData("https://20200507t112514-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram");
+        /*
         final ListAdapter adapter = new ListAdapter();
         //adapter에 data값
-        adapter.addItem(new Member_reg_program("다이어트1", "★★★★☆","★★★★☆","30 명","","","",""));
-        adapter.addItem(new Member_reg_program("다이어트2", "★★★★☆","★★★★☆","30 명","","","",""));
-        adapter.addItem(new Member_reg_program("다이어트3", "★★★★☆","★★★★☆","30 명","","","",""));
-        adapter.addItem(new Member_reg_program("다이어트4", "★★★★☆","★★★★☆","30 명","","","",""));
-
-
+        //adapter.addItem(new Member_reg_program("다이어트1", "★★★★☆","★★★★☆","30 명","","","",""));
         listView.setAdapter(adapter);
         //이렇게해서 listView껍데기가 어뎁터에게 몇 개의 데이터가 있고 어떤 뷰를 집어넣어야하는지
         //물어보면 어뎁터가 아래의 코드를 통해 만들어놓은 정보를 종합하여 전달함
-
+        */
 
     }
 
+    protected void showList() {
+        try {
+            JSONObject jsonObj = new JSONObject(myJSON);
+            peoples = jsonObj.getJSONArray(TAG_RESULTS);
+
+            for (int i = 0; i < peoples.length(); i++) {
+                JSONObject c = peoples.getJSONObject(i);
+                String id = c.getString(TAG_ID);
+                String mem_id = c.getString(TAG_MEMID);
+                int rating = c.getInt(TAG_RATING);
+                String star_date = c.getString(TAG_STARTDATE);
+                String end_date = c.getString(TAG_ENDDATE);
+                String star = "";
+                String date = "";
+                HashMap<String, String> persons = new HashMap<String, String>();
+
+                persons.put(TAG_ID, id);
+                persons.put(TAG_MEMID, mem_id);
+                for(int j =0; j<rating; j++)
+                {
+                    star += "★";
+                }
+                persons.put(TAG_RATING, star);
+                date = star_date + end_date;
+                persons.put(TAG_DATE, date);
+                personList.add(persons);
+            }
+
+            //adapter에 data값
+            //adapter.addItem(new Member_reg_program(ddd[0], "★★★★☆","★★★★☆","30 명","","","",""));
+            ListAdapter adapter = new SimpleAdapter(
+                    MemberAllExrProgramListActivity.this, personList, R.layout.member_all_exr_program_listview,
+                    new String[]{TAG_RATING}, //
+                    new int[]{R.id.rating_star}
+            );
+
+            list.setAdapter(adapter);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getData(String url) {
+        class GetDataJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+                try {
+                    URL url = new URL(uri);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                    String json;
+                    while ((json = bufferedReader.readLine()) != null) {
+                        sb.append(json + "\n");
+                    }
+
+                    return sb.toString().trim();
+
+                } catch (Exception e) {
+                    return null;
+                }
+
+
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                myJSON = result;
+                showList();
+            }
+        }
+        GetDataJSON g = new GetDataJSON();
+        g.execute(url);
+    }
+
+
+
+/*
     class ListAdapter extends BaseAdapter{
         //어뎁터가 데이터를 관리하며 데이터를 넣었다가 뺄 수도 있으므로 ArrayList를 활용
 
@@ -98,6 +208,6 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
             //그렇게 설정을 잘 해놓은 다음에 view를 반환해야 데이터값이 들어간 레이아웃이 반환
             return view;
         }
-    }
+    }*/
 
 }
