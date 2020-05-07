@@ -93,6 +93,9 @@ public class HomeFragment extends Fragment {
         else { //트레이너가 아닌 경우 내가 신청한 운동이 보여야함.
 
             //*****서버에서 자신이 신청한 운동 프로그램들만 읽어오고 화면에 표시함(최대3개)
+            //*****member_reg_program과 exr_program 테이블 이용해서 검색해와야 함
+
+
         }
 
         //*****트레이너 목록 읽어와서 화면에 표시해줌 (최대 4개)
