@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         //shared preferences에 로그인 정보 있는 경우 곧바로 로그인 처리 해준다.
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
@@ -81,11 +82,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void userLogin() {
         //이메일과 비밀번호를 스트링으로 받는다.
-        final String id = editText_email.getText().toString();
+        final String email = editText_email.getText().toString();
         final String pwd = editText_pwd.getText().toString();
 
         //입력값 검증
-        if (TextUtils.isEmpty(id)) {
+        if (TextUtils.isEmpty(email)) {
             editText_email.setError("Please enter your email");   //edittext 끝에 에러 메세지 띄운다.
             editText_email.requestFocus();                        //에러난 부분으로 포커스를 옮겨준다.
             return;
@@ -113,7 +114,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             //받은 정보를 토대로 user 객체 생성
                             Member user = new Member(
-                                    userJson.getString("id"),
+                                    userJson.getInt("id"),
+                                    userJson.getString("email"),
                                     userJson.getString("pwd"),
                                     userJson.getString("name"),
                                     userJson.getDouble("height"),
@@ -135,10 +137,6 @@ public class LoginActivity extends AppCompatActivity {
                             //mainactivity로 넘어감
                             finish();
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-
-
-                            Log.d("json=>", userJson.getString("id")+userJson.getString("name") );
-                            Toast.makeText(LoginActivity.this, userJson.getString("id"), Toast.LENGTH_SHORT).show();
 
 //                            //response 에러가 아니라면
 //                            if (!obj.getBoolean("error")) {
@@ -191,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                params.put("id", id);
+                params.put("email", email);
                 params.put("pwd", pwd);
                 return params;
             }
