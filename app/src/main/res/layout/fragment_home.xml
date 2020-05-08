@@ -54,6 +54,7 @@
             android:layout_marginRight="20dp">
 
             <TextView
+                android:id="@+id/fragment_home_myprogram1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="트레이너명-운동프로그램"
@@ -61,16 +62,18 @@
                 android:layout_marginBottom="10dp"/>
 
             <TextView
+                android:id="@+id/fragment_home_myprogram2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="트레이너명-운동프로그램"
+                android:text=""
                 android:textSize="15sp"
                 android:layout_marginBottom="10dp"/>
 
             <TextView
+                android:id="@+id/fragment_home_myprogram3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="트레이너명-운동프로그램"
+                android:text=""
                 android:textSize="15sp"
                 android:layout_marginBottom="10dp"/>
 
@@ -118,7 +121,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/fragment_home_imageview_trainer1"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="20dp"
@@ -127,34 +130,34 @@
                 app:srcCompat="@drawable/ic_account_box_black_24dp" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/fragment_home_imageview_trainer2"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="25dp"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/fragment_home_imageview_trainer1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_account_box_black_24dp" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/fragment_home_imageview_trainer3"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="25dp"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/fragment_home_imageview_trainer2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_account_box_black_24dp" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/fragment_home_imageview_trainer4"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="25dp"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintStart_toEndOf="@+id/fragment_home_imageview_trainer3"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_account_box_black_24dp" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/fragment_home_textview_trainer1"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -162,40 +165,40 @@
                 android:gravity="center"
                 android:text="이름"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/fragment_home_imageview_trainer1" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/fragment_home_textview_trainer2"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="이름"
-                app:layout_constraintStart_toEndOf="@+id/textView"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                app:layout_constraintStart_toEndOf="@+id/fragment_home_textview_trainer1"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_home_imageview_trainer2" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/fragment_home_textview_trainer3"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="이름"
-                app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                app:layout_constraintStart_toEndOf="@+id/fragment_home_textview_trainer2"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_home_imageview_trainer3" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/fragment_home_textview_trainer4"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="이름"
-                app:layout_constraintStart_toEndOf="@+id/textView4"
-                app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+                app:layout_constraintStart_toEndOf="@+id/fragment_home_textview_trainer3"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_home_imageview_trainer4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
@@ -245,6 +248,7 @@
             android:layout_marginRight="20dp">
 
             <TextView
+                android:id="@+id/fragment_home_textview_program1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="트레이너명-운동프로그램"
@@ -252,16 +256,18 @@
                 android:layout_marginBottom="10dp"/>
 
             <TextView
+                android:id="@+id/fragment_home_textview_program2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="트레이너명-운동프로그램"
+                android:text=""
                 android:textSize="15sp"
                 android:layout_marginBottom="10dp"/>
 
             <TextView
+                android:id="@+id/fragment_home_textview_program3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="트레이너명-운동프로그램"
+                android:text=""
                 android:textSize="15sp"
                 android:layout_marginBottom="10dp"/>
 

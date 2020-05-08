@@ -6,5 +6,6 @@ public class URLs {
 
     public static final String URL_SIGNUP = ROOT_URL + "/member/signup";
     public static final String URL_LOGIN= ROOT_URL + "/member/login";
+    public static final String URL_HOMEDATA= ROOT_URL + "/member/homeData";
 
 }
