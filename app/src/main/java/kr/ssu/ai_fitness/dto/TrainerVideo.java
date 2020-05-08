@@ -2,8 +2,8 @@ package kr.ssu.ai_fitness.dto;
 
 public class TrainerVideo {
 
-    private String id;
-    private String trainer_id;
+    private int id;
+    private int trainer_id;
     private String thumb_img;
     private String video;
     private String title;
@@ -16,7 +16,13 @@ public class TrainerVideo {
         this.title = title;
     }
 
-    public TrainerVideo(String id, String trainer_id, String thumb_img, String video, String title, String analysis) {
+    public TrainerVideo( int trainer_id, String thumb_img, String video, String title) {
+        this.trainer_id = trainer_id;
+        this.thumb_img = thumb_img;
+        this.video = video;
+        this.title = title;
+    }
+    public TrainerVideo(int id, int trainer_id, String thumb_img, String video, String title, String analysis) {
         this.id = id;
         this.trainer_id = trainer_id;
         this.thumb_img = thumb_img;
@@ -25,19 +31,19 @@ public class TrainerVideo {
         this.analysis = analysis;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getTrainer_id() {
+    public int getTrainer_id() {
         return trainer_id;
     }
 
-    public void setTrainer_id(String trainer_id) {
+    public void setTrainer_id(int trainer_id) {
         this.trainer_id = trainer_id;
     }
 
@@ -71,5 +77,17 @@ public class TrainerVideo {
 
     public void setAnalysis(String analysis) {
         this.analysis = analysis;
+    }
+
+    @Override
+    public String toString() {
+        return "TrainerVideo{" +
+                "id=" + id +
+                ", trainer_id=" + trainer_id +
+                ", thumb_img='" + thumb_img + '\'' +
+                ", video='" + video + '\'' +
+                ", title='" + title + '\'' +
+                ", analysis='" + analysis + '\'' +
+                '}';
     }
 }

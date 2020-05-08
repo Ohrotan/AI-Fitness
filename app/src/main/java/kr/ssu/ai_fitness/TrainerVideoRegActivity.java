@@ -2,41 +2,48 @@ package kr.ssu.ai_fitness;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.InputStream;
+import java.util.UUID;
 
+import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.dto.TrainerVideo;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.util.VideoUpload;
 
 public class TrainerVideoRegActivity extends AppCompatActivity {
-
+ImageView imgv;
     ImageButton video_choose_btn;
     EditText video_title_etv;
     Button tr_video_reg_btn;
-    TextView video_path_tv;
+
     private static final int SELECT_VIDEO = 3;
 
     private String selectedPath;
     Uri selectedImageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trainer_video_reg);
+        imgv = findViewById(R.id.imgv);
         video_choose_btn = findViewById(R.id.video_choose_btn);
-        video_path_tv = findViewById(R.id.video_path_tv);
+
         video_title_etv = findViewById(R.id.video_title_etv);
         tr_video_reg_btn = findViewById(R.id.tr_video_reg_btn);
 
@@ -65,14 +72,18 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_VIDEO) {
                 System.out.println("SELECT_VIDEO");
-                 selectedImageUri = data.getData();
+                selectedImageUri = data.getData();
                 selectedPath = selectedImageUri.getPath();
-                video_path_tv.setText(selectedPath);
+
+              //썸네일 하는중
+              Bitmap bmThumbnail = ThumbnailUtils.createVideoThumbnail(selectedPath, MediaStore.Images.Thumbnails.MICRO_KIND);
+                imgv.setImageBitmap(bmThumbnail);
             }
         }
     }
 
     public InputStream getFileInputStream(Uri uri) {
+       /*
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
         String document_id = cursor.getString(0);
@@ -87,20 +98,27 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
 
         String path = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
         cursor.close();
+        */
         InputStream is = null;
         try {
-            is =  getContentResolver().openInputStream(uri);
+            is = getContentResolver().openInputStream(uri);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return is;
     }
 
     private void uploadVideo(Uri selectedImageUri) {
-        class UploadVideoTask extends AsyncTask<Uri,Void, String> {
+        class UploadVideoTask extends AsyncTask<Uri, Void, String> {
 
             ProgressDialog uploading;
+
+            TrainerVideo info;
+
+            UploadVideoTask(TrainerVideo info) {
+               this.info = info;
+            }
 
             @Override
             protected void onPreExecute() {
@@ -112,19 +130,27 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 uploading.dismiss();
-                video_path_tv.setText(Html.fromHtml("<b>Uploaded at <a href='" + s + "'>" + s + "</a></b>"));
-                video_path_tv.setMovementMethod(LinkMovementMethod.getInstance());
+                // if(s.length()>100) s= s.substring(0,99);
+                //video_path_tv.setText(Html.fromHtml(s));
+               // video_path_tv.setMovementMethod(LinkMovementMethod.getInstance());
+                Toast.makeText(TrainerVideoRegActivity.this,"complete",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             protected String doInBackground(Uri... params) {
                 VideoUpload u = new VideoUpload();
 
-                String msg = u.uploadVideo(getFileInputStream(params[0]));
+                String msg = u.uploadVideo(getFileInputStream(params[0]),info);
                 return msg;
             }
         }
-        UploadVideoTask uv = new UploadVideoTask();
+        //예시 데이터
+        SharedPrefManager.getInstance(getApplicationContext()).userLogin(new Member(99));
+        int userId =  SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();;
+
+        TrainerVideo info = new TrainerVideo(userId,UUID.randomUUID()+".jpg", UUID.randomUUID()+".mp4", video_title_etv.getText().toString());
+        Log.i("Huzza", "Member : " + info.toString());
+        UploadVideoTask uv = new UploadVideoTask(info);
         uv.execute(selectedImageUri);
     }
 

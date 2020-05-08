@@ -17,6 +17,14 @@ public class Member {
     private byte admin;
     private byte alarm;
 
+    public Member(){
+
+    }
+
+    public Member(int id){
+        this.id=id;
+    }
+
     public Member(int id, String email, String pwd, String name, double height, double weight, byte gender, String birth, double muscle, double fat, String intro, String image, byte trainer, byte admin, byte alarm) {
         this.id = id;
         this.email = email;
