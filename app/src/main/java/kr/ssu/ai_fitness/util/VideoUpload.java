@@ -12,6 +12,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import kr.ssu.ai_fitness.dto.TrainerVideo;
+
 /**
  * Created by Belal on 11/22/2015.
  */
@@ -23,9 +25,8 @@ public class VideoUpload {
 
     String rtmsg="";
 
-    public String uploadVideo(InputStream is) {
+    public String uploadVideo(InputStream is, TrainerVideo info) {
 
-        String fileName = "test.mp4";
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
         String lineEnd = "\r\n";
@@ -33,19 +34,13 @@ public class VideoUpload {
         String boundary = "*****";
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
-        int maxBufferSize = 1 * 1024 * 1024;
-        rtmsg = rtmsg+" 37line";
-       // File sourceFile = new File(file);rtmsg = rtmsg+" 38line,"+file+","+sourceFile.getAbsolutePath();
-       // if (!sourceFile.isFile()) {
-      //      Log.e("Huzza", "Source File Does not exist");
-      //      return null;
-     //   }
+        int maxBufferSize = 100 * 1024 * 1024; //100mb
+        Log.i("Huzza", "Member2 : " + info.toString());
 
         try {
-           // FileInputStream fileInputStream = new FileInputStream(Environment.getExternalStorageDirectory().getPath()+sourceFile);     rtmsg = rtmsg+" 45line";
-            URL url = new URL(UPLOAD_URL);rtmsg = rtmsg+" 46line";
-            conn = (HttpURLConnection) url.openConnection();rtmsg = rtmsg+" 47line";
-            rtmsg = rtmsg+" 48line";
+            URL url = new URL(UPLOAD_URL);
+            conn = (HttpURLConnection) url.openConnection();
+
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.setUseCaches(false);
@@ -53,11 +48,15 @@ public class VideoUpload {
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            conn.setRequestProperty("myFile", fileName);
+            conn.setRequestProperty("myFile", info.getVideo());
             dos = new DataOutputStream(conn.getOutputStream());
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"myFile\";filename=\"" + fileName + "\"" + lineEnd);
+
+
+
+            dos.writeBytes("Content-Disposition: form-data; name=\"myFile\";filename=\"" + info.getVideo() + "\"" + lineEnd);
+
             dos.writeBytes(lineEnd);
 
             bytesAvailable = is.available();
@@ -76,25 +75,46 @@ public class VideoUpload {
             }
 
             dos.writeBytes(lineEnd);
+
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"title\"  " +twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Type: text/plain" + lineEnd);
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(info.getTitle());
+            dos.writeBytes(lineEnd);
+
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"trainer_id\"  " +twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Type: text/plain" + lineEnd);
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(info.getTrainer_id()+"");
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+
+            dos.writeBytes("Content-Disposition: form-data; name=\"thumb_img\"  " +twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Type: text/plain" + lineEnd);
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(info.getThumb_img());
+            dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
             serverResponseCode = conn.getResponseCode();
-            rtmsg = rtmsg+" 81ine "+serverResponseCode;
+
 
             is.close();
             dos.flush();
             dos.close();
         } catch (MalformedURLException ex) {
-            rtmsg = rtmsg+" 88ine";
+
               ex.printStackTrace();
         } catch (FileNotFoundException e){
-            rtmsg = rtmsg+" 92ine";
+
         }
         catch (SecurityException e){
-            rtmsg = rtmsg+" 95ine";
+
         }
         catch (Exception e) {
-            rtmsg = rtmsg+" 98ine";
+
             e.printStackTrace();
         }
 
@@ -110,7 +130,7 @@ public class VideoUpload {
                 rd.close();
             } catch (IOException ioex) {
             }
-            return sb.toString();
+            return  sb.toString();
         } else {
             return rtmsg+"Could not upload";
         }

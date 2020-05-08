@@ -17,6 +17,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/imgv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/bonobono" />
+
             <ImageButton
                 android:id="@+id/video_choose_btn"
                 android:layout_width="match_parent"
@@ -25,12 +31,6 @@
                 android:onClick="onClick"
                 android:padding="20dp"
                 app:srcCompat="@drawable/video_reg" />
-
-            <TextView
-                android:id="@+id/video_path_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
 
             <TextView
                 android:id="@+id/tv1"
