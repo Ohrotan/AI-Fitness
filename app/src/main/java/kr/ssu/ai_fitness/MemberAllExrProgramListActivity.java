@@ -35,12 +35,11 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
 
     private ListView mListview;
     private static final String TAG_RESULTS = "result";
-    private static final String TAG_ID = "id";
-    private static final String TAG_MEMID = "mem_id";
-    private static final String TAG_STARTDATE = "start_date";
-    private static final String TAG_ENDDATE = "end_date";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_TITLE = "title";
+    private static final String TAG_LEVEL = "level";
+    private static final String TAG_MAX = "max";
     private static final String TAG_RATING = "rating";
-    private static final String TAG_DATE = "date";
 
     JSONArray peoples = null;
     ListView list;
@@ -53,7 +52,7 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_member_all_exr_program_list);
         list = (ListView) findViewById(R.id.listView);
         personList = new ArrayList<HashMap<String, String>>();
-        getData("https://20200507t112514-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram");
+        getData("https://20200508t230129-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram");
         /*
         final ListAdapter adapter = new ListAdapter();
         //adapter에 data값
@@ -72,24 +71,29 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
 
             for (int i = 0; i < peoples.length(); i++) {
                 JSONObject c = peoples.getJSONObject(i);
-                String id = c.getString(TAG_ID);
-                String mem_id = c.getString(TAG_MEMID);
+                String name = c.getString(TAG_NAME);
+                String title = c.getString(TAG_TITLE);
                 int rating = c.getInt(TAG_RATING);
-                String star_date = c.getString(TAG_STARTDATE);
-                String end_date = c.getString(TAG_ENDDATE);
+                int level = c.getInt(TAG_LEVEL);
+                String max = c.getString(TAG_MAX);
                 String star = "";
-                String date = "";
+                String level_star = "";
                 HashMap<String, String> persons = new HashMap<String, String>();
 
-                persons.put(TAG_ID, id);
-                persons.put(TAG_MEMID, mem_id);
+                name = name + " - " + title;
+                persons.put(TAG_NAME, name);
                 for(int j =0; j<rating; j++)
                 {
                     star += "★";
                 }
                 persons.put(TAG_RATING, star);
-                date = star_date + end_date;
-                persons.put(TAG_DATE, date);
+                for(int j =0; j<rating; j++)
+                {
+                    level_star += "★";
+                }
+                persons.put(TAG_LEVEL, level_star);
+                max += " 명";
+                persons.put(TAG_MAX, max);
                 personList.add(persons);
             }
 
@@ -97,9 +101,16 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
             //adapter.addItem(new Member_reg_program(ddd[0], "★★★★☆","★★★★☆","30 명","","","",""));
             ListAdapter adapter = new SimpleAdapter(
                     MemberAllExrProgramListActivity.this, personList, R.layout.member_all_exr_program_listview,
-                    new String[]{TAG_RATING}, //
-                    new int[]{R.id.rating_star}
+                    new String[]{TAG_NAME,TAG_RATING,TAG_LEVEL,TAG_MAX}, //
+                    new int[]{R.id.titleOfProg,R.id.rating_star,R.id.diff_star,R.id.numOfProg}
             );
+
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Toast.makeText(view.getContext(), personList.get(i).toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
             list.setAdapter(adapter);
 
@@ -149,6 +160,7 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
         GetDataJSON g = new GetDataJSON();
         g.execute(url);
     }
+
 
 
 
