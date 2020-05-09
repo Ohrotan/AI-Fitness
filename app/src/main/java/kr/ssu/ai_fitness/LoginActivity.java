@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button button_login;
     private Button button_signup;
 
-    ProgressBar progressBar;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,6 @@ public class LoginActivity extends AppCompatActivity {
         editText_pwd = (EditText)findViewById(R.id.et_login_password);
         button_login = (Button)findViewById(R.id.btn_login);
         button_signup = (Button)findViewById(R.id.btn_signup);
-
-        progressBar = (ProgressBar)findViewById(R.id.activity_login_progressbar);
 
         //로그인 버튼 클릭
         button_login.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +97,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);//프로그레스바 안보이게 함
+        progressDialog = ProgressDialog.show(LoginActivity.this, "로그인 중", "Please wait...", false, false);
+
 
         //서버에서 받아오는 부분
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_LOGIN,
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
 
-                        progressBar.setVisibility(View.GONE);//프로그레스바 안보이게 함
+                        progressDialog.dismiss();
 
                         try {
                             //response를 json object로 변환함.
