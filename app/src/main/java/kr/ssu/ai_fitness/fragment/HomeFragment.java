@@ -204,7 +204,7 @@ public class HomeFragment extends Fragment {
                                 ));
                             }
 
-                            Log.d("mypromgrams", String.valueOf(myPrograms.size()) + "-" + myPrograms.get(0).getProgram_title());
+                            //Log.d("mypromgrams", String.valueOf(myPrograms.size()) + "-" + myPrograms.get(0).getProgram_title());
 
                             for (int i =0; i < allTrainerCount; ++i) {
                                 allTrainer.add(new AllTrainer(
@@ -226,6 +226,9 @@ public class HomeFragment extends Fragment {
                             //받아온 데이터를 이용해서 세팅한다.
 
                             //피드백 프로그램 or 내가 신청한 프로그램 부분 세팅한다.
+                            if (myProgramCount == 0) {
+                                textView_myProgram1.setText("신청한 운동 프로그램이 없습니다.");
+                            }
                             if (myProgramCount >= 1) {
                                 textView_myProgram1.setText(myPrograms.get(0).getTrainer_name() + "-" + myPrograms.get(0).getProgram_title());
                             }
