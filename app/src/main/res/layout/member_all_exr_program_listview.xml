@@ -18,9 +18,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:id="@+id/titleOfProg"
+        android:id="@+id/name"
         android:layout_toRightOf="@+id/pic"
-        android:text="보노본 - 다이어트 30일"
+        android:text="보노본"
+        android:textSize="25dp"
+        android:textColor="#3498db"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/title"
+        android:layout_toRightOf="@+id/name"
+        android:text="다이어트 30일"
         android:textSize="25dp"
         android:textColor="#3498db"
         android:gravity="center"/>
@@ -28,14 +38,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="난이도 : "
-        android:layout_below="@+id/titleOfProg"
+        android:layout_below="@+id/name"
         android:layout_toRightOf="@+id/pic"
         android:id="@+id/difficulty"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="★★★★★"
-        android:layout_below="@+id/titleOfProg"
+        android:layout_below="@+id/name"
         android:layout_toRightOf="@+id/difficulty"
         android:id="@+id/diff_star"/>
     <TextView
