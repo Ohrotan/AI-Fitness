@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,14 +81,15 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                 String level_star = "";
                 HashMap<String, String> persons = new HashMap<String, String>();
 
-                name = name + " - " + title;
+                name = name + " - ";
                 persons.put(TAG_NAME, name);
+                persons.put(TAG_TITLE, title);
                 for(int j =0; j<rating; j++)
                 {
                     star += "★";
                 }
                 persons.put(TAG_RATING, star);
-                for(int j =0; j<rating; j++)
+                for(int j =0; j<level; j++)
                 {
                     level_star += "★";
                 }
@@ -101,18 +103,28 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
             //adapter.addItem(new Member_reg_program(ddd[0], "★★★★☆","★★★★☆","30 명","","","",""));
             ListAdapter adapter = new SimpleAdapter(
                     MemberAllExrProgramListActivity.this, personList, R.layout.member_all_exr_program_listview,
-                    new String[]{TAG_NAME,TAG_RATING,TAG_LEVEL,TAG_MAX}, //
-                    new int[]{R.id.titleOfProg,R.id.rating_star,R.id.diff_star,R.id.numOfProg}
+                    new String[]{TAG_NAME,TAG_TITLE,TAG_RATING,TAG_LEVEL,TAG_MAX}, //
+                    new int[]{R.id.name, R.id.title,R.id.rating_star,R.id.diff_star,R.id.numOfProg}
             );
+            list.setAdapter(adapter);
 
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Toast.makeText(view.getContext(), personList.get(i).toString(), Toast.LENGTH_SHORT).show();
+                    view = list.getChildAt(i);// 얘 안쓰면 해당 리스트뷰의 값을 못 읽음.
+                    TextView txt = view.findViewById(R.id.title);
+                    String title = txt.getText().toString();
+                    //Toast.makeText(getApplicationContext(),title,Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class); // 다음 넘어갈 클래스 지정
+                    intent.putExtra("title", title);
+                    startActivity(intent); // 다음 화면으로 넘어간다
+
                 }
             });
 
-            list.setAdapter(adapter);
+
+
+
 
 
         } catch (JSONException e) {
