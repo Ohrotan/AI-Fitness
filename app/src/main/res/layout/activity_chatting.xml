@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/activity_chatting_button"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginRight="15dp"
