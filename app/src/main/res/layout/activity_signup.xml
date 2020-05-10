@@ -350,12 +350,4 @@
         android:layout_marginTop="60dp"
         android:background="@color/accent"/>
 
-    <ProgressBar
-        android:visibility="gone"
-        android:id="@+id/activity_signup_progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
-
 </RelativeLayout>

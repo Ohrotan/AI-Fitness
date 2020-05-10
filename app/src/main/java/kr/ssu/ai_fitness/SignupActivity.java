@@ -2,11 +2,16 @@ package kr.ssu.ai_fitness;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,15 +32,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.ProfileUpload;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class SignupActivity extends AppCompatActivity {
@@ -57,13 +65,11 @@ public class SignupActivity extends AppCompatActivity {
 
     TextView textViewImage;      //프사 경로
     Button buttonImage;       //프사 찾기 버튼
-    Uri path;
+    Uri selectedImageUri;
 
     EditText editTextIntro;           //자기소개
 
     Button buttonComplete;         //회원가입 완료 버튼
-
-    ProgressBar progressBar;            //로딩 프로그레스바
 
 
     Calendar myCalendar = Calendar.getInstance();
@@ -110,7 +116,6 @@ public class SignupActivity extends AppCompatActivity {
 
         buttonComplete = (Button)findViewById(R.id.activity_signup_button_complete);
 
-        progressBar = (ProgressBar)findViewById(R.id.activity_signup_progressBar);
 
         //생일 textveiw 클릭
         editTextBirth.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +145,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                registerUser();
+                registerUser(selectedImageUri);
 
             }
         });
@@ -154,11 +159,11 @@ public class SignupActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE) {
 
-                path = data.getData();
+                selectedImageUri = data.getData();
                 try {
 
                     //선택한 사진 경로를 버튼 옆 텍스트뷰에 보여줌
-                    textViewImage.setText(path.getPath());
+                    textViewImage.setText(selectedImageUri.getPath());
 
                 } catch (Exception e) {
                     Toast.makeText(this, "사진 선택 에러", Toast.LENGTH_LONG).show();
@@ -178,7 +183,20 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-    private void registerUser() {
+    public InputStream getFileInputStream(Uri uri) {
+        InputStream is = null;
+        try {
+            //ContentProvider를 통해 db에 있는 파일 path의 Uri로 해당 파일을 InputStream으로 가져오는 방법이다
+            is = getContentResolver().openInputStream(uri);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return is;
+    }
+
+
+    private void registerUser(Uri selectedImageUri) {
         final String email = editTextEmail.getText().toString().trim();
         final String pwd = editTextPwd.getText().toString().trim();
         final String pwd_check = editTextPwdCheck.getText().toString().trim();
@@ -188,16 +206,16 @@ public class SignupActivity extends AppCompatActivity {
         final String fat = editTextFat.getText().toString().trim();;
         final String muscle = editTextMuscle.getText().toString().trim();;
 
-        final String trainer = ((RadioButton) findViewById(radioGroup_trainer.getCheckedRadioButtonId())).getText().toString();
-        final String gender = ((RadioButton) findViewById(radioGroup_gender.getCheckedRadioButtonId())).getText().toString();
+        final int trainer = ((RadioButton) findViewById(radioGroup_trainer.getCheckedRadioButtonId())).getText().toString().equals("트레이너") ? 1 : 0;
+        final int gender = ((RadioButton) findViewById(radioGroup_gender.getCheckedRadioButtonId())).getText().toString().equals("남") ? 1 : 0;
 
         //path 값이 없으면 리턴하고, 있다면 이것을 프사 경로로 사용함.
-        if(path.equals("")) {
+        if(selectedImageUri.equals("")) {
             buttonImage.setError("Please select your photo");
             buttonImage.requestFocus();
             return;
         }
-        final String image = path.getPath();
+        final String image = selectedImageUri.getPath();
 
         final String intro = editTextIntro.getText().toString();
 
@@ -247,123 +265,73 @@ public class SignupActivity extends AppCompatActivity {
 
         //***** birth, iamge 예외처리 추가해야함
 
-        progressBar.setVisibility(View.VISIBLE);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SIGNUP,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        progressBar.setVisibility(View.GONE);
+        //dto가 들어가는 부분. 회원 가입의 경우 여러 정보와 함께 프로필 사진 이미지를 같이 전송한다.
+        Member info = new Member(
+                0,
+                email,
+                pwd,
+                name,
+                Double.parseDouble(height),
+                Double.parseDouble(weight),
+                (byte)gender,
+                birth,
+                Double.parseDouble(muscle),
+                Double.parseDouble(fat),
+                intro,
+                UUID.randomUUID()+".jpg",
+                (byte)trainer,
+                Byte.parseByte(admin),
+                Byte.parseByte(alarm)
+        );
+        Log.i("Huzza", "Member : " + info.getId()+info.getEmail()+info.getPwd()+info.getHeight()+info.getWeight());
 
-                        try {
-                            //response를 json object로 변환함.
-                            JSONArray obj = new JSONArray(response);
+        SignupActivity.UploadMemberInfoTask uploadMemberInfoTask = new SignupActivity.UploadMemberInfoTask(this, info);
+        uploadMemberInfoTask.execute(selectedImageUri);//AsyncTask 실행
+    }
 
-                            if (obj.get(0).toString().equals("error")) {//서버에서 insert query 실패한 경우
-                                Toast.makeText(SignupActivity.this, "DB에 INSERT 실패", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                JSONObject userJson = obj.getJSONObject(0);
 
-                                //받은 정보를 토대로 user 객체 생성
-                                Member user = new Member(
-                                        userJson.getInt("id"),
-                                        userJson.getString("email"),
-                                        userJson.getString("pwd"),
-                                        userJson.getString("name"),
-                                        userJson.getDouble("height"),
-                                        userJson.getDouble("weight"),
-                                        (byte) userJson.getInt("gender"),
-                                        userJson.getString("birth"),
-                                        userJson.getDouble("muscle"),
-                                        userJson.getDouble("fat"),
-                                        userJson.getString("intro"),
-                                        userJson.getString("image"),
-                                        (byte) userJson.getInt("trainer"),
-                                        (byte) userJson.getInt("admin"),
-                                        (byte) userJson.getInt("alarm")
-                                );
+    class UploadMemberInfoTask extends AsyncTask<Uri, Void, String> {
 
-                                //user를 shared preferences에 저장
-                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+        ProgressDialog uploading;
+        Context context;
 
-                                //mainactivity로 넘어감
-                                finish();
-                                startActivity(new Intent(SignupActivity.this, HomeActivity.class));
-                            }
-//                            //if no error in response
-//                            if (!obj.getBoolean("error")) {
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//
-//                                //getting the user from the response
-//                                JSONObject userJson = obj.getJSONObject("user");
-//
-//                                //creating a new user object
-//                                Member user = new Member(
-//                                        userJson.getString("id"),
-//                                        null,
-//                                        userJson.getString("name"),
-//                                        0,
-//                                        0,
-//                                        (byte)0,
-//                                        null,
-//                                        0,
-//                                        0,
-//                                        null,
-//                                        null,
-//                                        (byte)0,
-//                                        (byte)0,
-//                                        (byte)0
-//                                );
-//
-//                                //storing the user in shared preferences
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-//
-//                                //starting the profile activity
-//                                finish();
-//                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(),  "error!", Toast.LENGTH_SHORT).show();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+        Member info;
 
-                //id, pwd, name, height, weight, gender, birth, muscle, fat, intro, trainer, admin, alarm 보내야함.
-                //*****image는 따로 보내야 할 수도 있음
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("pwd", pwd);
-                params.put("name", name);
-                params.put("height", height);
-                params.put("weight", weight);
-                params.put("gender", gender);
-                params.put("birth", birth);
-                params.put("muscle", muscle);
-                params.put("fat", fat);
-                params.put("intro", intro);
-                params.put("image", image);
-                params.put("trainer", trainer);
-                params.put("admin", admin);
-                params.put("alarm", alarm);
+        UploadMemberInfoTask(Context context, Member info) {
+            this.info = info;
+            this.context = context;
+        }
 
-                return params;
-            }
-        };
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            uploading = ProgressDialog.show(SignupActivity.this, "Uploading File", "Please wait...", false, false);
+        }
 
-        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            uploading.dismiss();
+            // if(s.length()>100) s= s.substring(0,99);
+            //video_path_tv.setText(Html.fromHtml(s));
+            // video_path_tv.setMovementMethod(LinkMovementMethod.getInstance());
+            Toast.makeText(SignupActivity.this,"complete",Toast.LENGTH_SHORT).show();
 
+            SharedPrefManager.getInstance(context).userLogin(info);
+
+            ((Activity)context).finish();
+            context.startActivity(new Intent(context, HomeActivity.class));
+        }
+
+        @Override
+        protected String doInBackground(Uri... params) {
+            ProfileUpload u = new ProfileUpload();
+
+            //실제 HttpURLConnection 이용해서 서버에 요청하고 응답받는다.
+            String msg = u.upload(getFileInputStream(params[0]),info);
+            return msg;
+        }
     }
 
 }
-
