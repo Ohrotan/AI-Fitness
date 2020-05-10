@@ -1,11 +1,12 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,16 +15,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
-import kr.ssu.ai_fitness.TrainerListActivity;
+import kr.ssu.ai_fitness.vo.AllTrainer;
 
 public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.ViewHolder> {
 
-    private ArrayList<String> mData = new ArrayList<String>() ;
+    //private ArrayList<String> mData = new ArrayList<String>() ;
+    ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
     private Context mContext;
-   // private RatingBar trainerRating;
+    private ImageView ratings;
+    //private ImageView profilePic;
+    //private TextView name;
+    //private ImageView rating;
+    //private RatingBar trainerRating;
 
-    public void addItem(String item) {
+    /*public void addItem(String item) {
         mData.add(item);
+    }*/
+
+    public void addItem(AllTrainer item) {
+        trainers.add(item);
     }
 
     public TrainerListAdapter(Context c){
@@ -33,16 +43,21 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView trainerListItem ;
-        //ImageView alarmDot;
-        //ImageButton regMemberListNextIcon;
+        ImageView profilePic;
+        //ImageView rating;
 
         public ViewHolder(View itemView) {
             super(itemView) ;
 
+            profilePic = itemView.findViewById(R.id.trainerListImageItem_trainerPic);
+            ratings = itemView.findViewById(R.id.ratingImageTrainerList);
             // 뷰 객체에 대한 참조. (hold strong reference)
             trainerListItem = itemView.findViewById(R.id.trainerListTextItem_trainerName);
-            //trainerRating = itemView.findViewById(R.id.ratingBarTrainerList);
-            //regMemberListNextIcon = itemView.findViewById(R.id.regMemberListNext);
+
+            //int position = getAdapterPosition();
+            //Double avgRating = trainers.get(position).getRating();
+            //ratings.setImageResource();
+
             itemView.setOnClickListener(new View.OnClickListener(){
 
                 @Override
@@ -52,7 +67,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
                         //mData.set(pos, "item clicked. pos = " + pos);
                         Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
 
-                        notifyItemChanged(pos);
+                        //notifyItemChanged(pos);
                     }
                     else{
 
@@ -74,7 +89,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
         Context context = parent.getContext() ;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
-        View view = inflater.inflate(R.layout.layout_trainer_list_item, parent, false) ;
+        View view = inflater.inflate(R.layout.item_trainer_list, parent, false) ;
         TrainerListAdapter.ViewHolder vh = new TrainerListAdapter.ViewHolder(view) ;
 
         return vh ;
@@ -83,8 +98,17 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(TrainerListAdapter.ViewHolder holder, int position) {
-        String text = mData.get(position) ;
+        //ImageView ratings =
+        String text = trainers.get(position).getName() ;
+
+        Log.d("BINDVIEWHOLDER", "text = " + text);
+
         holder.trainerListItem.setText(text) ;
+        //Double avgRating = trainers.get(position).getRating();
+
+        /*if(avgRating < 0.5){
+            ratings.setImageDrawable();
+        }*/
         //holder.regMemberListNextIcon.getAccessibilityClassName();
     }
 
@@ -92,6 +116,6 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
     @Override
     public int getItemCount() {
 
-        return mData.size() ;
+        return trainers.size() ;
     }
 }

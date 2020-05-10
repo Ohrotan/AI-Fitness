@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     AlertDialog.Builder logoutDialog;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,10 +142,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         infoRegDate.setText(regDate);*/
 
         //신장, 체중, 근육량, 체지방량 설정
-        height.setText(String.format(Double.toString(user.getHeight())));
-        weight.setText(String.format(Double.toString(user.getWeight())));
-        muscle.setText(String.format(Double.toString(user.getMuscle())));
-        fat.setText(String.format(Double.toString(user.getFat())));
+        height.setText(String.format(Double.toString(user.getHeight())) + "cm");
+        weight.setText(String.format(Double.toString(user.getWeight())) + "kg");
+        muscle.setText(String.format(Double.toString(user.getMuscle())) + "%");
+        fat.setText(String.format(Double.toString(user.getFat())) + "%");
 
         //알림 설정 여부 스위치
         if(user.getAlarm() == 1){
