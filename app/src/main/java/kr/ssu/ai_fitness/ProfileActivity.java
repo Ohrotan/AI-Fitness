@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     final Context context = this;
@@ -24,6 +28,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ImageButton editButton;
     private RelativeLayout pwdChange;
     private RelativeLayout logout;
+    private RelativeLayout adminSetting;
     private RelativeLayout allMemberManage;
     private RelativeLayout allProgramManage;
     private RelativeLayout allVideoManage;
@@ -36,12 +41,23 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        trainerBadge = findViewById(R.id.trainerBadgeLayout);
+        editButton = findViewById(R.id.editProfile);
         alarmSwitch = findViewById(R.id.noticeSwitch);
         pwdChange = findViewById(R.id.pwdChangeLayout);
         logout = findViewById(R.id.logoutLayout);
+        adminSetting = findViewById(R.id.adminSetting);
         allMemberManage = findViewById(R.id.allMemberManageLayout);
         allProgramManage = findViewById(R.id.allProgramManageLayout);
         allVideoManage = findViewById(R.id.allVideoManageLayout);
+
+        Member user;
+
+        user = SharedPrefManager.getInstance(ProfileActivity.this).getUser();
+
+        if(user.getTrainer() == 0){
+            trainerBadge.setVisibility(View.INVISIBLE);
+        }
 
         alarmSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener(){
             @Override
@@ -53,6 +69,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         pwdChange.setOnClickListener(this);
+        editButton.setOnClickListener(this);
 
         logout.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
@@ -65,7 +82,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             public void onClick(DialogInterface dialog, int id) { // 프로그램을 종료한다
                                 //ProfileEditActivity.this.finish();
                                 dialog.cancel();
+                                SharedPrefManager.getInstance(ProfileActivity.this).logout();
                                 Toast.makeText(getApplicationContext(), "로그아웃하기", Toast.LENGTH_SHORT).show();
+                                finish();
+                                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                             }
                         })
                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -79,10 +99,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+        if(user.getAdmin() == 0){
+            adminSetting.setVisibility(View.INVISIBLE);
+        }
+
         allMemberManage.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
             public void onClick(View V){
                 Toast.makeText(getApplicationContext(), "전체 회원 관리", Toast.LENGTH_SHORT).show();
+                onPause();
+                startActivity(new Intent(ProfileActivity.this, AdminUserManageActivity.class));
             }
         });
 
@@ -90,6 +116,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View V){
                 Toast.makeText(getApplicationContext(), "전체 프로그램 관리", Toast.LENGTH_SHORT).show();
+                onPause();
+                startActivity(new Intent(ProfileActivity.this, AdminProgramManageActivity.class));
             }
         });
 
@@ -97,6 +125,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View V){
                 Toast.makeText(getApplicationContext(), "전체 영상 관리", Toast.LENGTH_SHORT).show();
+                onPause();
+                startActivity(new Intent(ProfileActivity.this, AdminVideoManageActivity.class));
             }
         });
     }
@@ -120,6 +150,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 });*/
                 dialog.show();
                 break;
+            case R.id.editProfile:
+                finish();
+                startActivity(new Intent(ProfileActivity.this, ProfileEditActivity.class));
         }
     }
 }

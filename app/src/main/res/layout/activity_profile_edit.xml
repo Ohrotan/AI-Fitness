@@ -90,9 +90,28 @@
         android:layout_below="@id/editDetailButtonProfileEdit"
         android:orientation="horizontal"
         android:id="@+id/heightLayout"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/heightEditTextProfileEditLayout"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="10dp"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/heightEditTextProfileEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="신장"
+                android:inputType="numberDecimal"
+                android:selectAllOnFocus="true"
+                android:textColorHint="@color/lightGray"
+                android:textColor="@color/darkGray"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="신장"
@@ -115,7 +134,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:textAlignment="viewEnd"
-            android:textColor="@color/darkGray"/>
+            android:textColor="@color/darkGray"/>-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -123,18 +142,40 @@
             android:text="cm"
             android:textColor="@color/darkGray"
             android:textSize="20sp"
-            android:layout_toRightOf="@+id/heightEditTextProfileEdit"/>
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/heightEditTextProfileEditLayout"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/heightLayout"
+        android:layout_below="@id/editDetailButtonProfileEdit"
+        android:layout_alignParentRight="true"
         android:orientation="horizontal"
         android:id="@+id/weightLayout"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp">
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/weightEditTextProfileEditLayout"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/weightEditTextProfileEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="체중"
+                android:inputType="numberDecimal"
+                android:selectAllOnFocus="true"
+                android:textColorHint="@color/lightGray"
+                android:textColor="@color/darkGray"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="체중"
@@ -157,7 +198,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:textAlignment="viewEnd"
-            android:textColor="@color/darkGray"/>
+            android:textColor="@color/darkGray"/>-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -165,7 +206,8 @@
             android:text="kg"
             android:textColor="@color/darkGray"
             android:textSize="20sp"
-            android:layout_toRightOf="@+id/weightEditTextProfileEdit"/>
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/weightEditTextProfileEditLayout"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -173,10 +215,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/weightLayout"
         android:orientation="horizontal"
-        android:id="@+id/muscleLayout"
-        android:layout_marginTop="10dp">
+        android:id="@+id/muscleLayout">
 
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="근육량"
@@ -200,7 +241,26 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:textAlignment="viewEnd"
-            android:textColor="@color/darkGray"/>
+            android:textColor="@color/darkGray"/>-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/muscleEditTextProfileEditLayout"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="10dp"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/muscleEditTextProfileEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="근육량"
+                android:inputType="numberDecimal"
+                android:selectAllOnFocus="true"
+                android:textColorHint="@color/lightGray"
+                android:textColor="@color/darkGray"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -208,18 +268,20 @@
             android:text="%"
             android:textColor="@color/darkGray"
             android:textSize="20sp"
-            android:layout_toRightOf="@+id/muscleEditTextProfileEdit"/>
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/muscleEditTextProfileEditLayout"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/muscleLayout"
+        android:layout_below="@id/heightLayout"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="53dp"
         android:orientation="horizontal"
-        android:id="@+id/fatLayout"
-        android:layout_marginTop="10dp">
+        android:id="@+id/fatLayout">
 
-        <TextView
+        <!--<TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="체지방량"
@@ -242,7 +304,25 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:textAlignment="viewEnd"
-            android:textColor="@color/darkGray"/>
+            android:textColor="@color/darkGray"/>-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fatEditTextProfileEditLayout"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fatEditTextProfileEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="체지방량"
+                android:inputType="numberDecimal"
+                android:selectAllOnFocus="true"
+                android:textColorHint="@color/lightGray"
+                android:textColor="@color/darkGray"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -250,7 +330,8 @@
             android:text="%"
             android:textColor="@color/darkGray"
             android:textSize="20sp"
-            android:layout_toRightOf="@+id/fatEditTextProfileEdit"/>
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/fatEditTextProfileEditLayout"/>
     </RelativeLayout>
 
     <TextView
@@ -260,11 +341,33 @@
         android:textColor="@color/darkGray"
         android:textSize="20sp"
         android:layout_marginLeft="70dp"
-        android:id="@+id/selfInstructionProfileEditText"
+        android:id="@+id/selfInstructionProfile"
         android:layout_below="@+id/fatLayout"
         android:layout_marginTop="15dp"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/selfInstructionProfileEditTextLayout"
+        android:layout_width="280dp"
+        android:layout_height="100dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/selfInstructionProfile"
+        android:layout_centerHorizontal="true"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/selfInstructionProfileEditText"
+            android:layout_width="280dp"
+            android:layout_height="100dp"
+            android:hint="자기소개"
+            android:inputType="textMultiLine"
+            android:textColorHint="@color/lightGray"
+            android:textColor="@color/darkGray"
+            android:textAlignment="viewStart"
+            android:gravity="start"
+            android:scrollbars="vertical"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--<EditText
         android:layout_width="280dp"
         android:layout_height="100dp"
         android:layout_below="@+id/selfInstructionProfileEditText"
@@ -280,12 +383,12 @@
         android:inputType="textMultiLine"
         android:textColor="@color/darkGray"
         android:padding="5dp"
-        />
+        />-->
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/selfInstructionProfileEdit"
+        android:layout_below="@+id/selfInstructionProfileEditTextLayout"
         android:id="@+id/isTrainerLayout"
         >
 
