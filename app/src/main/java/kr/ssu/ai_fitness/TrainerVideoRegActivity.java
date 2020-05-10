@@ -3,18 +3,15 @@ package kr.ssu.ai_fitness;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,7 +24,7 @@ import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.util.VideoUpload;
 
 public class TrainerVideoRegActivity extends AppCompatActivity {
-ImageView imgv;
+
     ImageButton video_choose_btn;
     EditText video_title_etv;
     Button tr_video_reg_btn;
@@ -41,7 +38,7 @@ ImageView imgv;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trainer_video_reg);
-        imgv = findViewById(R.id.imgv);
+
         video_choose_btn = findViewById(R.id.video_choose_btn);
 
         video_title_etv = findViewById(R.id.video_title_etv);
@@ -75,9 +72,11 @@ ImageView imgv;
                 selectedImageUri = data.getData();
                 selectedPath = selectedImageUri.getPath();
 
-              //썸네일 하는중
-              Bitmap bmThumbnail = ThumbnailUtils.createVideoThumbnail(selectedPath, MediaStore.Images.Thumbnails.MICRO_KIND);
-                imgv.setImageBitmap(bmThumbnail);
+                //썸네일
+                MediaMetadataRetriever mMMR = new MediaMetadataRetriever();
+                mMMR.setDataSource(this, selectedImageUri);
+                Bitmap bmp = mMMR.getFrameAtTime();
+                video_choose_btn.setImageBitmap(bmp);
             }
         }
     }
@@ -117,7 +116,7 @@ ImageView imgv;
             TrainerVideo info;
 
             UploadVideoTask(TrainerVideo info) {
-               this.info = info;
+                this.info = info;
             }
 
             @Override
@@ -130,25 +129,23 @@ ImageView imgv;
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 uploading.dismiss();
-                // if(s.length()>100) s= s.substring(0,99);
-                //video_path_tv.setText(Html.fromHtml(s));
-               // video_path_tv.setMovementMethod(LinkMovementMethod.getInstance());
-                Toast.makeText(TrainerVideoRegActivity.this,"complete",Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(TrainerVideoRegActivity.this,"complete",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             protected String doInBackground(Uri... params) {
                 VideoUpload u = new VideoUpload();
 
-                String msg = u.uploadVideo(getFileInputStream(params[0]),info);
+                String msg = u.uploadVideo(getFileInputStream(params[0]), info);
                 return msg;
             }
         }
         //예시 데이터
         SharedPrefManager.getInstance(getApplicationContext()).userLogin(new Member(99));
-        int userId =  SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();;
+        int userId = SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();
+        ;
 
-        TrainerVideo info = new TrainerVideo(userId,UUID.randomUUID()+".jpg", UUID.randomUUID()+".mp4", video_title_etv.getText().toString());
+        TrainerVideo info = new TrainerVideo(userId, UUID.randomUUID() + ".jpg", UUID.randomUUID() + ".mp4", video_title_etv.getText().toString());
         Log.i("Huzza", "Member : " + info.toString());
         UploadVideoTask uv = new UploadVideoTask(info);
         uv.execute(selectedImageUri);

@@ -17,19 +17,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imgv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/bonobono" />
-
             <ImageButton
                 android:id="@+id/video_choose_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="400dp"
                 android:background="#00FFFFFF"
                 android:onClick="onClick"
                 android:padding="20dp"
+                android:scaleType="centerInside"
                 app:srcCompat="@drawable/video_reg" />
 
             <TextView
