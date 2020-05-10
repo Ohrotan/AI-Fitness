@@ -147,6 +147,7 @@
                     android:textColor="@color/darkGray"/>
 
                 <TextView
+                    android:id="@+id/heightTrainerProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="178cm"
@@ -156,6 +157,7 @@
                     android:textSize="17dp"/>
 
                 <TextView
+                    android:id="@+id/weightTrainerProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
@@ -165,6 +167,7 @@
                     android:textSize="17dp"/>
 
                 <TextView
+                    android:id="@+id/muscleTrainerProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -174,6 +177,7 @@
                     android:textSize="17dp"/>
 
                 <TextView
+                    android:id="@+id/fatTrainerProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -183,6 +187,7 @@
                     android:textSize="17dp"/>
 
                 <TextView
+                    android:id="@+id/memberNumTrainerProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
