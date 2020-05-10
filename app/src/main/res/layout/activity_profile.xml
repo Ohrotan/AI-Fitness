@@ -42,7 +42,7 @@
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_margin="20dp"
-                android:id="@+id/memberPicRegMemberDetail"
+                android:id="@+id/memberPicProfile"
                 android:background="@drawable/img_rounding"
                 android:scaleType="fitXY"
                 android:src="@drawable/bonobono"/>
@@ -50,7 +50,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/memberPicRegMemberDetail"
+                android:layout_toRightOf="@+id/memberPicProfile"
                 android:id="@+id/trainerBadgeLayout">
 
                 <ImageView
@@ -75,7 +75,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/memberNameRegMemberDetail"
+                android:id="@+id/memberNameProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="류제호님"
@@ -83,22 +83,21 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:layout_gravity="center"
-                android:layout_toRightOf="@+id/memberPicRegMemberDetail"
+                android:layout_toRightOf="@+id/memberPicProfile"
                 android:layout_below="@+id/trainerBadgeLayout"
                 />
 
             <TextView
-                android:id="@+id/memberAgeRegMemberDetail"
+                android:id="@+id/memberAgeProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(남, 26세)"
                 android:textColor="@color/darkGray"
                 android:textSize="18sp"
                 android:layout_marginLeft="5dp"
-
                 android:layout_gravity="center"
                 android:layout_marginTop="13dp"
-                android:layout_toRightOf="@+id/memberNameRegMemberDetail"
+                android:layout_toRightOf="@+id/memberNameProfile"
                 android:layout_below="@+id/trainerBadgeLayout"
                 />
 
@@ -115,7 +114,7 @@
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/memberPicRegMemberDetail"
+                android:layout_below="@+id/memberPicProfile"
                 android:layout_marginHorizontal="20dp"
                 android:columnCount="4"
                 android:rowCount="2"
@@ -158,6 +157,7 @@
                     android:textColor="@color/darkGray"/>
 
                 <TextView
+                    android:id="@+id/heightProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="178cm"
@@ -166,6 +166,7 @@
                     android:layout_gravity="center"
                     android:textSize="20dp"/>
                 <TextView
+                    android:id="@+id/weightProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
@@ -174,6 +175,7 @@
                     android:textColor="@color/accent"
                     android:textSize="20dp"/>
                 <TextView
+                    android:id="@+id/muscleProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -182,6 +184,7 @@
                     android:textColor="@color/accent"
                     android:textSize="20dp"/>
                 <TextView
+                    android:id="@+id/fatProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -192,7 +195,7 @@
                 />
             </GridLayout>
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/infoGridLayout"
@@ -200,13 +203,13 @@
                 android:text="2020.04.01 기준"
                 android:textColor="@color/lightGray"
                 android:layout_marginRight="20dp"
-                android:id="@+id/infoRegDate"/>
+                android:id="@+id/infoRegDate"/>-->
 
             <TextView
                 android:id="@+id/infoSelf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/infoRegDate"
+                android:layout_below="@+id/infoGridLayout"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="25dp"
                 android:layout_marginHorizontal="50dp"

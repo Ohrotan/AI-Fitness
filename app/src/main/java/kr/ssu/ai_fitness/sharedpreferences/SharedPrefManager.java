@@ -72,6 +72,46 @@ public class SharedPrefManager {
         editor.apply();
     }
 
+    public void setAlarm(int isAlarm){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(alarm, String.valueOf(isAlarm));
+
+        editor.apply();
+    }
+
+    public void setTrainer(int isTrainer){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(trainer, String.valueOf(isTrainer));
+
+        editor.apply();
+    }
+
+    public void setPwd(String newPwd){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(pwd, String.valueOf(newPwd));
+
+        editor.apply();
+    }
+
+    public void setProfile(String heightInput, String weightInput, String muscleInput, String fatInput, String introInput){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(height, String.valueOf(heightInput)); //double형은 string으로 저장하고 꺼낼 때 Double.parseDoubble()써야함.
+        editor.putString(weight, String.valueOf(weightInput));
+        editor.putString(muscle, String.valueOf(muscleInput));
+        editor.putString(fat, String.valueOf(fatInput));
+        editor.putString(intro, introInput);
+
+        editor.apply();
+    }
+
     //isLoggedIn()는 사용자가 이미 로그인했는지 여부를 검사합니다.
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
