@@ -14,11 +14,11 @@
         android:layout_height="120dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/activity_exr_result_textview5"
         app:srcCompat="@drawable/ic_slow_motion_video_black_24dp" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/item_after_day_exr_program_textview1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1.스쿼트 10회 3세트"
@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button10"
+        android:id="@+id/item_after_day_exr_program_button"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:backgroundTint="@color/accent"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/item_after_day_exr_program_textview2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -45,7 +45,7 @@
         android:text="트레이너의 피드백"
         android:textColor="@color/accent"
         app:layout_constraintStart_toEndOf="@+id/item_after_day_exr_program_image"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/item_after_day_exr_program_textview1" />
 
     <TextView
         android:id="@+id/item_after_day_exr_program_date"
@@ -55,7 +55,7 @@
         android:layout_marginTop="5dp"
         android:text="2020.04.01"
         app:layout_constraintStart_toEndOf="@+id/item_after_day_exr_program_image"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/item_after_day_exr_program_textview2" />
 
     <TextView
         android:id="@+id/item_after_day_exr_program_feedback"

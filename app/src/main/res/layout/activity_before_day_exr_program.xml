@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/activity_before_day_exr_program_textview1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="35dp"
@@ -47,7 +47,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/activity_before_day_exr_program_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/accent"
