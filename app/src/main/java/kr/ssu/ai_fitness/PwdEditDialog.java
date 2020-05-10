@@ -9,16 +9,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class PwdEditDialog extends Dialog implements View.OnClickListener{
 
-    //private static final int LAYOUT = R.layout.dialog_pwd_edit;
-
     private Context context;
 
-    private TextInputEditText oldPwd;
-    private TextInputEditText newPwd;
-    private TextInputEditText newPwdConfirm;
+    private TextInputLayout originPwdLayout;
+    private TextInputLayout newPwdLayout;
+    private TextInputLayout newPwdCheckLayout;
+
+    private String oldPwd;
+    private String newPwd;
+    private String newPwdCheck;
+
+    //private TextInputEditText oldPwd;
+    //private TextInputEditText newPwd;
+    //private TextInputEditText newPwdConfirm;
 
     private TextView cancelButton;
     private TextView confirmButton;
@@ -41,8 +48,16 @@ public class PwdEditDialog extends Dialog implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_pwd_edit);
 
-        oldPwd = findViewById(R.id.originalPwd);
-        newPwd = findViewById(R.id.newPwd);
+        originPwdLayout = findViewById(R.id.originalPwdLayout);
+        newPwdLayout = findViewById(R.id.newPwdLayout);
+        newPwdCheckLayout = findViewById(R.id.newPwdConfirmLayout);
+
+        originPwdLayout.setPasswordVisibilityToggleEnabled(true);
+        newPwdLayout.setPasswordVisibilityToggleEnabled(true);
+        newPwdCheckLayout.setPasswordVisibilityToggleEnabled(true);
+
+        //oldPwd = findViewById(R.id.originalPwd);
+        //newPwd = findViewById(R.id.newPwd);
 
         cancelButton = findViewById(R.id.cancelPwdEdit);
         confirmButton = findViewById(R.id.confirmPwdEdit);

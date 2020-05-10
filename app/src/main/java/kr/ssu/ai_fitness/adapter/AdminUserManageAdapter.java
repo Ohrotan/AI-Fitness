@@ -156,7 +156,7 @@ public class AdminUserManageAdapter extends RecyclerView.Adapter<AdminUserManage
                                 String toBeDeleted = mData.get(position);
                                 Log.d("ToBeDeleted", toBeDeleted);
                                 deleteUser(toBeDeleted);
-                                 mData.remove(position);
+                                mData.remove(position);
                                 notifyItemRemoved(position);
                                 notifyItemRangeChanged(position, getItemCount());
                                 //ProfileEditActivity.this.finish();

@@ -145,6 +145,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         fat.setText(String.format(Double.toString(user.getFat())));
 
         //알림 설정 여부 스위치
+        if(user.getAlarm() == 1){
+            alarmSwitch.setChecked(true);
+        }
+        else{
+            alarmSwitch.setChecked(false);
+        }
+
+        Log.d("IS_ALARM_ON", "user.getAlarm = " + user.getAlarm());
+
         alarmSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
@@ -152,10 +161,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(getApplicationContext(), "알림 수신에 동의하셨습니다", Toast.LENGTH_SHORT).show();
                     //Member alarmConsent = new Member();
                     SharedPrefManager.getInstance(getApplicationContext()).setAlarm(1);
+                    Log.d("IS_ALARM_ON_CHANGE", "user.getAlarm = " + user.getAlarm());
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "알림 수신을 거부하셨습니다", Toast.LENGTH_SHORT).show();
                     SharedPrefManager.getInstance(getApplicationContext()).setAlarm(0);
+                    Log.d("IS_ALARM_ON_CHANGE", "user.getAlarm = " + user.getAlarm());
                 }
             }
         });
@@ -176,10 +187,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             public void onClick(DialogInterface dialog, int id) { // 프로그램을 종료한다
                                 //ProfileEditActivity.this.finish();
                                 dialog.cancel();
-                                SharedPrefManager.getInstance(getApplicationContext()).logout();
-                                Toast.makeText(getApplicationContext(), "로그아웃하기", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getApplicationContext(), "로그아웃하기", Toast.LENGTH_SHORT).show();
                                 finish();
-                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                SharedPrefManager.getInstance(getApplicationContext()).logout();
+                                //startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             }
                         })
                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
