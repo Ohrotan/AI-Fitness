@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -242,6 +243,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.pwdChangeLayout:
                 //requestName = nameEt.getText().toString();
                 PwdEditDialog dialog = new PwdEditDialog(this);
+
                 /*dialog.setDialogListener(new MyDialogListener() {  // MyDialogListener 를 구현
                     @Override
                     public void onPositiveClicked(String email, String name) {

@@ -90,6 +90,15 @@ public class SharedPrefManager {
         editor.apply();
     }
 
+    public void setPwd(String newPwd){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(pwd, String.valueOf(newPwd));
+
+        editor.apply();
+    }
+
     public void setProfile(String heightInput, String weightInput, String muscleInput, String fatInput, String introInput){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
