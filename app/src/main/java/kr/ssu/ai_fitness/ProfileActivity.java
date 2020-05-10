@@ -11,11 +11,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
@@ -24,8 +29,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     final Context context = this;
 
+    private ImageView profilePic;
+    private TextView name;
+    private TextView genderAge;
+    private String gender;
+    private int age;
     private RelativeLayout trainerBadge;
     private ImageButton editButton;
+    private TextView height;
+    private TextView weight;
+    private TextView muscle;
+    private TextView fat;
+    //private TextView infoRegDate;
+    private TextView infoSelf;
     private RelativeLayout pwdChange;
     private RelativeLayout logout;
     private RelativeLayout adminSetting;
@@ -42,7 +58,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_profile);
 
         trainerBadge = findViewById(R.id.trainerBadgeLayout);
+        profilePic = findViewById(R.id.memberPicProfile);
+        name = findViewById(R.id.memberNameProfile);
+        genderAge = findViewById(R.id.memberAgeProfile);
         editButton = findViewById(R.id.editProfile);
+        height = findViewById(R.id.heightProfile);
+        weight = findViewById(R.id.weightProfile);
+        muscle = findViewById(R.id.muscleProfile);
+        fat = findViewById(R.id.fatProfile);
+        infoSelf = findViewById(R.id.infoSelf);
+        //infoRegDate = findViewById(R.id.infoRegDate);
         alarmSwitch = findViewById(R.id.noticeSwitch);
         pwdChange = findViewById(R.id.pwdChangeLayout);
         logout = findViewById(R.id.logoutLayout);
@@ -51,26 +76,95 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         allProgramManage = findViewById(R.id.allProgramManageLayout);
         allVideoManage = findViewById(R.id.allVideoManageLayout);
 
-        Member user;
+        final Member user;
 
+        //SharedPrefManager에 저장된 user 데이터 가져오기
         user = SharedPrefManager.getInstance(ProfileActivity.this).getUser();
 
+        //프로필 이미지 설정
+        //profilePic.setI
+
+        //트레이너일시 트레이너 배지 보여주기
+        //아닐경우 비활성화
         if(user.getTrainer() == 0){
             trainerBadge.setVisibility(View.INVISIBLE);
         }
 
+        //이름설정
+        name.setText(user.getName() + "님");
+
+        //성별 설정
+        if(user.getGender() == 1){
+            gender = "남";
+        }
+        else {
+            gender = "여";
+        }
+
+        //나이 계산하기
+        String birthDate = user.getBirth();
+        long now = System.currentTimeMillis();
+        Date mDate = new Date(now);
+        try{ // String Type을 Date Type으로 캐스팅하면서 생기는 예외로 인해 여기서 예외처리 해주지 않으면 컴파일러에서 에러가 발생해서 컴파일을 할 수 없다.
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+            String nowDate = format.format(mDate);
+            // date1, date2 두 날짜를 parse()를 통해 Date형으로 변환.
+            Date FirstDate = format.parse(nowDate);
+            Date SecondDate = format.parse(birthDate);
+
+            // Date로 변환된 두 날짜를 계산한 뒤 그 리턴값으로 long type 변수를 초기화 하고 있다.
+            // 연산결과 -950400000. long type 으로 return 된다.
+            long calDate = FirstDate.getTime() - SecondDate.getTime();
+
+            // Date.getTime() 은 해당날짜를 기준으로1970년 00:00:00 부터 몇 초가 흘렀는지를 반환해준다.
+            // 이제 24*60*60*1000(각 시간값에 따른 차이점) 을 나눠주면 일수가 나온다.
+            long calDateDays = calDate / ( 24*60*60*1000);
+
+            calDateDays = Math.abs(calDateDays);
+            age = (int) (calDateDays / 365);
+        }
+        catch(ParseException e)
+        {
+            // 예외 처리
+        }
+        //성별 + 나이 설정
+        genderAge.setText("(" + gender + ", " + age + "세)");
+
+        //자기소개 설정
+        infoSelf.setText(user.getIntro());
+
+        //정보 표시한 날짜 설정
+        /*SimpleDateFormat regDateForm = new SimpleDateFormat("yyyy.mm.dd");
+        String regDate = regDateForm.format(mDate);
+        infoRegDate.setText(regDate);*/
+
+        //신장, 체중, 근육량, 체지방량 설정
+        height.setText(String.format(Double.toString(user.getHeight())));
+        weight.setText(String.format(Double.toString(user.getWeight())));
+        muscle.setText(String.format(Double.toString(user.getMuscle())));
+        fat.setText(String.format(Double.toString(user.getFat())));
+
+        //알림 설정 여부 스위치
         alarmSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked)
-                    Toast.makeText(getApplicationContext(), "알림 수신", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getApplicationContext(), "알림 수신 거부", Toast.LENGTH_SHORT).show();
+                if(isChecked) {
+                    Toast.makeText(getApplicationContext(), "알림 수신에 동의하셨습니다", Toast.LENGTH_SHORT).show();
+                    //Member alarmConsent = new Member();
+                    SharedPrefManager.getInstance(getApplicationContext()).setAlarm(1);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "알림 수신을 거부하셨습니다", Toast.LENGTH_SHORT).show();
+                    SharedPrefManager.getInstance(getApplicationContext()).setAlarm(0);
+                }
             }
         });
+        //비밀번호 수정
         pwdChange.setOnClickListener(this);
+        //개인정보 수정 버튼
         editButton.setOnClickListener(this);
 
+        //로그아웃
         logout.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
             public void onClick(View V){
@@ -82,10 +176,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             public void onClick(DialogInterface dialog, int id) { // 프로그램을 종료한다
                                 //ProfileEditActivity.this.finish();
                                 dialog.cancel();
-                                SharedPrefManager.getInstance(ProfileActivity.this).logout();
+                                SharedPrefManager.getInstance(getApplicationContext()).logout();
                                 Toast.makeText(getApplicationContext(), "로그아웃하기", Toast.LENGTH_SHORT).show();
                                 finish();
-                                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             }
                         })
                         .setNegativeButton("취소", new DialogInterface.OnClickListener() {

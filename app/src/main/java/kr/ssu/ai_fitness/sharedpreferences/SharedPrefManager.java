@@ -72,6 +72,15 @@ public class SharedPrefManager {
         editor.apply();
     }
 
+    public void setAlarm(int isAlarm){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(alarm, String.valueOf(isAlarm));
+
+        editor.apply();
+    }
+
     //isLoggedIn()는 사용자가 이미 로그인했는지 여부를 검사합니다.
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);

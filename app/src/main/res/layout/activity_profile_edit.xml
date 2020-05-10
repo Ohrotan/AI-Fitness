@@ -340,12 +340,12 @@
         android:text="자기소개"
         android:textColor="@color/darkGray"
         android:textSize="20sp"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="50dp"
         android:id="@+id/selfInstructionProfile"
         android:layout_below="@+id/fatLayout"
         android:layout_marginTop="15dp"/>
 
-    <com.google.android.material.textfield.TextInputLayout
+    <!--<com.google.android.material.textfield.TextInputLayout
         android:id="@+id/selfInstructionProfileEditTextLayout"
         android:layout_width="280dp"
         android:layout_height="100dp"
@@ -357,7 +357,6 @@
             android:id="@+id/selfInstructionProfileEditText"
             android:layout_width="280dp"
             android:layout_height="100dp"
-            android:hint="자기소개"
             android:inputType="textMultiLine"
             android:textColorHint="@color/lightGray"
             android:textColor="@color/darkGray"
@@ -365,12 +364,12 @@
             android:gravity="start"
             android:scrollbars="vertical"
             />
-    </com.google.android.material.textfield.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>-->
 
-    <!--<EditText
-        android:layout_width="280dp"
+    <EditText
+        android:layout_width="300dp"
         android:layout_height="100dp"
-        android:layout_below="@+id/selfInstructionProfileEditText"
+        android:layout_below="@+id/selfInstructionProfile"
         android:background="@drawable/edittext_background1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
@@ -383,12 +382,12 @@
         android:inputType="textMultiLine"
         android:textColor="@color/darkGray"
         android:padding="5dp"
-        />-->
+        />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/selfInstructionProfileEditTextLayout"
+        android:layout_below="@+id/selfInstructionProfileEdit"
         android:id="@+id/isTrainerLayout"
         >
 
