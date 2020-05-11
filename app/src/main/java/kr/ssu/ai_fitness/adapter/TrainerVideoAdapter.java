@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 
 public class TrainerVideoAdapter extends BaseAdapter {
 
@@ -57,6 +58,8 @@ public class TrainerVideoAdapter extends BaseAdapter {
 
         item = items.get(position);
         holder.title.setText(item.getTitle());
+        ImageViewTask task = new ImageViewTask(holder.img);
+        task.execute("https://storage.cloud.google.com/"+item.getThumb_img());
 
         return convertView;
     }
