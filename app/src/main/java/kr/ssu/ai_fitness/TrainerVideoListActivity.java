@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import java.util.Map;
 import kr.ssu.ai_fitness.adapter.TrainerVideoAdapter;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class TrainerVideoListActivity extends AppCompatActivity {
@@ -34,6 +36,8 @@ public class TrainerVideoListActivity extends AppCompatActivity {
     TrainerVideoAdapter trainerVideoAdapter;
     ProgressDialog progressDialog;
 
+    ImageView testView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +45,15 @@ public class TrainerVideoListActivity extends AppCompatActivity {
 
         tr_video_reg_btn = findViewById(R.id.tr_video_reg_btn);
         tr_video_list_view = findViewById(R.id.tr_video_list_view);
-       // trainerVideoAdapter = new TrainerVideoAdapter(this);
-        getData();
-        //  DownloadVideoTask task = new DownloadVideoTask();
-        // task.execute("99");
+        // trainerVideoAdapter = new TrainerVideoAdapter(this);
+        testView = findViewById(R.id.testView);
+
+        ImageViewTask task = new ImageViewTask(testView);
+     task.execute("https://storage.cloud.google.com/ai-fitness/tr_thumb_img/488abfb1-4146-4ea7-8430-91682e8ec79e.png");
+        //   task.execute("99");
+
+        // getData();
+
 
     }
 
@@ -80,7 +89,7 @@ public class TrainerVideoListActivity extends AppCompatActivity {
 
                             trainerVideoAdapter = new TrainerVideoAdapter(TrainerVideoListActivity.this, videoLists);
                             tr_video_list_view.setAdapter(trainerVideoAdapter);
-                           // Toast.makeText(TrainerVideoListActivity.this, videoDto.toString(), Toast.LENGTH_LONG).show();
+                            // Toast.makeText(TrainerVideoListActivity.this, videoDto.toString(), Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
