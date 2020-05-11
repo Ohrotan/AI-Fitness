@@ -44,13 +44,14 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView trainerListItem ;
         ImageView profilePic;
-        //ImageView rating;
+        ImageView rating;
 
         public ViewHolder(View itemView) {
             super(itemView) ;
 
             profilePic = itemView.findViewById(R.id.trainerListImageItem_trainerPic);
             ratings = itemView.findViewById(R.id.ratingImageTrainerList);
+            rating = itemView.findViewById(R.id.ratingImageTrainerList);
             // 뷰 객체에 대한 참조. (hold strong reference)
             trainerListItem = itemView.findViewById(R.id.trainerListTextItem_trainerName);
 
@@ -59,7 +60,6 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
             //ratings.setImageResource();
 
             itemView.setOnClickListener(new View.OnClickListener(){
-
                 @Override
                 public void onClick(View V){
                     int pos = getAdapterPosition();
@@ -87,7 +87,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
     @Override
     public TrainerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.item_trainer_list, parent, false) ;
         TrainerListAdapter.ViewHolder vh = new TrainerListAdapter.ViewHolder(view) ;
@@ -104,11 +104,16 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
         Log.d("BINDVIEWHOLDER", "text = " + text);
 
         holder.trainerListItem.setText(text) ;
-        //Double avgRating = trainers.get(position).getRating();
 
-        /*if(avgRating < 0.5){
-            ratings.setImageDrawable();
-        }*/
+        Double avgRating = trainers.get(position).getRating();
+        if(avgRating < 0.5){
+            //int img = R.drawable.
+            //holder.rating.setImageResource(trainers.get(position).);
+        }
+
+
+
+
         //holder.regMemberListNextIcon.getAccessibilityClassName();
     }
 
