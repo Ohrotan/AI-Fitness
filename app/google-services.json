@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "123198761975",
+    "firebase_url": "https://ai-fitness-98588.firebaseio.com",
+    "project_id": "ai-fitness-98588",
+    "storage_bucket": "ai-fitness-98588.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123198761975:android:b9bcb1ca19c5baa93b5cf2",
+        "android_client_info": {
+          "package_name": "kr.ssu.ai_fitness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123198761975-1tpgkh2qn7o8q24a96s3ttcgg0n2ejnq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.ssu.ai_fitness",
+            "certificate_hash": "557045f031b492242edbf5c8a12e9577a9737583"
+          }
+        },
+        {
+          "client_id": "123198761975-3kdivtc664gaov54khmov4megh0t4ga4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEB8yBp74t-Y4M26lQfNuydTLHGaETrKQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123198761975-3kdivtc664gaov54khmov4megh0t4ga4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

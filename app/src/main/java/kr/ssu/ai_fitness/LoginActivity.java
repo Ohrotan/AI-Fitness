@@ -74,7 +74,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 finish();    //계정 생성 화면으로 넘어가도록 설정
                 startActivity( new Intent(LoginActivity.this, SignupActivity.class));
-
             }
         });
     }
