@@ -64,7 +64,7 @@ public class VideoDownload {
             }
             return sb.toString();
         } else {
-            return rtmsg + "Could not upload";
+            return rtmsg + "Could not download";
         }
     }
 }

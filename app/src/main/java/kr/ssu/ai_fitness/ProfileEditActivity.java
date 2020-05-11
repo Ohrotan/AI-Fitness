@@ -94,7 +94,8 @@ public class ProfileEditActivity extends AppCompatActivity implements CompoundBu
 
         isTrainer = findViewById(R.id.isTrainerSwitch);
         //a = findViewById(R.id.isTrainerSwitch);
-        isTrainer.setOnCheckedChangeListener(this);
+        isTrainer.setOnClickListener(this);
+        //isTrainer.setOnCheckedChangeListener(this);
 
         //SharedPrefManager에 저장된 user 데이터 가져오기
         user = SharedPrefManager.getInstance(ProfileEditActivity.this).getUser();
@@ -175,6 +176,7 @@ public class ProfileEditActivity extends AppCompatActivity implements CompoundBu
                         public void onClick(DialogInterface dialog, int id) {
                             // 다이얼로그를 취소한다
                             dialog.cancel();
+
                             //isTrainer.setChecked(false);
                         }
                     });

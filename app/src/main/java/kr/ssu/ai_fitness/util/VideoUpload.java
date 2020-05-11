@@ -47,6 +47,7 @@ public class VideoUpload {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+            conn.setRequestProperty("Accept-Language", "*");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
             conn.setRequestProperty("videoFile", info.getVideo());
             conn.setRequestProperty("imgFile", info.getThumb_img());
