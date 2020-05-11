@@ -106,15 +106,48 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
         holder.trainerListItem.setText(text) ;
 
         Double avgRating = trainers.get(position).getRating();
+
+        Log.d("BINDVIEWHOLDER", "Average Rating = " + avgRating);
+
         if(avgRating < 0.5){
-            //int img = R.drawable.
-            //holder.rating.setImageResource(trainers.get(position).);
+            int img = R.drawable.rating_0_5;
+            holder.rating.setImageResource(img);
         }
-
-
-
-
-        //holder.regMemberListNextIcon.getAccessibilityClassName();
+        else if(avgRating >= 0.5 && avgRating < 1.0){
+            int img = R.drawable.rating_1;
+            holder.rating.setImageResource(img);
+        }
+        else if(avgRating >= 1.0 && avgRating < 1.5){
+            int img = R.drawable.rating_1_5;
+            holder.rating.setImageResource(img);
+        }
+        else if(avgRating >= 1.5 && avgRating < 2.0){
+            int img = R.drawable.rating_2;
+            holder.rating.setImageResource(img);
+        }
+        else if(avgRating >= 2.0 && avgRating < 2.5){
+            int img = R.drawable.rating_2_5;
+            holder.rating.setImageResource(img);
+        }
+        else if(avgRating >= 2.5 && avgRating < 3.0){
+            int img = R.drawable.rating_3;
+            holder.rating.setImageResource(img);
+        }else if(avgRating >= 3.0 && avgRating < 3.5){
+            int img = R.drawable.rating_3_5;
+            holder.rating.setImageResource(img);
+        }
+        else if(avgRating >= 3.5 && avgRating < 4.0){
+            int img = R.drawable.rating_4;
+            holder.rating.setImageResource(img);
+        }
+        else if(avgRating >= 4.0 && avgRating < 4.5){
+            int img = R.drawable.rating_4_5;
+            holder.rating.setImageResource(img);
+        }
+        else{
+            int img = R.drawable.rating_5;
+            holder.rating.setImageResource(img);
+        }
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
