@@ -5,11 +5,14 @@ import android.widget.GridView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 import kr.ssu.ai_fitness.adapter.TrainerVideoAdapter;
+import kr.ssu.ai_fitness.dto.TrainerVideo;
 
 public class AdminVideoManageActivity extends AppCompatActivity {
     GridView all_video_list;
-    TrainerVideoAdapter trainerVideoAdapter = new TrainerVideoAdapter(this);
+    TrainerVideoAdapter trainerVideoAdapter = new TrainerVideoAdapter(this, new ArrayList<TrainerVideo>());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
