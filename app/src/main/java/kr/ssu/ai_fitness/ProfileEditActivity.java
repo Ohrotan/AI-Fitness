@@ -155,6 +155,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
 
     /*@Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
         if (isChecked) {
             isTrainerTrueDialog = new AlertDialog.Builder(context);
             isTrainerTrueDialog.setTitle("경고");
