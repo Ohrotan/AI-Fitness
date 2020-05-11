@@ -53,7 +53,7 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_member_all_exr_program_list);
         list = (ListView) findViewById(R.id.listView);
         personList = new ArrayList<HashMap<String, String>>();
-        getData("https://20200508t230129-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram");
+        getData("https://20200511t093609-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram");
         /*
         final ListAdapter adapter = new ListAdapter();
         //adapter에 data값
