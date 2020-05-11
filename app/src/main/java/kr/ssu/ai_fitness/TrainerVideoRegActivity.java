@@ -15,7 +15,9 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 import kr.ssu.ai_fitness.dto.Member;
@@ -32,7 +34,9 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
     private static final int SELECT_VIDEO = 3;
 
     private String selectedPath;
-    Uri selectedImageUri;
+    Uri selectedVideoImageUri;
+    InputStream thumbImgInputStream;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,7 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             chooseVideo();
         }
         if (v == tr_video_reg_btn) {
-            uploadVideo(selectedImageUri);
+            uploadVideo(selectedVideoImageUri);
         }
     }
 
@@ -69,35 +73,43 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_VIDEO) {
                 System.out.println("SELECT_VIDEO");
-                selectedImageUri = data.getData();
-                selectedPath = selectedImageUri.getPath();
+                selectedVideoImageUri = data.getData();
+                selectedPath = selectedVideoImageUri.getPath();
 
                 //썸네일
-                MediaMetadataRetriever mMMR = new MediaMetadataRetriever();
-                mMMR.setDataSource(this, selectedImageUri);
-                Bitmap bmp = mMMR.getFrameAtTime();
-                video_choose_btn.setImageBitmap(bmp);
+                thumbImgInputStream = getThumbImgInputStream(selectedVideoImageUri);
+
             }
         }
     }
 
-    public InputStream getFileInputStream(Uri uri) {
-       /*
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
-        cursor.close();
+    //getThumb
+    public InputStream getThumbImgInputStream(Uri uri) {
+        MediaMetadataRetriever mMMR = new MediaMetadataRetriever();
+        mMMR.setDataSource(this, selectedVideoImageUri);
+        Bitmap bitmap = mMMR.getFrameAtTime();
+        video_choose_btn.setImageBitmap(bitmap);
 
+        int origWidth = bitmap.getWidth();
+        int origHeight = bitmap.getHeight();
 
-        cursor = getContentResolver().query(
-                android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
-        cursor.moveToFirst();
+        final int destWidth = 300;//or the width you need
 
-        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA));
-        cursor.close();
-        */
+        if (origWidth > destWidth) {
+            int destHeight = origHeight / (origWidth / destWidth);
+            bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false);
+        }
+
+        int byteSize = bitmap.getRowBytes() * bitmap.getHeight();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(byteSize);
+        bitmap.copyPixelsToBuffer(byteBuffer);
+
+        byte[] byteArray = byteBuffer.array();
+
+        return new ByteArrayInputStream(byteArray);
+    }
+
+    public InputStream getVideoInputStream(Uri uri) {
         InputStream is = null;
         try {
             is = getContentResolver().openInputStream(uri);
@@ -108,15 +120,17 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
         return is;
     }
 
-    private void uploadVideo(Uri selectedImageUri) {
+    private void uploadVideo(Uri selectedVideoImageUri) {
         class UploadVideoTask extends AsyncTask<Uri, Void, String> {
 
             ProgressDialog uploading;
 
             TrainerVideo info;
+            InputStream thumbImgInputStream;
 
-            UploadVideoTask(TrainerVideo info) {
+            UploadVideoTask(TrainerVideo info, InputStream thumbImgInputStream) {
                 this.info = info;
+                this.thumbImgInputStream = thumbImgInputStream;
             }
 
             @Override
@@ -136,19 +150,19 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             protected String doInBackground(Uri... params) {
                 VideoUpload u = new VideoUpload();
 
-                String msg = u.uploadVideo(getFileInputStream(params[0]), info);
+                String msg = u.uploadVideo(getVideoInputStream(params[0]), thumbImgInputStream, info);
                 return msg;
             }
         }
         //예시 데이터
         SharedPrefManager.getInstance(getApplicationContext()).userLogin(new Member(99));
         int userId = SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();
-        ;
 
-        TrainerVideo info = new TrainerVideo(userId, UUID.randomUUID() + ".jpg", UUID.randomUUID() + ".mp4", video_title_etv.getText().toString());
+
+        TrainerVideo info = new TrainerVideo(userId, UUID.randomUUID() + ".bmp", UUID.randomUUID() + ".mp4", video_title_etv.getText().toString());
         Log.i("Huzza", "Member : " + info.toString());
-        UploadVideoTask uv = new UploadVideoTask(info);
-        uv.execute(selectedImageUri);
+        UploadVideoTask uv = new UploadVideoTask(info, thumbImgInputStream);
+        uv.execute(selectedVideoImageUri);
     }
 
 

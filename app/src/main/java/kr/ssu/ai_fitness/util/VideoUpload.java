@@ -23,9 +23,9 @@ public class VideoUpload {
 
     private int serverResponseCode;
 
-    String rtmsg="";
+    String rtmsg = "";
 
-    public String uploadVideo(InputStream is, TrainerVideo info) {
+    public String uploadVideo(InputStream videoIs, InputStream imgIs, TrainerVideo info) {
 
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
@@ -35,7 +35,7 @@ public class VideoUpload {
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 100 * 1024 * 1024; //100mb
-        Log.i("Huzza", "Member2 : " + info.toString());
+        //Log.i("Huzza", "Member2 : " + info.toString());
 
         try {
             URL url = new URL(UPLOAD_URL);
@@ -48,72 +48,87 @@ public class VideoUpload {
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            conn.setRequestProperty("myFile", info.getVideo());
+            conn.setRequestProperty("videoFile", info.getVideo());
+            conn.setRequestProperty("imgFile", info.getThumb_img());
             dos = new DataOutputStream(conn.getOutputStream());
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
 
-
-
-            dos.writeBytes("Content-Disposition: form-data; name=\"myFile\";filename=\"" + info.getVideo() + "\"" + lineEnd);
+            //video file
+            dos.writeBytes("Content-Disposition: form-data; name=\"videoFile\";filename=\"" + info.getVideo() + "\"" + lineEnd);
 
             dos.writeBytes(lineEnd);
 
-            bytesAvailable = is.available();
+            bytesAvailable = videoIs.available();
             Log.i("Huzza", "Initial .available : " + bytesAvailable);
 
             bufferSize = Math.min(bytesAvailable, maxBufferSize);
             buffer = new byte[bufferSize];
 
-            bytesRead = is.read(buffer, 0, bufferSize);
+            bytesRead = videoIs.read(buffer, 0, bufferSize);
 
             while (bytesRead > 0) {
                 dos.write(buffer, 0, bufferSize);
-                bytesAvailable = is.available();
+                bytesAvailable = videoIs.available();
                 bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                bytesRead = is.read(buffer, 0, bufferSize);
+                bytesRead = videoIs.read(buffer, 0, bufferSize);
+            }
+
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+
+            //Thumbnail image
+            dos.writeBytes("Content-Disposition: form-data; name=\"imgFile\";filename=\"" + info.getThumb_img() + "\"" + lineEnd);
+
+            dos.writeBytes(lineEnd);
+
+            bytesAvailable = imgIs.available();
+
+
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+
+            bytesRead = imgIs.read(buffer, 0, bufferSize);
+
+            while (bytesRead > 0) {
+                dos.write(buffer, 0, bufferSize);
+                bytesAvailable = imgIs.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = imgIs.read(buffer, 0, bufferSize);
             }
 
             dos.writeBytes(lineEnd);
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"title\"  " +twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"title\"  " + twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Type: text/plain" + lineEnd);
             dos.writeBytes(lineEnd);
             dos.writeBytes(info.getTitle());
             dos.writeBytes(lineEnd);
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"trainer_id\"  " +twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"trainer_id\"  " + twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Type: text/plain" + lineEnd);
             dos.writeBytes(lineEnd);
-            dos.writeBytes(info.getTrainer_id()+"");
+            dos.writeBytes(info.getTrainer_id() + "");
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + lineEnd);
 
-            dos.writeBytes("Content-Disposition: form-data; name=\"thumb_img\"  " +twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Type: text/plain" + lineEnd);
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(info.getThumb_img());
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
             serverResponseCode = conn.getResponseCode();
 
 
-            is.close();
+            videoIs.close();
             dos.flush();
             dos.close();
         } catch (MalformedURLException ex) {
 
-              ex.printStackTrace();
-        } catch (FileNotFoundException e){
+            ex.printStackTrace();
+        } catch (FileNotFoundException e) {
 
-        }
-        catch (SecurityException e){
+        } catch (SecurityException e) {
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
         }
@@ -130,9 +145,9 @@ public class VideoUpload {
                 rd.close();
             } catch (IOException ioex) {
             }
-            return  sb.toString();
+            return sb.toString();
         } else {
-            return rtmsg+"Could not upload";
+            return rtmsg + "Could not upload";
         }
     }
 }
