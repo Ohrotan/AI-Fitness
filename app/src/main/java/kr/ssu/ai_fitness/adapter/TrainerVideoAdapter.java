@@ -19,15 +19,6 @@ public class TrainerVideoAdapter extends BaseAdapter {
     private Context context;
     TrainerVideo item;
 
-    public TrainerVideoAdapter(Context context) {
-        this.context = context;
-        items = new ArrayList<>();
-        items.add(new TrainerVideo("팔굽혀펴기"));
-        items.add(new TrainerVideo("스쿼트"));
-        items.add(new TrainerVideo("런지"));
-        items.add(new TrainerVideo("윗몸일으키기"));
-    }
-
     public TrainerVideoAdapter(Context context, ArrayList<TrainerVideo> items) {
         this.context = context;
         this.items = items;

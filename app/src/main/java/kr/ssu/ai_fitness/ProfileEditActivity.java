@@ -176,6 +176,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                         public void onClick(DialogInterface dialog, int id) {
                             // 다이얼로그를 취소한다
                             dialog.cancel();
+
                             //isTrainer.setChecked(false);
                         }
                     });
