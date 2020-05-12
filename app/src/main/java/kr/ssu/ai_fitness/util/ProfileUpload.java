@@ -57,6 +57,7 @@ public class ProfileUpload {
             //DataOutputStream 구하기. 실제 서버로 request body에 넣어서 전달되어야하는 내용을 설정하기 위해 필요하다.
             dos = new DataOutputStream(conn.getOutputStream());
 
+            //*****한글 깨지는 문제 해결해야 함
 
             //파일데이터(이미지파일)을 넣는 부분
             dos.writeBytes(twoHyphens + boundary + lineEnd);//각 데이터의 시작부분을 알려주는 코드
