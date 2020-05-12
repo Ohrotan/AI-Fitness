@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +19,14 @@ import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.adapter.PersonAdapter;
 import kr.ssu.ai_fitness.listener.OnPersonItemClickListener;
 import kr.ssu.ai_fitness.dto.Person;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 
 
 public class ChattingListFragment extends Fragment {
 
     final private int maxNumPeople = 3;
 
-    private String uid;//채팅을 요구하는 아이디, 즉 단말기에 로그인된 uid
+    private int uid;//채팅을 요구하는 아이디, 즉 단말기에 로그인된 uid
     private String chatRoomUid;
     private String festivalName;
     private String contentId;
@@ -40,13 +42,20 @@ public class ChattingListFragment extends Fragment {
 
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_chatting_list, container, false);
 
+        uid = SharedPrefManager.getInstance(getActivity()).getUser().getId();
+
         recyclerView = view.findViewById(R.id.fragment_chatting_list_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        PersonAdapter adapter = new PersonAdapter();
+
+        Log.d("xxxxxxxxx", "here1");
+        PersonAdapter adapter = new PersonAdapter(uid, getActivity());
         adapter.addItem(new Person("홍길동", "뭐하지", "10:20"));
         adapter.addItem(new Person("김가나", "안녕하세요", "10:50"));
         recyclerView.setAdapter(adapter);
+
+
+        Log.d("xxxxxxxxx", "here2");
 
         adapter.setOnItemClickListner(new OnPersonItemClickListener() {
             @Override
