@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
+
 import kr.ssu.ai_fitness.ChattingActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.adapter.PersonAdapter;
@@ -20,7 +22,17 @@ import kr.ssu.ai_fitness.dto.Person;
 
 public class ChattingListFragment extends Fragment {
 
+    final private int maxNumPeople = 3;
+
+    private String uid;//채팅을 요구하는 아이디, 즉 단말기에 로그인된 uid
+    private String chatRoomUid;
+    private String festivalName;
+    private String contentId;
+
     RecyclerView recyclerView;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm");
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,15 +41,11 @@ public class ChattingListFragment extends Fragment {
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_chatting_list, container, false);
 
         recyclerView = view.findViewById(R.id.fragment_chatting_list_rv);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
         PersonAdapter adapter = new PersonAdapter();
-
         adapter.addItem(new Person("홍길동", "뭐하지", "10:20"));
         adapter.addItem(new Person("김가나", "안녕하세요", "10:50"));
-
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListner(new OnPersonItemClickListener() {
