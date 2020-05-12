@@ -53,6 +53,8 @@ public class ChattingListFragment extends Fragment {
             public void onItemClick(PersonAdapter.ViewHolder holder, View view, int position) {
                 Intent intent = new Intent(getActivity(), ChattingActivity.class);
 
+                //*****여기 또는 어댑터에서 상대방 아이디(destinationUid) 넘겨줘야함.
+
                 startActivity(intent);
             }
         });
