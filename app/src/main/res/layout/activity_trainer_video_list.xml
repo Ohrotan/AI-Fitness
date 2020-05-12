@@ -21,12 +21,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/testView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bonobono" />
-
         <Button
             android:id="@+id/tr_video_reg_btn"
             android:layout_width="match_parent"
