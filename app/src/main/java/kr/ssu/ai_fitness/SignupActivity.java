@@ -77,6 +77,7 @@ public class SignupActivity extends AppCompatActivity {
 
     Button buttonComplete;         //회원가입 완료 버튼
 
+    InputStream imgInputStream;
 
     Calendar myCalendar = Calendar.getInstance();
 
@@ -171,6 +172,8 @@ public class SignupActivity extends AppCompatActivity {
                     //선택한 사진 경로를 버튼 옆 텍스트뷰에 보여줌
                     textViewImage.setText(selectedImageUri.getPath());
 
+                    imgInputStream = getFileInputStream(selectedImageUri);
+
                 } catch (Exception e) {
                     Toast.makeText(this, "사진 선택 에러", Toast.LENGTH_LONG).show();
                 }
@@ -190,12 +193,12 @@ public class SignupActivity extends AppCompatActivity {
 
 
     public InputStream getFileInputStream(Uri uri) throws IOException {
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),selectedImageUri);
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
 
         int origWidth = bitmap.getWidth();
         int origHeight = bitmap.getHeight();
 
-        final int destWidth = 300;//or the width you need
+        final int destWidth = 100;//or the width you need
 
         if (origWidth > destWidth) {
             int destHeight = origHeight / (origWidth / destWidth);
@@ -226,19 +229,17 @@ public class SignupActivity extends AppCompatActivity {
         final int gender = ((RadioButton) findViewById(radioGroup_gender.getCheckedRadioButtonId())).getText().toString().equals("남") ? 1 : 0;
 
         //path 값이 없으면 리턴하고, 있다면 이것을 프사 경로로 사용함.
-        if(selectedImageUri.equals("")) {
-            buttonImage.setError("Please select your photo");
-            buttonImage.requestFocus();
+        if(selectedImageUri == null || selectedImageUri.equals(Uri.EMPTY)) {//image
+            textViewImage.setError("Please click button and select your photo");
+            textViewImage.requestFocus();
             return;
         }
-        final String image = selectedImageUri.getPath();
 
         final String intro = editTextIntro.getText().toString();
 
         final String birth = editTextBirth.getText().toString();
         final String admin = "0";
         final String alarm = "1";
-
 
 
         //first we will do the validations
@@ -279,7 +280,7 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        //***** birth, iamge 예외처리 추가해야함
+        //***** birth 예외처리 추가해야함
 
 
         //dto가 들어가는 부분. 회원 가입의 경우 여러 정보와 함께 프로필 사진 이미지를 같이 전송한다.
@@ -302,21 +303,23 @@ public class SignupActivity extends AppCompatActivity {
         );
         Log.i("Huzza", "Member : " + info.getId()+info.getEmail()+info.getPwd()+info.getHeight()+info.getWeight());
 
-        SignupActivity.UploadMemberInfoTask uploadMemberInfoTask = new SignupActivity.UploadMemberInfoTask(this, info);
-        uploadMemberInfoTask.execute(selectedImageUri);//AsyncTask 실행
+        SignupActivity.UploadMemberInfoTask uploadMemberInfoTask = new SignupActivity.UploadMemberInfoTask(this, info, imgInputStream);
+        uploadMemberInfoTask.execute();//AsyncTask 실행
     }
 
 
-    class UploadMemberInfoTask extends AsyncTask<Uri, Void, String> {
+    class UploadMemberInfoTask extends AsyncTask<Void, Void, String> {
 
         ProgressDialog uploading;
         Context context;
+        InputStream imgInputStream;
 
         Member info;
 
-        UploadMemberInfoTask(Context context, Member info) {
+        UploadMemberInfoTask(Context context, Member info, InputStream imgInputStream) {
             this.info = info;
             this.context = context;
+            this.imgInputStream = imgInputStream;
         }
 
         @Override
@@ -341,16 +344,12 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(Uri... params) {
+        protected String doInBackground(Void... voids) {
             ProfileUpload u = new ProfileUpload();
 
             //실제 HttpURLConnection 이용해서 서버에 요청하고 응답받는다.
-            String msg = null;
-            try {
-                msg = u.upload(getFileInputStream(params[0]),info);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            String msg = u.upload(imgInputStream,info);
+
             return msg;
         }
     }

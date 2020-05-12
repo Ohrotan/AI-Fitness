@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -56,6 +57,7 @@ public class ProfileUpload {
             //DataOutputStream 구하기. 실제 서버로 request body에 넣어서 전달되어야하는 내용을 설정하기 위해 필요하다.
             dos = new DataOutputStream(conn.getOutputStream());
 
+
             //파일데이터(이미지파일)을 넣는 부분
             dos.writeBytes(twoHyphens + boundary + lineEnd);//각 데이터의 시작부분을 알려주는 코드
             //아래 줄은 name= 뒤에 fieldname 넣어주고, filename= 뒤에 이미지 파일명을 넣어준다.
@@ -79,6 +81,10 @@ public class ProfileUpload {
             }
 
             dos.writeBytes(lineEnd);
+
+            Log.d("xxxxxxxx", ""+info.getId()+"**"+info.getEmail()+"**"+info.getPwd()+"**"+info.getName()+"**"+info.getHeight()+"**"+info.getWeight()+"**"+
+                    info.getGender()+"**"+info.getBirth()+"**"+info.getMuscle()+"**"+info.getFat()+"**"+info.getIntro()+"**"+info.getImage()+"**"+
+                    info.getTrainer()+"**"+info.getAdmin()+"**"+info.getAlarm());
 
             //보낼 데이터 중에서 이미지 이외에 나머지 데이터들 넣는부분
             dos.writeBytes(twoHyphens + boundary + lineEnd);
