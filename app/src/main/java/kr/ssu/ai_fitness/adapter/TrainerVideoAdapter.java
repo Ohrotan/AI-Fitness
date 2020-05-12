@@ -58,8 +58,9 @@ public class TrainerVideoAdapter extends BaseAdapter {
 
         item = items.get(position);
         holder.title.setText(item.getTitle());
+
         ImageViewTask task = new ImageViewTask(holder.img);
-        task.execute("https://storage.cloud.google.com/"+item.getThumb_img());
+        task.execute(item.getThumb_img());
 
         return convertView;
     }
