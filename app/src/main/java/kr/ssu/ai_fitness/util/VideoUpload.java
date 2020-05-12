@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import kr.ssu.ai_fitness.dto.TrainerVideo;
 
@@ -47,13 +48,15 @@ public class VideoUpload {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            conn.setRequestProperty("Accept-Language", "*");
+            conn.setRequestProperty("accept-charset", "UTF-8");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
             conn.setRequestProperty("videoFile", info.getVideo());
             conn.setRequestProperty("imgFile", info.getThumb_img());
-            dos = new DataOutputStream(conn.getOutputStream());
+
+             dos = new DataOutputStream(conn.getOutputStream());
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
+
 
             //video file
             dos.writeBytes("Content-Disposition: form-data; name=\"videoFile\";filename=\"" + info.getVideo() + "\"" + lineEnd);
@@ -122,6 +125,7 @@ public class VideoUpload {
             videoIs.close();
             dos.flush();
             dos.close();
+
         } catch (MalformedURLException ex) {
 
             ex.printStackTrace();
