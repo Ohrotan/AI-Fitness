@@ -7,9 +7,12 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +35,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -183,16 +189,26 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-    public InputStream getFileInputStream(Uri uri) {
-        InputStream is = null;
-        try {
-            //ContentProvider를 통해 db에 있는 파일 path의 Uri로 해당 파일을 InputStream으로 가져오는 방법이다
-            is = getContentResolver().openInputStream(uri);
+    public InputStream getFileInputStream(Uri uri) throws IOException {
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),selectedImageUri);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        int origWidth = bitmap.getWidth();
+        int origHeight = bitmap.getHeight();
+
+        final int destWidth = 300;//or the width you need
+
+        if (origWidth > destWidth) {
+            int destHeight = origHeight / (origWidth / destWidth);
+            bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false);
         }
-        return is;
+
+        int byteSize = bitmap.getRowBytes() * bitmap.getHeight();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(byteSize);
+        bitmap.copyPixelsToBuffer(byteBuffer);
+
+        byte[] byteArray = byteBuffer.array();
+
+        return new ByteArrayInputStream(byteArray);
     }
 
 
@@ -329,7 +345,12 @@ public class SignupActivity extends AppCompatActivity {
             ProfileUpload u = new ProfileUpload();
 
             //실제 HttpURLConnection 이용해서 서버에 요청하고 응답받는다.
-            String msg = u.upload(getFileInputStream(params[0]),info);
+            String msg = null;
+            try {
+                msg = u.upload(getFileInputStream(params[0]),info);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return msg;
         }
     }
