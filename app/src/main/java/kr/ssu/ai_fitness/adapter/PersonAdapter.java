@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
@@ -16,8 +18,15 @@ import kr.ssu.ai_fitness.dto.Person;
 
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder> {
 
-    ArrayList<Person> items = new ArrayList<Person>();
+    ArrayList<Person> items = new ArrayList<Person>(); // items는 상대방 유저에 대한 정보 리스트
     OnPersonItemClickListener listener;
+
+    public PersonAdapter() {
+        //*****서버에서 사용자 uid 받아옴.
+
+        //*****서버에서 사용자와 채팅할 수 있는 상대방 목록을 받아옴.
+        //*****items.clear()랑 notifydatasetchanged()사용해야할 수도 있음
+    }
 
     public void setOnItemClickListner(OnPersonItemClickListener listner) {
         this.listener = listner;
