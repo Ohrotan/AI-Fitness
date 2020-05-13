@@ -85,7 +85,10 @@ public class ChattingListFragment extends Fragment {
             public void onItemClick(PersonAdapter.ViewHolder holder, View view, int position) {
                 Intent intent = new Intent(getActivity(), ChattingActivity.class);
 
-                //*****여기 또는 어댑터에서 상대방 아이디(destinationUid) 넘겨줘야함.
+                //상대방 아이디(destUser) 넘겨줌.
+                intent.putExtra("destUser", destUsers.get(position).getId());
+
+                //*****여기서 넘겨주는 데이터로 destUser의 image를 넘겨줘야할 것 같음
 
                 startActivity(intent);
             }
@@ -113,9 +116,9 @@ public class ChattingListFragment extends Fragment {
                                 destUsers.add(new Person(userJson.getInt("id"), userJson.getString("name"), userJson.getString("image")));
                             }
 
-//                            for (int i =0; i < destUsersCount; ++i) {
-//                                destUsers.add(new Person(1,String.valueOf(obj.getInt(1+i)),"d"));
-//                            }
+                            //*****상대방 이미지 경로를 가지고 이미지를 서버에서 가져와서 imageList 를 만든다.
+
+                            //*****채팅방 정보를 firebase에서 가져와서 chatRoomList 를 만든다. 이때 채팅을 아직 한번도 안해본경우 예외처리 해줘야함
 
 
                         } catch (JSONException ex) {
