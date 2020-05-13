@@ -19,14 +19,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.core.utilities.Tree;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import kr.ssu.ai_fitness.ChattingActivity;
 import kr.ssu.ai_fitness.HomeActivity;
@@ -37,18 +40,18 @@ import kr.ssu.ai_fitness.listener.OnPersonItemClickListener;
 import kr.ssu.ai_fitness.dto.Person;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.vo.ChatModel;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder> {
 
     ArrayList<Person> items = new ArrayList<Person>(); // items는 상대방 유저에 대한 정보 리스트
-    ArrayList<String> chatRoodIds;
-    OnPersonItemClickListener listener;
+    ArrayList<ChatModel> chatRoomInfos;
     Context context;
 
-    public PersonAdapter (ArrayList<Person> destUsers, ArrayList<String> chatRoodIds, Context context) {
-        items = destUsers;
-        this.chatRoodIds = chatRoodIds;
+    public PersonAdapter(ArrayList<Person> items, ArrayList<ChatModel> chatRoomInfos, Context context) {
+        this.items = items;
+        this.chatRoomInfos = chatRoomInfos;
         this.context = context;
     }
 
@@ -60,8 +63,8 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         this.items = items;
     }
 
-    public void setChatRoodIds(ArrayList<String> chatRoodIds) {
-        this.chatRoodIds = chatRoodIds;
+    public void setChatRoomInfos(ArrayList<ChatModel> chatRoomInfos) {
+        this.chatRoomInfos = chatRoomInfos;
     }
 
     public Person getItem(int position) {
@@ -84,7 +87,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Person item;
-        String chatRoom;
+        String lastMessage;
 
         if (items.size() > position) {
             item = items.get(position);
@@ -93,14 +96,32 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
             item = new Person(-1, "", "");
         }
 
-        if (chatRoodIds.size() > position) {
-            chatRoom = chatRoodIds.get(position);
+//        if (chatRoomInfos.size() > position) {
+//            chatRoomInfo = chatRoomInfos.get(position);
+//        }
+//        else {
+//            HashMap<String, Boolean> temp = new HashMap<>();
+//            temp.put("-1", false);
+//            chatRoomInfo = new ChatModel(temp);
+//        }
+
+
+        if (chatRoomInfos.size() > position && !(chatRoomInfos.get(position).users.containsKey("-1"))) {
+            //메시지를 내림차순으로 정렬 후 마지막 메세지의 키값을 가져옴
+            Map<String, ChatModel.Comment> commentMap = new TreeMap<>(Collections.reverseOrder());
+            commentMap.putAll(chatRoomInfos.get(position).comments);
+            String lastMessageKey = (String)commentMap.keySet().toArray()[0];
+
+            //위에서 얻음 키값을 이용해서 해당 메세지 내용을 가져옴
+            lastMessage = chatRoomInfos.get(position).comments.get(lastMessageKey).message;
         }
         else {
-            chatRoom = "";
+            lastMessage = "";
         }
 
-        holder.setItem(item, chatRoom);
+
+
+        holder.setItem(item, lastMessage);
     }
 
     @Override
@@ -141,15 +162,20 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
         }
 
-        public void setItem(Person item, String chatRoom) {
+        public void setItem(Person item, String lastMessage) {
             if (item.getId() != -1) {
                 name.setText(item.getName());
             }
 
-            if (!chatRoom.equals("")) {
-                message.setText(chatRoom);
-            }else {
+            if (lastMessage.equals("")) {
                 message.setText("아직 채팅을 한 적이 없습니다.");
+                timestamp.setText("");
+            }
+            else {
+                //가장 마지막 메세지 내용으로 수정함
+                message.setText(lastMessage);
+
+                //*****가장 마지막 메세지를 보낸 시간으로 time stamp 보여줘야 함
             }
         }
     }
