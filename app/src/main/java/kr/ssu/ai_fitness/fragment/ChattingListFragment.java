@@ -55,7 +55,7 @@ public class ChattingListFragment extends Fragment {
     PersonAdapter adapter;
 
     ArrayList<Person> destUsers = new ArrayList<>();
-    ArrayList<ChatModel> chatRoodInfos = new ArrayList<>();//*****채팅방 아이디 뿐만아니라 채팅방 마지막 메세지와 타임 스탬프를 가져오도록 수정해야함.
+    ArrayList<ChatModel> chatRoodInfos = new ArrayList<>();//채팅방 아이디 뿐만아니라 채팅방 마지막 메세지와 타임 스탬프를 가져오도록 수정해야함.
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm");
 
@@ -77,29 +77,7 @@ public class ChattingListFragment extends Fragment {
         adapter = new PersonAdapter(destUsers, chatRoodInfos, getActivity());
         recyclerView.setAdapter(adapter);
 
-        //*****여기 에러부분 해결해야함
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-//        recyclerView.setLayoutManager(layoutManager);
-//        adapter = new PersonAdapter(destUsers, chatRoodIds, getActivity());
-//        recyclerView.setAdapter(adapter);
-
-        //상대방 정보 서버로부터 받아옴
         requestDestinationUser();
-//
-//
-//        adapter.setOnItemClickListner(new OnPersonItemClickListener() {
-//            @Override
-//            public void onItemClick(PersonAdapter.ViewHolder holder, View view, int position) {
-//                Intent intent = new Intent(getActivity(), ChattingActivity.class);
-//
-//                //상대방 아이디(destUser) 넘겨줌.
-//                intent.putExtra("destUser", destUsers.get(position).getId());
-//
-//                //*****여기서 넘겨주는 데이터로 destUser의 image를 넘겨줘야할 것 같음
-//
-//                startActivity(intent);
-//            }
-//        });
 
         Log.d("xxxxxxxxx", "here2");
 
@@ -123,13 +101,13 @@ public class ChattingListFragment extends Fragment {
                             final int destUsersCount = obj.getInt(0);
                             //JSONObject userJson = obj.getJSONObject(1);
 
+                            Log.d("xxxxxxxxx", ""+destUsersCount);
+
                             //상대방 리스트 만든다
                             for (int i =0; i < destUsersCount; ++i) {
                                 JSONObject userJson = obj.getJSONObject(1+i);
                                 destUsers.add(new Person(userJson.getInt("id"), userJson.getString("name"), userJson.getString("image")));
                             }
-
-                            //*****상대방 이미지 경로를 가지고 이미지를 서버에서 가져와서 imageList 를 만든다.
 
                             //채팅방 정보를 firebase에서 가져와서 chatRoomList 를 만든다. 이때 채팅을 아직 한번도 안해본경우 예외처리 해줘야함
                             FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+ uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -189,6 +167,8 @@ public class ChattingListFragment extends Fragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("uid", String.valueOf(uid));
                 params.put("trainer", String.valueOf(trainer));
+
+                Log.d("xxxxxxxxx", String.valueOf(uid) +"/"+String.valueOf(trainer));
                 return params;
             }
         };

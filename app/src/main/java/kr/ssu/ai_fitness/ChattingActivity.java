@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,6 +32,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.vo.ChatModel;
 
 public class ChattingActivity extends AppCompatActivity {
@@ -38,6 +40,7 @@ public class ChattingActivity extends AppCompatActivity {
     int uid;
     int destUser;
     String destUserName;
+    String destUserImage;
     String chatRoodId;
 
     RecyclerView recyclerView;
@@ -56,6 +59,8 @@ public class ChattingActivity extends AppCompatActivity {
         uid = SharedPrefManager.getInstance(this).getUser().getId();
         destUser = getIntent().getIntExtra("destUser", -1);
         destUserName = getIntent().getStringExtra("destUserName");
+        destUserImage = getIntent().getStringExtra("destUserImage");
+
 
         //1. 리사이클러뷰로 반복한다.
         //2. 디비 내용을 넣는다.
@@ -268,6 +273,9 @@ public class ChattingActivity extends AppCompatActivity {
                 LinearLayout1 = itemView.findViewById(R.id.item_chat_LinearLayout1);
                 LinearLayout2 = itemView.findViewById(R.id.item_chat_LinearLayout2);
                 timestamp = itemView.findViewById(R.id.item_chat_timestamp);
+
+                ImageViewTask task = new ImageViewTask(profile);
+                task.execute(destUserImage);
 
             }
 
