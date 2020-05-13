@@ -153,7 +153,6 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-
         return trainers.size() ;
     }
 }

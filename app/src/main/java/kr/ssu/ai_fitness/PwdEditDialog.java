@@ -11,11 +11,21 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class PwdEditDialog extends Dialog implements View.OnClickListener{
 
@@ -159,6 +169,36 @@ public class PwdEditDialog extends Dialog implements View.OnClickListener{
         }*/
     }
 
+    public void setPwd(final String name, final String pwd){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SETPWD,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("SET_PWD_received", response);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Log.d("SET_PASSWORD_DATA", "name = " + name + " pwd = " + pwd);
+                //서버가 요청하는 파라미터를 담는 부분
+                Map<String, String> params = new HashMap<>();
+                params.put("name", name);
+                params.put("pwd", pwd);
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -181,7 +221,7 @@ public class PwdEditDialog extends Dialog implements View.OnClickListener{
                     cancel();
 
                     SharedPrefManager.getInstance(context).setPwd(newPwd);
-
+                    setPwd(user.getName(), newPwd);
                 }
                 if(oldPwd == null){
                     Log.d("INFO_PASSWORD_CHECK", "oldPwd is null");

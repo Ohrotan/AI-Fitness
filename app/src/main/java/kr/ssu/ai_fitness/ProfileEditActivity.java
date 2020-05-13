@@ -17,15 +17,24 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class ProfileEditActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,6 +66,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
     private String muscle;
     private String fat;
     private String intro;
+    private int trainer;
 
     private Member user;
 
@@ -143,9 +153,11 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
         genderAge.setText("(" + gender + ", " + age + "세)");
 
         if(user.getTrainer() == 1){
+            trainer = 1;
             isTrainer.setChecked(true);
         }
         else{
+            trainer = 0;
             isTrainer.setChecked(false);
         }
 
@@ -219,6 +231,40 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
             //Toast.makeText(getApplicationContext(), "알림 수신 거부", Toast.LENGTH_SHORT).show();
         }
     }*/
+    public void setProfile(final String name, final String height, final String weight, final String muscle, final String fat, final String intro, final String trainer){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SETPROFILE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("SET_PROFILE_received", response);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                Log.d("INFO_PROFILE_EDIT_MAP", "name = " + name + " height = " + height + " weight = " + weight + " muscle = " + muscle + " fat = " + fat + " intro = " + intro + " isTrainer = " + trainer);
+                Map<String, String> params = new HashMap<>();
+                params.put("name", name);
+                params.put("height", height);
+                params.put("weight", weight);
+                params.put("muscle", muscle);
+                params.put("fat", fat);
+                params.put("trainer", trainer);
+                params.put("intro", intro);
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
 
     @Override
     public void onClick(View v) {
@@ -229,10 +275,11 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                 muscle = muscleEdit.getText().toString();
                 fat = fatEdit.getText().toString();
                 intro = selfIntro.getText().toString();
+                String trainerString = Integer.toString(trainer);
 
                 //Member user = SharedPrefManager.getInstance(ProfileEditActivity.this).getUser();;
 
-                Log.d("INFO_INPUT", "height = " + height + " weight = " + weight + " muscle = " + muscle + " fat = " + fat);
+                Log.d("INFO_INPUT", "height = " + height + " weight = " + weight + " muscle = " + muscle + " fat = " + fat + " isTrainer = " + trainer);
                 Log.d("INFO_INPUT", "Intro = " + intro);
 
                 if(height.length() == 0 || weight.length() == 0 || muscle.length() == 0 || fat.length() == 0){
@@ -252,14 +299,17 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                     reEnterDialog.show();
                 }
                 else{
-                    SharedPrefManager.getInstance(getApplicationContext()).setProfile(height, weight, muscle, fat, intro);
+                    SharedPrefManager.getInstance(getApplicationContext()).setProfile(height, weight, muscle, fat, intro, trainerString);
 
-                    Log.d("INFO_AFTER_CHANGE", "height = " + user.getHeight() + " weight = " + user.getWeight() + " muscle = " + user.getMuscle() + " fat = " + user.getFat());
+                    Log.d("INFO_AFTER_CHANGE", "height = " + user.getHeight() + " weight = " + user.getWeight() + " muscle = " + user.getMuscle() + " fat = " + user.getFat() + " isTrainer = " + user.getTrainer());
                     Log.d("INFO_AFTER_CHANGE", "Intro = " + user.getIntro());
+
+                    setProfile(user.getName(), height, weight, muscle, fat, intro, trainerString);
 
                     finish();
                     startActivity(new Intent(ProfileEditActivity.this, ProfileActivity.class));
                 }
+                break;
             case R.id.isTrainerSwitch:
                 if(isTrainer.isChecked()){
                     isTrainerTrueDialog = new AlertDialog.Builder(context);
@@ -274,8 +324,9 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                                     dialog.cancel();
                                     Toast.makeText(getApplicationContext(), "트레이너로 변경되었습니다.", Toast.LENGTH_SHORT).show();
                                     SharedPrefManager.getInstance(getApplicationContext()).setTrainer(1);
+                                    trainer = 1;
 
-                                    Log.d("INFO_ISTRAINER_CHANGE", "user.getTrainer = " + user.getTrainer());
+                                    Log.d("INFO_ISTRAINER_CHANGE", "user.getTrainer = " + user.getTrainer() + " isTrainer = " + trainer);
                                 }
                             })
                             .setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -305,8 +356,9 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                                     dialog.cancel();
                                     Toast.makeText(getApplicationContext(), "일반 회원으로 변경되었습니다.", Toast.LENGTH_SHORT).show();
                                     SharedPrefManager.getInstance(getApplicationContext()).setTrainer(0);
+                                    trainer = 0;
 
-                                    Log.d("INFO_ISTRAINER_CHANGE", "user.getTrainer = " + user.getTrainer());
+                                    Log.d("INFO_ISTRAINER_CHANGE", "user.getTrainer = " + user.getTrainer() + " isTrainer = " + trainer);
                                 }
                             })
                             .setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -322,6 +374,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                     alertDialog.show();
                     //Toast.makeText(getApplicationContext(), "알림 수신 거부", Toast.LENGTH_SHORT).show();
                 }
+                break;
         }
     }
 }

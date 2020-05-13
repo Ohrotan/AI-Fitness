@@ -20,12 +20,22 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -164,11 +174,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(getApplicationContext(), "알림 수신에 동의하셨습니다", Toast.LENGTH_SHORT).show();
                     //Member alarmConsent = new Member();
                     SharedPrefManager.getInstance(getApplicationContext()).setAlarm(1);
+                    setAlarm(user.getName(), 1);
                     Log.d("IS_ALARM_ON_CHANGE", "user.getAlarm = " + user.getAlarm());
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "알림 수신을 거부하셨습니다", Toast.LENGTH_SHORT).show();
                     SharedPrefManager.getInstance(getApplicationContext()).setAlarm(0);
+                    setAlarm(user.getName(), 0);
                     Log.d("IS_ALARM_ON_CHANGE", "user.getAlarm = " + user.getAlarm());
                 }
             }
@@ -214,7 +226,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         allMemberManage.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
             public void onClick(View V){
-                Toast.makeText(getApplicationContext(), "전체 회원 관리", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "전체 회원 관리", Toast.LENGTH_SHORT).show();
                 onPause();
                 startActivity(new Intent(ProfileActivity.this, AdminUserManageActivity.class));
             }
@@ -223,7 +235,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         allProgramManage.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
             public void onClick(View V){
-                Toast.makeText(getApplicationContext(), "전체 프로그램 관리", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "전체 프로그램 관리", Toast.LENGTH_SHORT).show();
                 onPause();
                 startActivity(new Intent(ProfileActivity.this, AdminProgramManageActivity.class));
             }
@@ -232,11 +244,40 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         allVideoManage.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
             public void onClick(View V){
-                Toast.makeText(getApplicationContext(), "전체 영상 관리", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "전체 영상 관리", Toast.LENGTH_SHORT).show();
                 onPause();
                 startActivity(new Intent(ProfileActivity.this, AdminVideoManageActivity.class));
             }
         });
+    }
+
+    public void setAlarm(final String name, final int alarm){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SETALARM,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("SET_ALARM_received", response);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                Map<String, String> params = new HashMap<>();
+                params.put("name", name);
+                params.put("alarm", Integer.toString(alarm));
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 
     @Override
@@ -260,7 +301,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 dialog.show();
                 break;
             case R.id.editProfile:
-                finish();
+                onPause();
                 startActivity(new Intent(ProfileActivity.this, ProfileEditActivity.class));
         }
     }

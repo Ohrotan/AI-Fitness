@@ -111,12 +111,6 @@ public class AdminUserManageAdapter extends RecyclerView.Adapter<AdminUserManage
         }
     }
 
-    // 생성자에서 데이터 리스트 객체를 전달받음.
-    /*RegMemberListAdapter(ArrayList<String> list) {
-
-        mData = list ;
-    }*/
-
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
     public AdminUserManageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
