@@ -66,13 +66,13 @@ public class ChattingActivity extends AppCompatActivity {
                 if (chatRoodId == null) {//생성된 채팅방이 없는경우
                     //새로운 채팅방을 생성해준다.
 
-                    Log.d("xxxxxxxx", "null임");
-
                     sendButton.setEnabled(false); //버튼 비활성화.
 
                     ChatModel chatModel = new ChatModel();
                     chatModel.users.put(String.valueOf(uid), true);
                     chatModel.users.put(String.valueOf(destUser), true);
+
+
 
                     //FirebaseDatabase에 생성하는 부분
                     //push()를 해주는 이유는 알아서 채팅방에 대한 식별자를 만들어주기 위함이다.
@@ -82,6 +82,8 @@ public class ChattingActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
                             //두 유저 간의 채팅방이 있는지 체크해서 있으면 채팅방 아이디 가져온다.
                             checkChatRoom();
+
+                            //*****채팅방 없을 때는 전송 두번 눌러야하는 문제 없애야함
                         }
                     });
                     checkChatRoom();
@@ -89,13 +91,11 @@ public class ChattingActivity extends AppCompatActivity {
                 else {//채팅방이 존재하는 경우
                     //기존 채팅방에서 comment 밑에 전송하는 메세지만 추가해준다.
 
-
-                    Log.d("xxxxxxxx", chatRoodId);
-
                     ChatModel.Comment comment = new ChatModel.Comment();
                     comment.uid = String.valueOf(uid);
                     comment.message = editText.getText().toString();
                     FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoodId).child("comments").push().setValue(comment);
+                    editText.setText("");
                 }
 
             }
@@ -105,23 +105,18 @@ public class ChattingActivity extends AppCompatActivity {
 
     void checkChatRoom() {
         //user/uid랑 일치하는 채팅방들을 찾는다.
-        Log.d("xxxxxxxx", "여기야1");
         FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+ uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //찾은 채팅방들을 반복문을 통해서 추출한 다음 이번에는 대화 상대(destUser)가 일치하는지 찾느다.
 
 
-                Log.d("xxxxxxxx", "여기야2");
                 for(DataSnapshot item : dataSnapshot.getChildren()) {
-
-                    Log.d("xxxxxxxx", "여기야3");
                     ChatModel chatModel = item.getValue(ChatModel.class);//채팅방 추출하는 부분
                     if (chatModel.users.containsKey(String.valueOf(destUser))) {//destUser에 대한 키값이 있는지 체크
                         chatRoodId = item.getKey();//채팅방 생성에서 push()를 통해 만들어줬던 채팅방 식별자(id)를 가져온다.
 
 
-                        Log.d("xxxxxxxx", "여기야4");
                         sendButton.setEnabled(true);//채팅방 아이디 받아왔으면 버튼 다시 활성화.
 
                         LinearLayoutManager layoutManager = new LinearLayoutManager(ChattingActivity.this, LinearLayoutManager.VERTICAL, false);
@@ -155,7 +150,11 @@ public class ChattingActivity extends AppCompatActivity {
                         items.add(item.getValue(ChatModel.Comment.class));
                     }
 
+                    //메세지 갱신
                     notifyDataSetChanged();
+
+                    //메세지 갱신되면 포커스가 맨 하단으로 맞춰지도록 한다.
+                    recyclerView.scrollToPosition(items.size() - 1);
                 }
 
                 @Override
