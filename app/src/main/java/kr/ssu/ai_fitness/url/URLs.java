@@ -12,5 +12,8 @@ public class URLs {
     public static final String URL_ADMINUSERMANAGE = ROOT_URL + "/member/readAdminUserManage";
     public static final String URL_DELETEADMINUSERMANAGE = ROOT_URL + "/member/deleteAdminUserManage";
     public static final String URL_READTRAINERLIST = ROOT_URL + "/member/readTrainerList";
+    public static final String URL_SETALARM = ROOT_URL + "/member/setAlarm";
+    public static final String URL_SETPROFILE = ROOT_URL + "/member/setProfile";
+    public static final String URL_SETPWD = ROOT_URL + "/member/setPwd";
 
 }

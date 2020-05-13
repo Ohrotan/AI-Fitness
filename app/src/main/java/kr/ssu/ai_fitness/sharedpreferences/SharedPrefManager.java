@@ -99,7 +99,7 @@ public class SharedPrefManager {
         editor.apply();
     }
 
-    public void setProfile(String heightInput, String weightInput, String muscleInput, String fatInput, String introInput){
+    public void setProfile(String heightInput, String weightInput, String muscleInput, String fatInput, String introInput, String trainerInput){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -108,6 +108,7 @@ public class SharedPrefManager {
         editor.putString(muscle, String.valueOf(muscleInput));
         editor.putString(fat, String.valueOf(fatInput));
         editor.putString(intro, introInput);
+        editor.putString(trainer, trainerInput);
 
         editor.apply();
     }
