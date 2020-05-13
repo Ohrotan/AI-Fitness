@@ -25,10 +25,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.TreeMap;
 
 import kr.ssu.ai_fitness.ChattingActivity;
@@ -48,6 +51,8 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     ArrayList<Person> items = new ArrayList<Person>(); // items는 상대방 유저에 대한 정보 리스트
     ArrayList<ChatModel> chatRoomInfos;
     Context context;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm");
 
     public PersonAdapter(ArrayList<Person> items, ArrayList<ChatModel> chatRoomInfos, Context context) {
         this.items = items;
@@ -88,6 +93,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Person item;
         String lastMessage;
+        String time;
 
         if (items.size() > position) {
             item = items.get(position);
@@ -114,14 +120,21 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
             //위에서 얻음 키값을 이용해서 해당 메세지 내용을 가져옴
             lastMessage = chatRoomInfos.get(position).comments.get(lastMessageKey).message;
+
+
+
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+            long unixTime = (long)chatRoomInfos.get(position).comments.get(lastMessageKey).timestamp;
+            Date date = new Date(unixTime);
+            time = simpleDateFormat.format(date);
         }
         else {
             lastMessage = "";
+            time = "";
         }
 
 
-
-        holder.setItem(item, lastMessage);
+        holder.setItem(item, lastMessage, time);
     }
 
     @Override
@@ -150,11 +163,13 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
                     if (position != RecyclerView.NO_POSITION) {
                         Intent intent = new Intent(context, ChattingActivity.class);
 
-                        //상대방 아이디(destUser) 넘겨줌.
+                        //상대방 아이디(destUser), 이름 넘겨줌.
                         intent.putExtra("destUser", items.get(position).getId());
+                        intent.putExtra("destUserName", items.get(position).getName());
 
                         //*****여기서 넘겨주는 데이터로 destUser의 image를 넘겨줘야할 것 같음
 
+                        ((Activity)context).finish();
                         context.startActivity(intent);
                     }
                 }
@@ -162,7 +177,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
         }
 
-        public void setItem(Person item, String lastMessage) {
+        public void setItem(Person item, String lastMessage, String time) {
             if (item.getId() != -1) {
                 name.setText(item.getName());
             }
@@ -174,7 +189,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
             else {
                 //가장 마지막 메세지 내용으로 수정함
                 message.setText(lastMessage);
-
+                timestamp.setText(time);
                 //*****가장 마지막 메세지를 보낸 시간으로 time stamp 보여줘야 함
             }
         }
