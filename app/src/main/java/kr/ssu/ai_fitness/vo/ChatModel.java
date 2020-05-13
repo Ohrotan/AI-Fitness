@@ -8,6 +8,12 @@ public class ChatModel {
     public Map<String, Boolean> users = new HashMap<>();//uid와 destUser 정보. 즉 채팅방 유저들
     public Map<String, Comment> comments = new HashMap<>();//채팅방의 내용
 
+    public ChatModel() {}
+
+    public ChatModel(HashMap<String, Boolean> users) {
+        this.users = users;
+    }
+
     public static  class Comment {
         public String uid;
         public String message;
