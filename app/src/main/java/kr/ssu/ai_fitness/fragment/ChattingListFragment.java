@@ -75,6 +75,10 @@ public class ChattingListFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.fragment_chatting_list_rv);
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new PersonAdapter(destUsers, chatRoodIds, getActivity());
+        recyclerView.setAdapter(adapter);
 
         //*****여기 에러부분 해결해야함
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -113,6 +117,8 @@ public class ChattingListFragment extends Fragment {
                     public void onResponse(String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
 
+                        destUsers.clear();
+
                         JSONArray obj = null;
                         try {
                             //response를 json object로 변환함.
@@ -128,7 +134,7 @@ public class ChattingListFragment extends Fragment {
 
                             //*****상대방 이미지 경로를 가지고 이미지를 서버에서 가져와서 imageList 를 만든다.
 
-                            //*****채팅방 정보를 firebase에서 가져와서 chatRoomList 를 만든다. 이때 채팅을 아직 한번도 안해본경우 예외처리 해줘야함
+                            //채팅방 정보를 firebase에서 가져와서 chatRoomList 를 만든다. 이때 채팅을 아직 한번도 안해본경우 예외처리 해줘야함
                             for(int i=0; i < destUsersCount; ++i ) {
                                 final int destUser = destUsers.get(i).getId();
 
@@ -136,6 +142,8 @@ public class ChattingListFragment extends Fragment {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         //찾은 채팅방들을 반복문을 통해서 추출한 다음 이번에는 대화 상대(destUser)가 일치하는지 찾느다.
+
+                                        //chatRoodIds.clear();
 
                                         boolean isFound = false;
                                         for(DataSnapshot item : dataSnapshot.getChildren()) {
@@ -151,12 +159,10 @@ public class ChattingListFragment extends Fragment {
                                         }
 
                                         //만들어진 chatRoomIds를 adapter로 넘겨준다.
+                                        adapter.setChatRoodIds(chatRoodIds);
+                                        adapter.notifyDataSetChanged();
 
 
-                                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-                                        recyclerView.setLayoutManager(layoutManager);
-                                        adapter = new PersonAdapter(destUsers, chatRoodIds, getActivity());
-                                        recyclerView.setAdapter(adapter);
 
                                     }
 
@@ -168,15 +174,13 @@ public class ChattingListFragment extends Fragment {
 
                             }
 
-
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
 
                         Log.d("xxxxxxxxx", obj.toString());
+                        adapter.notifyDataSetChanged();
 
-
-                        //adapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
