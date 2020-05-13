@@ -1,6 +1,7 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.TrainerProfileActivity;
 import kr.ssu.ai_fitness.vo.AllTrainer;
 
 public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.ViewHolder> {
@@ -27,6 +29,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
     //private TextView name;
     //private ImageView rating;
     //private RatingBar trainerRating;
+    private double mAvgRating;
 
     /*public void addItem(String item) {
         mData.add(item);
@@ -63,9 +66,19 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
                 @Override
                 public void onClick(View V){
                     int pos = getAdapterPosition();
+                    //String mName = trainers.get(pos).getName();
                     if(pos != RecyclerView.NO_POSITION){
                         //mData.set(pos, "item clicked. pos = " + pos);
-                        Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
+                        String mName = trainers.get(pos).getName();
+                        Intent intent = new Intent(mContext, TrainerProfileActivity.class);
+
+                        intent.putExtra("trainerName", mName);
+                        intent.putExtra("rating", mAvgRating);
+
+                        Log.d("VIEWHOLDER", "name = " + mName + " Average Rating = " + mAvgRating);
+
+                        mContext.startActivity(intent);
 
                         //notifyItemChanged(pos);
                     }
@@ -106,41 +119,42 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
         holder.trainerListItem.setText(text) ;
 
         Double avgRating = trainers.get(position).getRating();
+        mAvgRating = avgRating;
 
         Log.d("BINDVIEWHOLDER", "Average Rating = " + avgRating);
 
-        if(avgRating < 0.5){
+        if(avgRating <= 0.5){
             int img = R.drawable.rating_0_5;
             holder.rating.setImageResource(img);
         }
-        else if(avgRating >= 0.5 && avgRating < 1.0){
+        else if(avgRating > 0.5 && avgRating <= 1.0){
             int img = R.drawable.rating_1;
             holder.rating.setImageResource(img);
         }
-        else if(avgRating >= 1.0 && avgRating < 1.5){
+        else if(avgRating > 1.0 && avgRating <= 1.5){
             int img = R.drawable.rating_1_5;
             holder.rating.setImageResource(img);
         }
-        else if(avgRating >= 1.5 && avgRating < 2.0){
+        else if(avgRating > 1.5 && avgRating <= 2.0){
             int img = R.drawable.rating_2;
             holder.rating.setImageResource(img);
         }
-        else if(avgRating >= 2.0 && avgRating < 2.5){
+        else if(avgRating > 2.0 && avgRating <= 2.5){
             int img = R.drawable.rating_2_5;
             holder.rating.setImageResource(img);
         }
-        else if(avgRating >= 2.5 && avgRating < 3.0){
+        else if(avgRating > 2.5 && avgRating <= 3.0){
             int img = R.drawable.rating_3;
             holder.rating.setImageResource(img);
-        }else if(avgRating >= 3.0 && avgRating < 3.5){
+        }else if(avgRating > 3.0 && avgRating <= 3.5){
             int img = R.drawable.rating_3_5;
             holder.rating.setImageResource(img);
         }
-        else if(avgRating >= 3.5 && avgRating < 4.0){
+        else if(avgRating > 3.5 && avgRating <= 4.0){
             int img = R.drawable.rating_4;
             holder.rating.setImageResource(img);
         }
-        else if(avgRating >= 4.0 && avgRating < 4.5){
+        else if(avgRating > 4.0 && avgRating <= 4.5){
             int img = R.drawable.rating_4_5;
             holder.rating.setImageResource(img);
         }

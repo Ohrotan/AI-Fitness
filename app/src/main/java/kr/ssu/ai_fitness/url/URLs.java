@@ -15,5 +15,6 @@ public class URLs {
     public static final String URL_SETALARM = ROOT_URL + "/member/setAlarm";
     public static final String URL_SETPROFILE = ROOT_URL + "/member/setProfile";
     public static final String URL_SETPWD = ROOT_URL + "/member/setPwd";
+    public static final String URL_READTRAINERDATA = ROOT_URL + "/member/readTrainerData";
 
 }
