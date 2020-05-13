@@ -1,37 +1,37 @@
 package kr.ssu.ai_fitness.dto;
 
 public class Person {
+    private int id;
     private String name;
-    private String message;
-    private String timestamp;
+    private String image;
 
-    public Person(String name, String message, String timestamp) {
+    public Person(int id, String name, String image) {
+        this.id = id;
         this.name = name;
-        this.message = message;
-        this.timestamp = timestamp;
+        this.image = image;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public String getImage() {
+        return image;
     }
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

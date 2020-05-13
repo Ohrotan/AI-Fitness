@@ -43,20 +43,8 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     ArrayList<Person> items = new ArrayList<Person>(); // items는 상대방 유저에 대한 정보 리스트
     OnPersonItemClickListener listener;
 
-    ArrayList<Integer> temp = new ArrayList<>();
-
-    public PersonAdapter(final int uid, final Context context) {
-
-        //*****인자로받은 uid를 이용해서 서버로부터 사용자와 채팅할 수 있는 상대방 목록을 받아옴.
-        //*****items.clear()랑 notifydatasetchanged()사용해야할 수도 있음
-
-
-    }
-
-    public void swapDataSet(ArrayList<Person> newData) {
-        items = newData;
-
-        notifyDataSetChanged();
+    public PersonAdapter (ArrayList<Person> destUsers) {
+        items = destUsers;
     }
 
     public void setOnItemClickListner(OnPersonItemClickListener listner) {
@@ -92,9 +80,6 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Person item = items.get(position);
         holder.setItem(item);
-        if (temp.size() >1) {
-            holder.name.setText(String.valueOf(temp.get(position)));
-        }
     }
 
     @Override
@@ -128,8 +113,6 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
         public void setItem(Person item) {
             name.setText(item.getName());
-            message.setText(item.getMessage());
-            timestamp.setText(item.getTimestamp());
         }
     }
 }
