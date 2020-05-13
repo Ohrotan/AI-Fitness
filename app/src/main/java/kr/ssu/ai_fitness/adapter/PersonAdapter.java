@@ -52,16 +52,16 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         this.context = context;
     }
 
-//    public void setOnItemClickListner(OnPersonItemClickListener listner) {
-//        this.listener = listner;
-//    }
-
     public void addItem(Person item) {
         items.add(item);
     }
 
     public void setItems(ArrayList<Person> items) {
         this.items = items;
+    }
+
+    public void setChatRoodIds(ArrayList<String> chatRoodIds) {
+        this.chatRoodIds = chatRoodIds;
     }
 
     public Person getItem(int position) {
@@ -83,8 +83,23 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Person item = items.get(position);
-        String chatRoom = chatRoodIds.get(position);
+        Person item;
+        String chatRoom;
+
+        if (items.size() > position) {
+            item = items.get(position);
+        }
+        else {
+            item = new Person(-1, "", "");
+        }
+
+        if (chatRoodIds.size() > position) {
+            chatRoom = chatRoodIds.get(position);
+        }
+        else {
+            chatRoom = "";
+        }
+
         holder.setItem(item, chatRoom);
     }
 
@@ -127,8 +142,15 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         }
 
         public void setItem(Person item, String chatRoom) {
-            name.setText(item.getName());
-            message.setText(chatRoom);
+            if (item.getId() != -1) {
+                name.setText(item.getName());
+            }
+
+            if (!chatRoom.equals("")) {
+                message.setText(chatRoom);
+            }else {
+                message.setText("아직 채팅을 한 적이 없습니다.");
+            }
         }
     }
 }
