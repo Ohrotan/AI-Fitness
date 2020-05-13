@@ -41,10 +41,12 @@ import kr.ssu.ai_fitness.volley.VolleySingleton;
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder> {
 
     ArrayList<Person> items = new ArrayList<Person>(); // items는 상대방 유저에 대한 정보 리스트
+    ArrayList<String> chatRoodIds;
     OnPersonItemClickListener listener;
 
-    public PersonAdapter (ArrayList<Person> destUsers) {
+    public PersonAdapter (ArrayList<Person> destUsers, ArrayList<String> chatRoodIds) {
         items = destUsers;
+        this.chatRoodIds = chatRoodIds;
     }
 
     public void setOnItemClickListner(OnPersonItemClickListener listner) {
@@ -79,7 +81,8 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Person item = items.get(position);
-        holder.setItem(item);
+        String chatRoom = chatRoodIds.get(position);
+        holder.setItem(item, chatRoom);
     }
 
     @Override
@@ -111,8 +114,9 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
             });
         }
 
-        public void setItem(Person item) {
+        public void setItem(Person item, String chatRoom) {
             name.setText(item.getName());
+            message.setText(chatRoom);
         }
     }
 }

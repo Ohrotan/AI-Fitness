@@ -3,6 +3,7 @@ package kr.ssu.ai_fitness.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +40,7 @@ import kr.ssu.ai_fitness.listener.OnPersonItemClickListener;
 import kr.ssu.ai_fitness.dto.Person;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.vo.ChatModel;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 
@@ -52,6 +58,7 @@ public class ChattingListFragment extends Fragment {
     PersonAdapter adapter;
 
     ArrayList<Person> destUsers = new ArrayList<>();
+    ArrayList<String> chatRoodIds = new ArrayList<>();//*****채팅방 아이디 뿐만아니라 채팅방 마지막 메세지와 타임 스탬프를 가져오도록 수정해야함.
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm");
 
@@ -67,11 +74,12 @@ public class ChattingListFragment extends Fragment {
         trainer = SharedPrefManager.getInstance(getActivity()).getUser().getTrainer();
 
         recyclerView = view.findViewById(R.id.fragment_chatting_list_rv);
+
+
+        //*****여기 에러부분 해결해야함
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
-        Log.d("xxxxxxxxx", "here1");
-        adapter = new PersonAdapter(destUsers);
+        adapter = new PersonAdapter(destUsers, chatRoodIds);
         recyclerView.setAdapter(adapter);
 
         //상대방 정보 서버로부터 받아옴
@@ -119,6 +127,38 @@ public class ChattingListFragment extends Fragment {
                             //*****상대방 이미지 경로를 가지고 이미지를 서버에서 가져와서 imageList 를 만든다.
 
                             //*****채팅방 정보를 firebase에서 가져와서 chatRoomList 를 만든다. 이때 채팅을 아직 한번도 안해본경우 예외처리 해줘야함
+                            for(int i=0; i < destUsersCount; ++i ) {
+                                final int destUser = destUsers.get(i).getId();
+
+                                FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+ uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        //찾은 채팅방들을 반복문을 통해서 추출한 다음 이번에는 대화 상대(destUser)가 일치하는지 찾느다.
+
+                                        boolean isFound = false;
+                                        for(DataSnapshot item : dataSnapshot.getChildren()) {
+                                            ChatModel chatModel = item.getValue(ChatModel.class);//채팅방 추출하는 부분
+                                            if (chatModel.users.containsKey(String.valueOf(destUser))) {//destUser에 대한 키값이 있는지 체크
+                                                chatRoodIds.add(item.getKey());//채팅방 생성에서 push()를 통해 만들어줬던 채팅방 식별자(id)를 가져온다.
+                                                isFound = true;
+                                            }
+                                        }
+
+                                        if (!isFound) {//아직 채팅방이 생성 안 돼서 못 찾은 경우
+                                            chatRoodIds.add("");
+                                        }
+
+                                        //만들어진 chatRoomIds를 adapter로 넘겨준다.
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                            }
 
 
                         } catch (JSONException ex) {
