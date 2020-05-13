@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,9 +22,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.vo.ChatModel;
@@ -32,12 +37,15 @@ public class ChattingActivity extends AppCompatActivity {
 
     int uid;
     int destUser;
+    String destUserName;
     String chatRoodId;
 
     RecyclerView recyclerView;
 
     EditText editText;
     Button sendButton;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,7 @@ public class ChattingActivity extends AppCompatActivity {
         //uid, destUser 얻어옴
         uid = SharedPrefManager.getInstance(this).getUser().getId();
         destUser = getIntent().getIntExtra("destUser", -1);
+        destUserName = getIntent().getStringExtra("destUserName");
 
         //1. 리사이클러뷰로 반복한다.
         //2. 디비 내용을 넣는다.
@@ -86,7 +95,6 @@ public class ChattingActivity extends AppCompatActivity {
                             //*****채팅방 없을 때는 전송 두번 눌러야하는 문제 없애야함
                         }
                     });
-                    checkChatRoom();
                 }
                 else {//채팅방이 존재하는 경우
                     //기존 채팅방에서 comment 밑에 전송하는 메세지만 추가해준다.
@@ -94,6 +102,7 @@ public class ChattingActivity extends AppCompatActivity {
                     ChatModel.Comment comment = new ChatModel.Comment();
                     comment.uid = String.valueOf(uid);
                     comment.message = editText.getText().toString();
+                    comment.timestamp = ServerValue.TIMESTAMP;
                     FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoodId).child("comments").push().setValue(comment);
                     editText.setText("");
                 }
@@ -101,6 +110,14 @@ public class ChattingActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+
+        finish();
+        startActivity(new Intent(ChattingActivity.this, ChattingListActivity.class));
     }
 
     void checkChatRoom() {
@@ -115,7 +132,6 @@ public class ChattingActivity extends AppCompatActivity {
                     ChatModel chatModel = item.getValue(ChatModel.class);//채팅방 추출하는 부분
                     if (chatModel.users.containsKey(String.valueOf(destUser))) {//destUser에 대한 키값이 있는지 체크
                         chatRoodId = item.getKey();//채팅방 생성에서 push()를 통해 만들어줬던 채팅방 식별자(id)를 가져온다.
-
 
                         sendButton.setEnabled(true);//채팅방 아이디 받아왔으면 버튼 다시 활성화.
 
@@ -206,20 +222,28 @@ public class ChattingActivity extends AppCompatActivity {
 
                 //리니어레이아웃 속의 전체 요소들을 오른쪽 정렬 시킨다.
                 holder.LinearLayout1.setGravity(Gravity.RIGHT);
+                holder.LinearLayout2.setGravity(Gravity.RIGHT);
             }
             else {//상대방 말풍선일 때
-                //말풍선 이미지를 오른쪽말풍선으로 선택
+                //말풍선 이미지를 왼쪽말풍선으로 선택
                 holder.message.setBackgroundResource(R.drawable.leftbubble);
 
                 //상대방일 때는 프사랑 이름을 보여준다..
                 holder.profile.setVisibility(View.VISIBLE);
                 holder.name.setVisibility(View.VISIBLE);
+                holder.name.setText(destUserName);
 
                 //리니어레이아웃 속의 전체 요소들을 왼쪽 정렬 시킨다.
                 holder.LinearLayout1.setGravity(Gravity.LEFT);
+                holder.LinearLayout2.setGravity(Gravity.LEFT);
             }
 
             //*****타임스탬프 설정하는 부분 있어야 함
+            long unixTime = (long)items.get(position).timestamp;
+            Date date = new Date(unixTime);
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+            String time = simpleDateFormat.format(date);
+            holder.timestamp.setText(time);
         }
 
         @Override
@@ -231,7 +255,9 @@ public class ChattingActivity extends AppCompatActivity {
             ImageView profile;
             TextView name;
             TextView message;
+            TextView timestamp;
             LinearLayout LinearLayout1;
+            LinearLayout LinearLayout2;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -240,6 +266,8 @@ public class ChattingActivity extends AppCompatActivity {
                 name = itemView.findViewById(R.id.item_chat_name);
                 message = itemView.findViewById(R.id.item_chat_message);
                 LinearLayout1 = itemView.findViewById(R.id.item_chat_LinearLayout1);
+                LinearLayout2 = itemView.findViewById(R.id.item_chat_LinearLayout2);
+                timestamp = itemView.findViewById(R.id.item_chat_timestamp);
 
             }
 
