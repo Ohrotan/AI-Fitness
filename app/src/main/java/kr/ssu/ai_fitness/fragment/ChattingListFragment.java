@@ -77,30 +77,32 @@ public class ChattingListFragment extends Fragment {
 
 
         //*****여기 에러부분 해결해야함
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        adapter = new PersonAdapter(destUsers, chatRoodIds);
-        recyclerView.setAdapter(adapter);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//        recyclerView.setLayoutManager(layoutManager);
+//        adapter = new PersonAdapter(destUsers, chatRoodIds, getActivity());
+//        recyclerView.setAdapter(adapter);
 
         //상대방 정보 서버로부터 받아옴
         requestDestinationUser();
-
+//
+//
+//        adapter.setOnItemClickListner(new OnPersonItemClickListener() {
+//            @Override
+//            public void onItemClick(PersonAdapter.ViewHolder holder, View view, int position) {
+//                Intent intent = new Intent(getActivity(), ChattingActivity.class);
+//
+//                //상대방 아이디(destUser) 넘겨줌.
+//                intent.putExtra("destUser", destUsers.get(position).getId());
+//
+//                //*****여기서 넘겨주는 데이터로 destUser의 image를 넘겨줘야할 것 같음
+//
+//                startActivity(intent);
+//            }
+//        });
 
         Log.d("xxxxxxxxx", "here2");
 
-        adapter.setOnItemClickListner(new OnPersonItemClickListener() {
-            @Override
-            public void onItemClick(PersonAdapter.ViewHolder holder, View view, int position) {
-                Intent intent = new Intent(getActivity(), ChattingActivity.class);
 
-                //상대방 아이디(destUser) 넘겨줌.
-                intent.putExtra("destUser", destUsers.get(position).getId());
-
-                //*****여기서 넘겨주는 데이터로 destUser의 image를 넘겨줘야할 것 같음
-
-                startActivity(intent);
-            }
-        });
         return view;
     }
 
@@ -150,6 +152,12 @@ public class ChattingListFragment extends Fragment {
 
                                         //만들어진 chatRoomIds를 adapter로 넘겨준다.
 
+
+                                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                                        recyclerView.setLayoutManager(layoutManager);
+                                        adapter = new PersonAdapter(destUsers, chatRoodIds, getActivity());
+                                        recyclerView.setAdapter(adapter);
+
                                     }
 
                                     @Override
@@ -168,7 +176,7 @@ public class ChattingListFragment extends Fragment {
                         Log.d("xxxxxxxxx", obj.toString());
 
 
-                        adapter.notifyDataSetChanged();
+                        //adapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {

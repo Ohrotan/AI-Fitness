@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.ssu.ai_fitness.ChattingActivity;
 import kr.ssu.ai_fitness.HomeActivity;
 import kr.ssu.ai_fitness.LoginActivity;
 import kr.ssu.ai_fitness.R;
@@ -43,15 +44,17 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     ArrayList<Person> items = new ArrayList<Person>(); // items는 상대방 유저에 대한 정보 리스트
     ArrayList<String> chatRoodIds;
     OnPersonItemClickListener listener;
+    Context context;
 
-    public PersonAdapter (ArrayList<Person> destUsers, ArrayList<String> chatRoodIds) {
+    public PersonAdapter (ArrayList<Person> destUsers, ArrayList<String> chatRoodIds, Context context) {
         items = destUsers;
         this.chatRoodIds = chatRoodIds;
+        this.context = context;
     }
 
-    public void setOnItemClickListner(OnPersonItemClickListener listner) {
-        this.listener = listner;
-    }
+//    public void setOnItemClickListner(OnPersonItemClickListener listner) {
+//        this.listener = listner;
+//    }
 
     public void addItem(Person item) {
         items.add(item);
@@ -75,7 +78,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView = inflater.inflate(R.layout.item_person, parent, false);
 
-        return new ViewHolder(itemView, listener);
+        return new ViewHolder(itemView, context);
     }
 
     @Override
@@ -95,7 +98,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         TextView message;
         TextView timestamp;
 
-        public ViewHolder(View itemView, final OnPersonItemClickListener listener) {
+        public ViewHolder(View itemView, final Context context) {
             super(itemView);
 
             name = itemView.findViewById(R.id.item_person_name);
@@ -107,11 +110,20 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
                 public void onClick(View view) {
                     int position = getAdapterPosition();
 
-                    if (listener != null) {
-                        listener.onItemClick(ViewHolder.this, view, position);
+                    //notifyDataSetChanged()에 의해 갱신하는 과정에서 뷰홀더가 참조하는 아이템이 어댑터에서 삭제되면 NO_POSITION이 될수 있으므로 체크한다.
+                    if (position != RecyclerView.NO_POSITION) {
+                        Intent intent = new Intent(context, ChattingActivity.class);
+
+                        //상대방 아이디(destUser) 넘겨줌.
+                        intent.putExtra("destUser", items.get(position).getId());
+
+                        //*****여기서 넘겨주는 데이터로 destUser의 image를 넘겨줘야할 것 같음
+
+                        context.startActivity(intent);
                     }
                 }
             });
+
         }
 
         public void setItem(Person item, String chatRoom) {
