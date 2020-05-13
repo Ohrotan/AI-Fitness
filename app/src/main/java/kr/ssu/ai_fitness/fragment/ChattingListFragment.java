@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class ChattingListFragment extends Fragment {
     final private int maxNumPeople = 3;
 
     private int uid;//채팅을 요구하는 아이디, 즉 단말기에 로그인된 uid
+    private byte trainer;
     private String chatRoomUid;
     private String festivalName;
     private String contentId;
@@ -49,7 +51,7 @@ public class ChattingListFragment extends Fragment {
     RecyclerView recyclerView;
     PersonAdapter adapter;
 
-    ArrayList<Person> destinationUsers = new ArrayList<>();
+    ArrayList<Person> destUsers = new ArrayList<>();
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd hh:mm");
 
@@ -60,16 +62,16 @@ public class ChattingListFragment extends Fragment {
 
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_chatting_list, container, false);
 
+        //uid랑 trainer 값 가져옴
         uid = SharedPrefManager.getInstance(getActivity()).getUser().getId();
+        trainer = SharedPrefManager.getInstance(getActivity()).getUser().getTrainer();
 
         recyclerView = view.findViewById(R.id.fragment_chatting_list_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         Log.d("xxxxxxxxx", "here1");
-        adapter = new PersonAdapter(uid, getActivity());
-        adapter.addItem(new Person("홍길동", "뭐하지", "10:20"));
-        adapter.addItem(new Person("김가나", "안녕하세요", "10:50"));
+        adapter = new PersonAdapter(destUsers);
         recyclerView.setAdapter(adapter);
 
         //상대방 정보 서버로부터 받아옴
@@ -102,14 +104,23 @@ public class ChattingListFragment extends Fragment {
                         try {
                             //response를 json object로 변환함.
                             obj = new JSONArray(response);
+                            int destUsersCount = obj.getInt(0);
+                            //JSONObject userJson = obj.getJSONObject(1);
 
-                            //*****여기서 상대방 리스트 만든다
+                            //상대방 리스트 만든다
+                            for (int i =0; i < destUsersCount; ++i) {
+                                JSONObject userJson = obj.getJSONObject(1+i);
+                                destUsers.add(new Person(userJson.getInt("id"), userJson.getString("name"), userJson.getString("image")));
+                            }
+
+//                            for (int i =0; i < destUsersCount; ++i) {
+//                                destUsers.add(new Person(1,String.valueOf(obj.getInt(1+i)),"d"));
+//                            }
 
 
                         } catch (JSONException ex) {
                             ex.printStackTrace();
                         }
-                        //JSONObject userJson = obj.getJSONObject(0);
 
                         Log.d("xxxxxxxxx", obj.toString());
 
@@ -128,6 +139,7 @@ public class ChattingListFragment extends Fragment {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
                 params.put("uid", String.valueOf(uid));
+                params.put("trainer", String.valueOf(trainer));
                 return params;
             }
         };
