@@ -86,7 +86,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
                             int isFound = obj.getInt(0);
 
                             if (isFound == 0) {
-                                Toast.makeText(BeforeDayExrProgramActivity.this, "dya_program_id is not vlaid", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BeforeDayExrProgramActivity.this, "day_program_id is not valid", Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 JSONObject dayProgramObj = obj.getJSONObject(1);
