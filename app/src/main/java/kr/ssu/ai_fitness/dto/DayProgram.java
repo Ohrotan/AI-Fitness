@@ -1,47 +1,49 @@
 package kr.ssu.ai_fitness.dto;
 
 public class DayProgram {
-    private String id;
-    private String exr_id;
+    private int id;
+    private int exr_id;
     private String title;
-    private int order;
+    private int seq;
     private String intro;
 
     public DayProgram() {
     }
 
-    public DayProgram(String title) {
-        this.title = title;
-    }
-
-    public DayProgram( String exr_id, String title, int order, String intro) {
+    public DayProgram(int exr_id, String title, int seq) {
         this.exr_id = exr_id;
         this.title = title;
-        this.order = order;
+        this.seq = seq;
+    }
+
+    public DayProgram(int exr_id, String title, int seq, String intro) {
+        this.exr_id = exr_id;
+        this.title = title;
+        this.seq = seq;
         this.intro = intro;
     }
 
-    public DayProgram(String id, String exr_id, String title, int order, String intro) {
+    public DayProgram(int id, int exr_id, String title, int seq, String intro) {
         this.id = id;
         this.exr_id = exr_id;
         this.title = title;
-        this.order = order;
+        this.seq = seq;
         this.intro = intro;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getExr_id() {
+    public int getExr_id() {
         return exr_id;
     }
 
-    public void setExr_id(String exr_id) {
+    public void setExr_id(int exr_id) {
         this.exr_id = exr_id;
     }
 
@@ -53,12 +55,12 @@ public class DayProgram {
         this.title = title;
     }
 
-    public int getOrder() {
-        return order;
+    public int getSeq() {
+        return seq;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setSeq(int seq) {
+        this.seq = seq;
     }
 
     public String getIntro() {
