@@ -3,6 +3,7 @@ package kr.ssu.ai_fitness.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +18,16 @@ import kr.ssu.ai_fitness.dto.MemberExrHistory;
 public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrProgramAdapter.ViewHolder> {
 
     private ArrayList<MemberExrHistory> items = new ArrayList<MemberExrHistory>();
+
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
+    }
+
+    public AfterDayExrProgramAdapter(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public void addItem(MemberExrHistory item) {
         items.add(item);
@@ -44,9 +55,16 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         MemberExrHistory item = items.get(position);
         holder.setItem(item);
+
+        holder.buttonRegisterFeedback.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClick(view, position);
+            }
+        }));
 
         //*****사용자가 회원이면 피드백버튼 안보이게, 트레이너이면 보이게 설정해줘야 함
     }
@@ -60,6 +78,7 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
         ImageView image;
         TextView date;
         TextView feedback;
+        Button buttonRegisterFeedback;
 
 
         public ViewHolder(View itemView) {
@@ -68,6 +87,7 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
             image = itemView.findViewById(R.id.item_after_day_exr_program_image);
             date = itemView.findViewById(R.id.item_after_day_exr_program_date);
             feedback = itemView.findViewById(R.id.item_after_day_exr_program_feedback);
+            buttonRegisterFeedback = itemView.findViewById(R.id.item_after_day_exr_program_button);
         }
 
         public void setItem(MemberExrHistory item) {
