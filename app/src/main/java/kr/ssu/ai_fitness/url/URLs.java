@@ -11,6 +11,7 @@ public class URLs {
     public static final String URL_CHATLIST= ROOT_URL + "/member/read_chat_list";
     public static final String URL_DAYPROGRAM= ROOT_URL + "/day_exr/read_day_program";
     public static final String URL_DAYPROGRAMAFTER= ROOT_URL + "/day_exr/read_day_program_after";
+    public static final String URL_UPDATEMEMBERHISTORYFEEDBACK= ROOT_URL + "/day_exr/update_member_history_feedback";
     public static final String URL_ADMINUSERMANAGE = ROOT_URL + "/member/readAdminUserManage";
     public static final String URL_DELETEADMINUSERMANAGE = ROOT_URL + "/member/deleteAdminUserManage";
     public static final String URL_READTRAINERLIST = ROOT_URL + "/member/readTrainerList";
