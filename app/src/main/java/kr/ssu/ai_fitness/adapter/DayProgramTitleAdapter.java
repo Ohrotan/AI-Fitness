@@ -1,6 +1,7 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +18,20 @@ public class DayProgramTitleAdapter extends BaseAdapter {
     private Context context;
     DayProgram item;
 
-    public DayProgramTitleAdapter(Context context){
+    public DayProgramTitleAdapter(Context context, int exr_id, int period) {
 
-            this.context = context;
-            items = new ArrayList<>();
-            items.add(new DayProgram("1일차 프로그램"));
-            items.add(new DayProgram("2일차 프로그램"));
-            items.add(new DayProgram("3일차 프로그램"));
-            items.add(new DayProgram("4일차 프로그램"));
+        this.context = context;
+        items = new ArrayList<>();
+        for (int i = 1; i <= period; i++) {
+            items.add(new DayProgram(exr_id, i + "일차 프로그램", i));
+            Log.v("daypro dto", i + "");
         }
+    }
 
     public DayProgramTitleAdapter(Context context, ArrayList<DayProgram> items) {
-            this.context = context;
-            this.items = items;
-        }
+        this.context = context;
+        this.items = items;
+    }
 
 
     @Override
@@ -65,7 +66,7 @@ public class DayProgramTitleAdapter extends BaseAdapter {
         }
 
         item = items.get(position);
-        holder.title.setText(position+". ");
+        holder.num.setText(item.getSeq() + ". ");
         holder.title.setText(item.getTitle());
 
         return convertView;

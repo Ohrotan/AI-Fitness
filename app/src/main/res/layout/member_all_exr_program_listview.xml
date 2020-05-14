@@ -47,7 +47,7 @@
         android:text="★★★★★"
         android:layout_below="@+id/name"
         android:layout_toRightOf="@+id/difficulty"
-        android:id="@+id/diff_star"/>
+        android:id="@+id/level_star"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,14 +66,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="진행중인 회원수 : "
-        android:layout_below="@+id/star"
+        android:layout_below="@+id/rating_star"
         android:layout_toRightOf="@+id/pic"
         android:id="@+id/Prog"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="20 명"
-        android:layout_below="@+id/star"
+        android:layout_below="@+id/rating_star"
         android:id="@+id/numOfProg"
         android:layout_toRightOf="@+id/Prog"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/id"
+        android:text=""
+        android:textColor="@color/white"
+        />
 </RelativeLayout>
