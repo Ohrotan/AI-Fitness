@@ -11,15 +11,15 @@ public class ExrProgram {
     private int max;
     private String intro;
 
-    public ExrProgram(){
+    public ExrProgram() {
 
     }
 
-    public ExrProgram(String title){
+    public ExrProgram(String title) {
         this.title = title;
     }
 
-    public ExrProgram(String title, int period, String equip, char gender, int level, int max){
+    public ExrProgram(String title, int period, String equip, char gender, int level, int max) {
         this.title = title;
         this.period = period;
         this.equip = equip;
@@ -28,7 +28,7 @@ public class ExrProgram {
         this.max = max;
     }
 
-    public ExrProgram(String title, int period, String equip, char gender, int level, int max, String intro){
+    public ExrProgram(String title, int period, String equip, char gender, int level, int max, String intro) {
         this.title = title;
         this.period = period;
         this.equip = equip;
@@ -38,7 +38,7 @@ public class ExrProgram {
         this.intro = intro;
     }
 
-    public ExrProgram(String trainer_id, String title, int period, String equip, char gender, int level, int max, String intro){
+    public ExrProgram(String trainer_id, String title, int period, String equip, char gender, int level, int max, String intro) {
         this.trainer_id = trainer_id;
         this.title = title;
         this.period = period;
@@ -119,5 +119,20 @@ public class ExrProgram {
 
     public void setIntro(String intro) {
         this.intro = intro;
+    }
+
+    @Override
+    public String toString() {
+        return "ExrProgram{" +
+                "id='" + id + '\'' +
+                ", trainer_id='" + trainer_id + '\'' +
+                ", title='" + title + '\'' +
+                ", period=" + period +
+                ", equip='" + equip + '\'' +
+                ", gender=" + gender +
+                ", level=" + level +
+                ", max=" + max +
+                ", intro='" + intro + '\'' +
+                '}';
     }
 }
