@@ -377,7 +377,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
                             Log.d("parsedJSON_PR_INFO_0", "title =  " + title + " period = " + period + " equip = " + equip + " gender = " + gender + " level = " + level + " max = " + max);
 
                             JSONObject jObject1 = jArray.getJSONObject(1);
-                            int curMemberNum = jObject1.getInt("cur_member_num");
+                            int curMemberNum = jObject1.getInt("curMemberNum");
 
                             Log.d("parseJSON_PR_INFO_1", "curMemberNum = " + curMemberNum);
 
