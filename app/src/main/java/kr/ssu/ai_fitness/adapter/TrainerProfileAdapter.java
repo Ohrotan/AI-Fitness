@@ -16,15 +16,22 @@ import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.dto.ExrProgram;
+import kr.ssu.ai_fitness.vo.TrainerProgram;
 //import kr.ssu.ai_fitness.TrainerProfileActivity;
 
 public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAdapter.ViewHolder> {
 
     private ArrayList<ExrProgram> mData = new ArrayList<ExrProgram>() ;
+    private ArrayList<TrainerProgram> tData = new ArrayList<TrainerProgram>() ;
     private Context mContext;
+    private int trainerID;
 
     public void addItem(ExrProgram item) {
         mData.add(item);
+    }
+
+    public void addItem(TrainerProgram item){
+        tData.add(item);
     }
 
     public TrainerProfileAdapter(Context c){
@@ -35,14 +42,14 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView programTitle;
         TextView period;
-        String curMemberNum = "31";
+        String curMemberNum;
         TextView maxMemberNum;
         TextView totalMemberNum;
-        TextView rating;
-        TextView difficulty;
+        ImageView rating;
+        ImageView difficulty;
         TextView equip;
         TextView gender;
-        int ratingNum = 3;
+        //int ratingNum = 3;
         //TextView regMemberDetailItem ;
 
         public ViewHolder(View itemView) {
@@ -76,11 +83,11 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
             });
         }
 
-        public void setItem(ExrProgram item){
+        public void setItem(TrainerProgram item){
             programTitle.setText(item.getTitle());
             period.setText(String.format(item.getPeriod() + "일 프로그램"));
-            maxMemberNum.setText(String.format(curMemberNum + " / " + item.getMax() + "명"));
-            totalMemberNum.setText(String.format("112명"));
+            maxMemberNum.setText(String.format(item.getCurNum() + "명 / " + item.getMax() + "명"));
+            totalMemberNum.setText(String.format(item.getTotalNum() + "명"));
             equip.setText(String.format(item.getEquip()));
 
             switch (item.getGender()){
@@ -97,46 +104,87 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
 
             }
 
-            switch (ratingNum){
-                case 1:
-                    rating.setText(String.format("★☆☆☆☆"));
-                    break;
-                case 2:
-                    rating.setText(String.format("★★☆☆☆"));
-                    break;
-                case 3:
-                    rating.setText(String.format("★★★☆☆"));
-                    break;
-                case 4:
-                    rating.setText(String.format("★★★★☆"));
-                    break;
-                case 5:
-                    rating.setText(String.format("★★★★★"));
-                    break;
-                default:
-
+            if(item.getRating() <= 0.5){
+                int img = R.drawable.rating_0_5_b;
+                rating.setImageResource(img);
+            }
+            else if(item.getRating() > 0.5 && item.getRating() <= 1.0){
+                int img = R.drawable.rating_1_b;
+                rating.setImageResource(img);
+            }
+            else if(item.getRating() > 1.0 && item.getRating() <= 1.5){
+                int img = R.drawable.rating_1_5_b;
+                rating.setImageResource(img);
+            }
+            else if(item.getRating() > 1.5 && item.getRating() <= 2.0){
+                int img = R.drawable.rating_2_b;
+                rating.setImageResource(img);
+            }
+            else if(item.getRating() > 2.0 && item.getRating() <= 2.5){
+                int img = R.drawable.rating_2_5_b;
+                rating.setImageResource(img);
+            }
+            else if(item.getRating() > 2.5 && item.getRating() <= 3.0){
+                int img = R.drawable.rating_3_b;
+                rating.setImageResource(img);
+            }
+            else if(item.getRating() > 3.0 && item.getRating() <= 3.5){
+                int img = R.drawable.rating_3_5_b;
+                rating.setImageResource(img);
+            }
+            else if(item.getRating() > 3.5 && item.getRating() <= 4.0){
+                int img = R.drawable.rating_4_b;
+                rating.setImageResource(img);
+            }
+            else if(item.getRating() > 4.0 && item.getRating() <= 4.5){
+                int img = R.drawable.rating_4_5_b;
+                rating.setImageResource(img);
+            }
+            else{
+                int img = R.drawable.rating_5_b;
+                rating.setImageResource(img);
             }
 
-            switch (item.getLevel()){
-                case 1:
-                    difficulty.setText(String.format("★☆☆☆☆"));
-                    break;
-                case 2:
-                    difficulty.setText(String.format("★★☆☆☆"));
-                    break;
-                case 3:
-                    difficulty.setText(String.format("★★★☆☆"));
-                    break;
-                case 4:
-                    difficulty.setText(String.format("★★★★☆"));
-                    break;
-                case 5:
-                    difficulty.setText(String.format("★★★★★"));
-                    break;
-                default:
-
+            if(item.getLevel() <= 0.5){
+                int img = R.drawable.rating_0_5_b;
+                difficulty.setImageResource(img);
             }
-
+            else if(item.getLevel() > 0.5 && item.getLevel() <= 1.0){
+                int img = R.drawable.rating_1_b;
+                difficulty.setImageResource(img);
+            }
+            else if(item.getLevel() > 1.0 && item.getLevel() <= 1.5){
+                int img = R.drawable.rating_1_5_b;
+                difficulty.setImageResource(img);
+            }
+            else if(item.getLevel() > 1.5 && item.getLevel() <= 2.0){
+                int img = R.drawable.rating_2_b;
+                difficulty.setImageResource(img);
+            }
+            else if(item.getLevel() > 2.0 && item.getLevel() <= 2.5){
+                int img = R.drawable.rating_2_5_b;
+                difficulty.setImageResource(img);
+            }
+            else if(item.getLevel() > 2.5 && item.getLevel() <= 3.0){
+                int img = R.drawable.rating_3_b;
+                difficulty.setImageResource(img);
+            }
+            else if(item.getLevel() > 3.0 && item.getLevel() <= 3.5){
+                int img = R.drawable.rating_3_5_b;
+                difficulty.setImageResource(img);
+            }
+            else if(item.getLevel() > 3.5 && item.getLevel() <= 4.0){
+                int img = R.drawable.rating_4_b;
+                difficulty.setImageResource(img);
+            }
+            else if(item.getLevel() > 4.0 && item.getLevel() <= 4.5){
+                int img = R.drawable.rating_4_5_b;
+                difficulty.setImageResource(img);
+            }
+            else{
+                int img = R.drawable.rating_5_b;
+                difficulty.setImageResource(img);
+            }
         }
     }
 
@@ -155,8 +203,9 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(TrainerProfileAdapter.ViewHolder holder, int position) {
-        ExrProgram item = mData.get(position) ;
-        holder.setItem(item); ;
+        TrainerProgram item = tData.get(position) ;
+        holder.setItem(item);
+
         //holder.regMemberListNextIcon.getAccessibilityClassName();
     }
 

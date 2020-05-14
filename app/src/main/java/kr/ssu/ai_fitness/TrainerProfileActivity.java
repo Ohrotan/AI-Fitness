@@ -1,8 +1,11 @@
 package kr.ssu.ai_fitness;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +37,8 @@ import kr.ssu.ai_fitness.adapter.RegMemberDetailAdapter;
 import kr.ssu.ai_fitness.adapter.TrainerProfileAdapter;
 import kr.ssu.ai_fitness.dto.ExrProgram;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.vo.AllTrainer;
+import kr.ssu.ai_fitness.vo.TrainerProgram;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 /*
@@ -45,6 +51,7 @@ profile image
 public class TrainerProfileActivity extends AppCompatActivity {
 
     private ImageView profilePic;
+    private int trainerID;
     private TextView name;
     private String trainerName;
     private TextView genderAge;
@@ -63,9 +70,12 @@ public class TrainerProfileActivity extends AppCompatActivity {
     private TextView fat;
     private double fatValue;
     private TextView curNumMember;
+    private int memberNum;
     private TextView intro;
     private String introValue;
+    private int i;
 
+    private ArrayList<Integer> exrProgramIdList = new ArrayList<Integer>();
 
     private static final String TAG = "MAIN";
     private RequestQueue queue;
@@ -87,62 +97,32 @@ public class TrainerProfileActivity extends AppCompatActivity {
         intro = findViewById(R.id.infoSelfTrainerProfile);
 
         Intent intent = getIntent();
+        trainerID = intent.getExtras().getInt("id");
         trainerName = intent.getExtras().getString("trainerName");
         avgRating = intent.getExtras().getDouble("rating");
+        heightValue = intent.getExtras().getDouble("height");
+        weightValue = intent.getExtras().getDouble("weight");
+        muscleValue = intent.getExtras().getDouble("muscle");
+        fatValue = intent.getExtras().getDouble("fat");
+        introValue = intent.getExtras().getString("intro");
+        gender = intent.getExtras().getInt("gender");
+        birthValue = intent.getExtras().getString("birth");
+        memberNum = intent.getExtras().getInt("memberNum");
 
         String[] array = trainerName.split(" ");
         trainerName = array[0];
 
-        Log.d("READ_TR_DATA_received", "name = " + trainerName + " rating = " + avgRating);
+        Log.d("TR_DATA_fromTrProfile", "name = " + trainerName + " rating = " + avgRating);
 
-        queue = Volley.newRequestQueue(this);
+        //queue = Volley.newRequestQueue(this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READTRAINERDATA,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            Log.d("READ_TR_DATA_received", response);
+        //stringRequest.setTag(TAG);
+        //queue.add(stringRequest);
 
-                            //JSONArray jArray = new JSONArray(response);
-                            JSONObject jObject = new JSONObject(response);
-                            trainerName = jObject.getString("name");
-                            heightValue = jObject.getDouble("height");
-                            weightValue = jObject.getDouble("weight");
-                            muscleValue = jObject.getDouble("muscle");
-                            fatValue = jObject.getDouble("fat");
-                            introValue = jObject.getString("intro");
-                            birthValue = jObject.getString("birth");
-                            gender = jObject.getInt("gender");
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                //서버가 요청하는 파라미터를 담는 부분
-                Map<String, String> params = new HashMap<>();
-                params.put("name", trainerName);
-                return params;
-            }
-        };
-
-        stringRequest.setTag(TAG);
-        queue.add(stringRequest);
-
-        Log.d("READ_TR_DATA_received", String.format(trainerName + " / " +  avgRating + " / " + heightValue + " / " + weightValue + " / " + muscleValue + " / " + fatValue + " / " + introValue + " / " + birthValue + " / " + gender));
+        Log.d("READ_TR_DATA_received", String.format(trainerID + " / " + trainerName + " / " +  avgRating + " / " + heightValue + " / " + weightValue + " / " + muscleValue + " / " + fatValue + " / " + introValue + " / " + birthValue + " / " + gender));
 
         //이름설정
-        name.setText(trainerName);
+        name.setText(trainerName + " 트레이너");
 
         //성별 설정
         if(gender == 1){
@@ -188,6 +168,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
         weight.setText(weightValue + "kg");
         muscle.setText(muscleValue + "%");
         fat.setText(fatValue + "%");
+        curNumMember.setText(memberNum + "명");
 
         //트레이너 평점 설정
         if(avgRating <= 0.5){
@@ -230,20 +211,260 @@ public class TrainerProfileActivity extends AppCompatActivity {
             trainerRating.setImageResource(img);
         }
 
+        getProgramId(trainerID);
+
+        Handler handler1 = new Handler();
+        handler1.postDelayed(new Runnable() {
+            public void run() {
+                //recyclerViewTrainerProfile.setAdapter(adapter);
+                setAdapter();
+            }
+        }, 500);  // 2000은 2초를 의미합니다.
+
+        /*Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                for(int i = 0; i < exrProgramIdList.size(); i++){
+                    Log.d("PROGRAM_ID_LIST", "Program ID = " + exrProgramIdList.get(i));
+                }
+
+                // 리사이클러뷰에 LinearLayoutManager 객체 지정.
+                final RecyclerView recyclerViewTrainerProfile = findViewById(R.id.trainerProfileRecyclerView);
+                recyclerViewTrainerProfile.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+                // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
+                final TrainerProfileAdapter adapter = new TrainerProfileAdapter(getApplication());
+
+                for(i = 0; i < exrProgramIdList.size(); i++) {
+
+                    queue = Volley.newRequestQueue(getApplicationContext());
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READTRAINERPROGRAM,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    try {
+                                        Log.d("GETPROGRAMINFO_RESPONSE", response);
+
+                                        JSONArray jArray = new JSONArray(response);
+                                        //ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
+                                        TrainerProgram trainerProgram;
+
+                                        JSONObject jObject0 = jArray.getJSONObject(0);
+                                        String title = jObject0.getString("title");
+                                        int period = jObject0.getInt("period");
+                                        String equip = jObject0.getString("equip");
+                                        byte gender = (byte)jObject0.getInt("gender");
+                                        double level = jObject0.getDouble("level");
+                                        int max = jObject0.getInt("max");
+
+                                        Log.d("parsedJSON_PR_INFO_0", "title =  " + title + " period = " + period + " equip = " + equip + " gender = " + gender + " level = " + level + " max = " + max);
+
+                                        JSONObject jObject1 = jArray.getJSONObject(1);
+                                        int curMemberNum = jObject1.getInt("cur_member_num");
+
+                                        Log.d("parseJSON_PR_INFO_1", "curMemberNum = " + curMemberNum);
+
+                                        JSONObject jObject2 = jArray.getJSONObject(2);
+                                        int totalMemberNum = jObject2.getInt("total_member_num");
+
+                                        Log.d("parseJSON_PR_INFO_1", "totalMemberNum = " + totalMemberNum);
+
+                                        JSONObject jObject3 = jArray.getJSONObject(3);
+                                        double avgRating = jObject3.getDouble("avg_rating");
+
+                                        Log.d("parseJSON_PR_INFO_1", "avgRating = " + avgRating);
+
+                                        trainerProgram = new TrainerProgram(title, period, curMemberNum, max, totalMemberNum, avgRating, level, equip, gender);
+
+                                        adapter.addItem(trainerProgram);
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            //서버가 요청하는 파라미터를 담는 부분
+                            Map<String, String> params = new HashMap<>();
+                            Log.d("SEND_EXR_ID", "exrID = " + exrProgramIdList.get(i));
+                            params.put("exr_id", Integer.toString(exrProgramIdList.get(i)));
+                            return params;
+                        }
+                    };
+
+                    stringRequest.setTag(TAG);
+                    queue.add(stringRequest);
+                }
+
+                Handler handler1 = new Handler();
+                handler1.postDelayed(new Runnable() {
+                    public void run() {
+                        recyclerViewTrainerProfile.setAdapter(adapter);
+                    }
+                }, 200);  // 2000은 2초를 의미합니다.
+            }
+        }, 100);  // 2000은 2초를 의미합니다.*/
+
+        //adapter.notifyID(trainerID);
+        //adapter.addItem(new ExrProgram("체지방 다이어트", 7, "덤벨", 'A', 3, 50));
+        //adapter.addItem(new ExrProgram("미친 다이어트 30일", 30, "없음", 'A', 2, 100));
+        //adapter.addItem(new ExrProgram("덜 미친 다이어트", 15, "덤벨, 밴드", 'F', 1, 50));
+        //adapter.addItem(new ExrProgram("유연성 기르기", 20, "밴드, 매트", 'F', 4, 30));
+        //adapter.addItem(new ExrProgram("집중 근력 증진 ", 30, "덤벨", 'M', 5, 10));
+
+        //recyclerViewTrainerProfile.setAdapter(adapter);
+    }
+
+    private void setAdapter(){
+        for(int i = 0; i < exrProgramIdList.size(); i++){
+            Log.d("PROGRAM_ID_LIST", "Program ID = " + exrProgramIdList.get(i));
+        }
+
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-        RecyclerView recyclerViewTrainerProfile = findViewById(R.id.trainerProfileRecyclerView);
-        recyclerViewTrainerProfile.setLayoutManager(new LinearLayoutManager(this));
+        final RecyclerView recyclerViewTrainerProfile = findViewById(R.id.trainerProfileRecyclerView);
+        recyclerViewTrainerProfile.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        TrainerProfileAdapter adapter = new TrainerProfileAdapter(getApplication());
+        final TrainerProfileAdapter adapter = new TrainerProfileAdapter(getApplication());
 
-        adapter.addItem(new ExrProgram("체지방 다이어트", 7, "덤벨", 'A', 3, 50));
-        adapter.addItem(new ExrProgram("미친 다이어트 30일", 30, "없음", 'A', 2, 100));
-        adapter.addItem(new ExrProgram("덜 미친 다이어트", 15, "덤벨, 밴드", 'F', 1, 50));
-        adapter.addItem(new ExrProgram("유연성 기르기", 20, "밴드, 매트", 'F', 4, 30));
-        adapter.addItem(new ExrProgram("집중 근력 증진 ", 30, "덤벨", 'M', 5, 10));
+        for(i = 0; i < exrProgramIdList.size(); i++) {
 
+            Log.d("Iterator Check", "iterator = " + i);
+            queue = Volley.newRequestQueue(getApplicationContext());
 
-        recyclerViewTrainerProfile.setAdapter(adapter);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READTRAINERPROGRAM,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                Log.d("Iterator Check", "onResponse Start : " + i);
+
+                                SystemClock.sleep(100);
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        recyclerViewTrainerProfile.setAdapter(adapter);
+                                    }
+                                }, 200);  // 2000은 2초를 의미합니다.
+                                Log.d("GETPROGRAMINFO_RESPONSE", response);
+
+                                JSONArray jArray = new JSONArray(response);
+                                //ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
+                                TrainerProgram trainerProgram;
+
+                                JSONObject jObject0 = jArray.getJSONObject(0);
+                                String title = jObject0.getString("title");
+                                int period = jObject0.getInt("period");
+                                String equip = jObject0.getString("equip");
+                                byte gender = (byte)jObject0.getInt("gender");
+                                double level = jObject0.getDouble("level");
+                                int max = jObject0.getInt("max");
+
+                                Log.d("parsedJSON_PR_INFO_0", "title =  " + title + " period = " + period + " equip = " + equip + " gender = " + gender + " level = " + level + " max = " + max);
+
+                                JSONObject jObject1 = jArray.getJSONObject(1);
+                                int curMemberNum = jObject1.getInt("cur_member_num");
+
+                                Log.d("parseJSON_PR_INFO_1", "curMemberNum = " + curMemberNum);
+
+                                JSONObject jObject2 = jArray.getJSONObject(2);
+                                int totalMemberNum = jObject2.getInt("total_member_num");
+
+                                Log.d("parseJSON_PR_INFO_1", "totalMemberNum = " + totalMemberNum);
+
+                                JSONObject jObject3 = jArray.getJSONObject(3);
+                                double avgRating = jObject3.getDouble("avg_rating");
+
+                                Log.d("parseJSON_PR_INFO_1", "avgRating = " + avgRating);
+
+                                trainerProgram = new TrainerProgram(title, period, curMemberNum, max, totalMemberNum, avgRating, level, equip, gender);
+
+                                adapter.addItem(trainerProgram);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    //서버가 요청하는 파라미터를 담는 부분
+                    Map<String, String> params = new HashMap<>();
+                    Log.d("SEND_EXR_ID", "exrID = " + exrProgramIdList.get(i));
+                    params.put("exr_id", Integer.toString(exrProgramIdList.get(i)));
+                    return params;
+                }
+            };
+
+            stringRequest.setTag(TAG);
+            queue.add(stringRequest);
+            Log.d("Iterator Check", "End of the iteration : " + i);
+        }
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                recyclerViewTrainerProfile.setAdapter(adapter);
+            }
+        }, 200);  // 2000은 2초를 의미합니다.
+    }
+
+    private void getProgramId(final int trainerId){
+        queue = Volley.newRequestQueue(this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READTRAINERPROGRAMNUM,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Log.d("GETPROGRAMNUM_RESPONSE", response);
+
+                            JSONArray jArray = new JSONArray(response);
+                            //ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
+                            //TrainerProgram trainerProgram;
+
+                            for(int i = 0; i < jArray.length(); i++){
+                                JSONObject jObject = jArray.getJSONObject(i);
+                                int programId = jObject.getInt("id");
+
+                                Log.d("parsedJSON_GET_PG_NUM", "id = " + programId);
+
+                                exrProgramIdList.add(programId);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                Map<String, String> params = new HashMap<>();
+                Log.d("SEND_TR_ID", "trainerID = " + trainerId);
+                params.put("trainer_id", Integer.toString(trainerId));
+                return params;
+            }
+        };
+
+        stringRequest.setTag(TAG);
+        queue.add(stringRequest);
     }
 }

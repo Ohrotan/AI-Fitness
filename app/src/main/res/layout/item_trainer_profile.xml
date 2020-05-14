@@ -108,13 +108,18 @@
                         android:textSize="16dp"
                         android:text="평점 - "
                         android:id="@+id/ratingTextTrainerProfile"/>
-                    <TextView
+                    <!--<TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/darkGray"
                         android:textSize="16dp"
                         android:text="★★★★★"
-                        android:id="@+id/ratingTrainerProfileItem"/>
+                        android:id="@+id/ratingTrainerProfileItem"/>-->
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/ratingTrainerProfileItem"
+                        android:src="@drawable/rating_3_b"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -136,13 +141,19 @@
                         android:textSize="16dp"
                         android:text="난이도 - "/>
 
-                    <TextView
+                    <!--<TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/darkGray"
                         android:textSize="16dp"
                         android:text="★★★★★"
-                        android:id="@+id/difficultyTrainerProfileItem"/>
+                        android:id="@+id/difficultyTrainerProfileItem"/>-->
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/difficultyTrainerProfileItem"
+                        android:src="@drawable/rating_3_b"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -157,7 +168,7 @@
                         android:text="사용기구 - "/>
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="20dp"
                         android:textColor="@color/darkGray"
                         android:textSize="16dp"
                         android:text="덤벨, 바벨"
