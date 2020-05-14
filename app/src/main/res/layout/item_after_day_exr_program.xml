@@ -14,11 +14,11 @@
         android:layout_height="120dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_after_day_exr_program_textview1"
+        app:layout_constraintTop_toBottomOf="@+id/item_after_day_exr_program_title"
         app:srcCompat="@drawable/ic_slow_motion_video_black_24dp" />
 
     <TextView
-        android:id="@+id/item_after_day_exr_program_textview1"
+        android:id="@+id/item_after_day_exr_program_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1.스쿼트 10회 3세트"
@@ -45,7 +45,7 @@
         android:text="트레이너의 피드백"
         android:textColor="@color/accent"
         app:layout_constraintStart_toEndOf="@+id/item_after_day_exr_program_image"
-        app:layout_constraintTop_toBottomOf="@+id/item_after_day_exr_program_textview1" />
+        app:layout_constraintTop_toBottomOf="@+id/item_after_day_exr_program_title" />
 
     <TextView
         android:id="@+id/item_after_day_exr_program_date"
