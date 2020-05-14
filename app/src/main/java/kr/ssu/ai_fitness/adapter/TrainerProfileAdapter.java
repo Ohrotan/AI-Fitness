@@ -1,6 +1,7 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +22,14 @@ import kr.ssu.ai_fitness.vo.TrainerProgram;
 
 public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAdapter.ViewHolder> {
 
-    private ArrayList<ExrProgram> mData = new ArrayList<ExrProgram>() ;
+    //private ArrayList<ExrProgram> mData = new ArrayList<ExrProgram>() ;
     private ArrayList<TrainerProgram> tData = new ArrayList<TrainerProgram>() ;
     private Context mContext;
     private int trainerID;
 
-    public void addItem(ExrProgram item) {
+    /*public void addItem(ExrProgram item) {
         mData.add(item);
-    }
+    }*/
 
     public void addItem(TrainerProgram item){
         tData.add(item);
@@ -83,7 +84,7 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
             });
         }
 
-        public void setItem(TrainerProgram item){
+        /*public void setItem(TrainerProgram item){
             programTitle.setText(item.getTitle());
             period.setText(String.format(item.getPeriod() + "일 프로그램"));
             maxMemberNum.setText(String.format(item.getCurNum() + "명 / " + item.getMax() + "명"));
@@ -91,13 +92,13 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
             equip.setText(String.format(item.getEquip()));
 
             switch (item.getGender()){
-                case 'M':
+                case "M":
                     gender.setText(String.format("남성"));
                     break;
-                case 'F':
+                case "F":
                     gender.setText(String.format("여성"));
                     break;
-                case 'A':
+                case "A":
                     gender.setText(String.format("모두"));
                     break;
                 default:
@@ -185,7 +186,7 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
                 int img = R.drawable.rating_5_b;
                 difficulty.setImageResource(img);
             }
-        }
+        }*/
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -204,15 +205,117 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
     @Override
     public void onBindViewHolder(TrainerProfileAdapter.ViewHolder holder, int position) {
         TrainerProgram item = tData.get(position) ;
-        holder.setItem(item);
+        Log.d("BINDVIEWHOLDER", "tdata_size = " + tData.size());
+        Log.d("BINDVIEWHOLDER", item.getTitle() + " / " + item.getCurNum() + " / " + item.getTotalNum() + " / " + item.getMax() + " / " + item.getPeriod() + " / " + item.getRating() + " / " + item.getEquip() + " / " + item.getLevel() + " / " + item.getGender());
+        //holder.setItem(item);
 
-        //holder.regMemberListNextIcon.getAccessibilityClassName();
+        holder.programTitle.setText(item.getTitle());
+        holder.period.setText(String.format(item.getPeriod() + "일 프로그램"));
+        holder.maxMemberNum.setText(String.format(item.getCurNum() + "명 / " + item.getMax() + "명"));
+        holder.totalMemberNum.setText(String.format(item.getTotalNum() + "명"));
+        holder.equip.setText(String.format(item.getEquip()));
+
+        switch (item.getGender()){
+            case "M":
+                holder.gender.setText(String.format("남성"));
+                break;
+            case "F":
+                holder.gender.setText(String.format("여성"));
+                break;
+            case "A":
+                holder.gender.setText(String.format("모두"));
+                break;
+            default:
+
+        }
+
+        if(item.getRating() <= 0.5){
+            int img = R.drawable.rating_0_5_b;
+            holder.rating.setImageResource(img);
+        }
+        else if(item.getRating() > 0.5 && item.getRating() <= 1.0){
+            int img = R.drawable.rating_1_b;
+            holder.rating.setImageResource(img);
+        }
+        else if(item.getRating() > 1.0 && item.getRating() <= 1.5){
+            int img = R.drawable.rating_1_5_b;
+            holder.rating.setImageResource(img);
+        }
+        else if(item.getRating() > 1.5 && item.getRating() <= 2.0){
+            int img = R.drawable.rating_2_b;
+            holder.rating.setImageResource(img);
+        }
+        else if(item.getRating() > 2.0 && item.getRating() <= 2.5){
+            int img = R.drawable.rating_2_5_b;
+            holder.rating.setImageResource(img);
+        }
+        else if(item.getRating() > 2.5 && item.getRating() <= 3.0){
+            int img = R.drawable.rating_3_b;
+            holder.rating.setImageResource(img);
+        }
+        else if(item.getRating() > 3.0 && item.getRating() <= 3.5){
+            int img = R.drawable.rating_3_5_b;
+            holder.rating.setImageResource(img);
+        }
+        else if(item.getRating() > 3.5 && item.getRating() <= 4.0){
+            int img = R.drawable.rating_4_b;
+            holder.rating.setImageResource(img);
+        }
+        else if(item.getRating() > 4.0 && item.getRating() <= 4.5){
+            int img = R.drawable.rating_4_5_b;
+            holder.rating.setImageResource(img);
+        }
+        else{
+            int img = R.drawable.rating_5_b;
+            holder.rating.setImageResource(img);
+        }
+
+        if(item.getLevel() <= 0.5){
+            int img = R.drawable.rating_0_5_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else if(item.getLevel() > 0.5 && item.getLevel() <= 1.0){
+            int img = R.drawable.rating_1_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else if(item.getLevel() > 1.0 && item.getLevel() <= 1.5){
+            int img = R.drawable.rating_1_5_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else if(item.getLevel() > 1.5 && item.getLevel() <= 2.0){
+            int img = R.drawable.rating_2_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else if(item.getLevel() > 2.0 && item.getLevel() <= 2.5){
+            int img = R.drawable.rating_2_5_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else if(item.getLevel() > 2.5 && item.getLevel() <= 3.0){
+            int img = R.drawable.rating_3_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else if(item.getLevel() > 3.0 && item.getLevel() <= 3.5){
+            int img = R.drawable.rating_3_5_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else if(item.getLevel() > 3.5 && item.getLevel() <= 4.0){
+            int img = R.drawable.rating_4_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else if(item.getLevel() > 4.0 && item.getLevel() <= 4.5){
+            int img = R.drawable.rating_4_5_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else{
+            int img = R.drawable.rating_5_b;
+            holder.difficulty.setImageResource(img);
+        }
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
 
-        return mData.size() ;
+        return tData.size() ;
     }
 }

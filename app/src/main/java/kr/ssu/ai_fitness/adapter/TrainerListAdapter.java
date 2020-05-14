@@ -125,7 +125,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
 
                                 mContext.startActivity(intent);
                             }
-                        }, 200);  // 2000은 2초를 의미합니다.
+                        }, 500);  // 2000은 2초를 의미합니다.
 
 
 
@@ -225,6 +225,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
         //ImageView ratings =
         String text = trainers.get(position).getName() ;
 
+        Log.d("BINDVIEWHOLDER", "trainers_size = " + trainers.size());
         Log.d("BINDVIEWHOLDER", "text = " + text);
 
         holder.trainerListItem.setText(text) ;
