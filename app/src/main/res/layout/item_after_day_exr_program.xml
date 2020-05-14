@@ -14,7 +14,7 @@
         android:layout_height="120dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_exr_result_textview5"
+        app:layout_constraintTop_toBottomOf="@+id/item_after_day_exr_program_textview1"
         app:srcCompat="@drawable/ic_slow_motion_video_black_24dp" />
 
     <TextView
