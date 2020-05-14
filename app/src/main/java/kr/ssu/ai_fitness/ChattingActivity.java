@@ -70,7 +70,7 @@ public class ChattingActivity extends AppCompatActivity {
         editText = findViewById(R.id.activity_chatting_edittext);
         sendButton = findViewById(R.id.activity_chatting_button);
 
-        checkChatRoom();
+        checkChatRoom(null);
 
         //전송버튼 클릭
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +85,10 @@ public class ChattingActivity extends AppCompatActivity {
                     ChatModel chatModel = new ChatModel();
                     chatModel.users.put(String.valueOf(uid), true);
                     chatModel.users.put(String.valueOf(destUser), true);
-
+                    final ChatModel.Comment comment = new ChatModel.Comment();
+                    comment.uid = String.valueOf(uid);
+                    comment.message = editText.getText().toString();
+                    comment.timestamp = ServerValue.TIMESTAMP;
 
 
                     //FirebaseDatabase에 생성하는 부분
@@ -95,9 +98,7 @@ public class ChattingActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             //두 유저 간의 채팅방이 있는지 체크해서 있으면 채팅방 아이디 가져온다.
-                            checkChatRoom();
-
-                            //*****채팅방 없을 때는 전송 두번 눌러야하는 문제 없애야함
+                            checkChatRoom(comment);
                         }
                     });
                 }
@@ -125,7 +126,7 @@ public class ChattingActivity extends AppCompatActivity {
         startActivity(new Intent(ChattingActivity.this, ChattingListActivity.class));
     }
 
-    void checkChatRoom() {
+    void checkChatRoom(final ChatModel.Comment comment) {
         //user/uid랑 일치하는 채팅방들을 찾는다.
         FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+ uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -137,6 +138,12 @@ public class ChattingActivity extends AppCompatActivity {
                     ChatModel chatModel = item.getValue(ChatModel.class);//채팅방 추출하는 부분
                     if (chatModel.users.containsKey(String.valueOf(destUser))) {//destUser에 대한 키값이 있는지 체크
                         chatRoodId = item.getKey();//채팅방 생성에서 push()를 통해 만들어줬던 채팅방 식별자(id)를 가져온다.
+
+
+                        if (comment != null) {
+                            FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoodId).child("comments").push().setValue(comment);
+                            editText.setText("");
+                        }
 
                         sendButton.setEnabled(true);//채팅방 아이디 받아왔으면 버튼 다시 활성화.
 
@@ -243,7 +250,7 @@ public class ChattingActivity extends AppCompatActivity {
                 holder.LinearLayout2.setGravity(Gravity.LEFT);
             }
 
-            //*****타임스탬프 설정하는 부분 있어야 함
+            //타임스탬프 설정하는 부분
             long unixTime = (long)items.get(position).timestamp;
             Date date = new Date(unixTime);
             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
@@ -274,13 +281,13 @@ public class ChattingActivity extends AppCompatActivity {
                 LinearLayout2 = itemView.findViewById(R.id.item_chat_LinearLayout2);
                 timestamp = itemView.findViewById(R.id.item_chat_timestamp);
 
+                //*****사진 세팅하는 부분. 지금은 매번 서버에서 받아오는데, 이전 액티비티에서 비트맵같은 걸 전달받아서 그걸 세팅해주도록 수정하면 더 좋을 듯
                 ImageViewTask task = new ImageViewTask(profile);
                 task.execute(destUserImage);
 
             }
 
             public void setItem(ChatModel.Comment item) {
-                //*****item에서 사진 데이터 빼내서 profile에 세팅해줘야함
                 message.setText(item.message);
             }
         }
