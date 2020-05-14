@@ -96,7 +96,7 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
                         //내용 입력후 확인 버튼 누르면 서버에 전달해서 내용을 바꾼다.
                         //그리고 화면에서 보이는 피드백 내용도 변경해준다.
                         int member_exr_history_id = videoInfos.get(position).getId();
-                        requestUpdateFeedback(member_exr_history_id, editTextFeedback.getText().toString());
+                        requestUpdateFeedback(member_exr_history_id, editTextFeedback.getText().toString(), position);
                         Toast.makeText(AfterDayExrProgramActivity.this, "피드백이 등록됐습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -119,55 +119,59 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 
     }
 
-    public void requestUpdateFeedback(final int member_exr_history_id, final String feedback) {
+    public void requestUpdateFeedback(final int member_exr_history_id, final String feedback, final int position) {
 
-//        //feedback 내용을 서버에 전달해서 수정하는 부분
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        //서버에서 요청을 받았을 때 수행되는 부분
-//
-//                        try {
-//                            //response를 json object로 변환함.
-//                            JSONArray obj = new JSONArray(response);
-//                            int isFound = obj.getInt(0);
-//
-//                            if (isFound == 0) {
-//                                Toast.makeText(AfterDayExrProgramActivity.this, "day_program_id is not valid", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else {
-//                                JSONObject dayProgramObj = obj.getJSONObject(1);
-//
-//                            }
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(getApplicationContext(), "response error", Toast.LENGTH_SHORT).show();
-//                    }
-//                }) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                //서버가 요청하는 파라미터를 담는 부분
-//                Map<String, String> params = new HashMap<>();
-//                params.put("member_exr_history_id", String.valueOf(member_exr_history_id));
-//                params.put("feedback",feedback);
-//                return params;
-//            }
-//        };
-//
-//        //아래 큐에 add 할 때 Volley라고 하는 게 내부에서 캐싱을 해준다, 즉, 한번 보내고 받은 응답결과가 있으면
-//        //그 다음에 보냈을 떄 이전 게 있으면 그냥 이전거를 보여줄수도  있다.
-//        //따라서 이렇게 하지말고 매번 받은 결과를 그대로 보여주기 위해 다음과같이 setShouldCache를 false로한다.
-//        //결과적으로 이전 결과가 있어도 새로 요청한 응답을 보여줌
-//        stringRequest.setShouldCache(false);
-//        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+        //feedback 내용을 서버에 전달해서 수정하는 부분
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_UPDATEMEMBERHISTORYFEEDBACK,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //서버에서 요청을 받았을 때 수행되는 부분
+
+                        try {
+                            //response를 json object로 변환함.
+                            JSONArray obj = new JSONArray(response);
+                            int isFound = obj.getInt(0);
+
+                            if (isFound == 0) {
+                                Toast.makeText(AfterDayExrProgramActivity.this, "day_program_id is not valid", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+
+                                //화면에 보이는 피드백 부분을 바꿔줌
+                                videoInfos.get(position).setFeedback(feedback);
+                                adapter.notifyDataSetChanged();
+
+                                Toast.makeText(AfterDayExrProgramActivity.this, "피드백 등록 완료", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "response error", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                Map<String, String> params = new HashMap<>();
+                params.put("member_exr_history_id", String.valueOf(member_exr_history_id));
+                params.put("feedback",feedback);
+                return params;
+            }
+        };
+
+        //아래 큐에 add 할 때 Volley라고 하는 게 내부에서 캐싱을 해준다, 즉, 한번 보내고 받은 응답결과가 있으면
+        //그 다음에 보냈을 떄 이전 게 있으면 그냥 이전거를 보여줄수도  있다.
+        //따라서 이렇게 하지말고 매번 받은 결과를 그대로 보여주기 위해 다음과같이 setShouldCache를 false로한다.
+        //결과적으로 이전 결과가 있어도 새로 요청한 응답을 보여줌
+        stringRequest.setShouldCache(false);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     public void requestReadDayProgramAfter() {
