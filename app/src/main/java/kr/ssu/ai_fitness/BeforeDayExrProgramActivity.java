@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,53 +22,39 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.adapter.BeforeDayExrProgramAdapter;
-import kr.ssu.ai_fitness.dto.DayProgramVideoList;
-import kr.ssu.ai_fitness.dto.Member;
-import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.vo.DayProgramVideoModel;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class BeforeDayExrProgramActivity extends AppCompatActivity {
 
-    TextView textView;
+    TextView textViewIntro;
     RecyclerView recyclerView;
     Button button;
 
     int day_program_id;
+
+    String title;
+    String intro;
+    ArrayList<DayProgramVideoModel> videoInfos = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_before_day_exr_program);
 
-        textView = findViewById(R.id.activity_before_day_exr_program_intro_content);
+        textViewIntro = findViewById(R.id.activity_before_day_exr_program_intro_content);
         recyclerView = findViewById(R.id.activity_before_day_exr_program_rv);
         button = findViewById(R.id.activity_before_day_exr_program_button);
 
-
-
         //*****여기 액티비티로 넘어오기 전에 intent로 day_program 의 id를 넘겨줘야 한다.
         day_program_id = 1;
-
-
-        textView.setText("오\n늘\n은\n이것들을 할거다.!!");
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        BeforeDayExrProgramAdapter adapter = new BeforeDayExrProgramAdapter();
-
-        adapter.addItem(new DayProgramVideoList("a","a","a","스쿼트", 10, 3, 1));
-        adapter.addItem(new DayProgramVideoList("a","a","a","푸쉬업", 10, 3, 1));
-        adapter.addItem(new DayProgramVideoList("a","a","a","푸쉬업", 10, 3, 1));
-        adapter.addItem(new DayProgramVideoList("a","a","a","푸쉬업", 10, 3, 1));
-        adapter.addItem(new DayProgramVideoList("a","a","a","푸쉬업", 10, 3, 1));
-        adapter.addItem(new DayProgramVideoList("a","a","a","푸쉬업", 10, 3, 1));
-
-        recyclerView.setAdapter(adapter);
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -93,48 +80,57 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
 
-//                        progressDialog.dismiss();
-//
-//                        try {
-//                            //response를 json object로 변환함.
-//                            JSONArray obj = new JSONArray(response);
-//                            JSONObject userJson = obj.getJSONObject(0);
-//
-//                            //받은 정보를 토대로 user 객체 생성
-//                            Member user = new Member(
-//                                    userJson.getInt("id"),
-//                                    userJson.getString("email"),
-//                                    userJson.getString("pwd"),
-//                                    userJson.getString("name"),
-//                                    userJson.getDouble("height"),
-//                                    userJson.getDouble("weight"),
-//                                    (byte)userJson.getInt("gender"),
-//                                    userJson.getString("birth"),
-//                                    userJson.getDouble("muscle"),
-//                                    userJson.getDouble("fat"),
-//                                    userJson.getString("intro"),
-//                                    userJson.getString("image"),
-//                                    (byte)userJson.getInt("trainer"),
-//                                    (byte)userJson.getInt("admin"),
-//                                    (byte)userJson.getInt("alarm")
-//                            );
-//
-//                            //user를 shared preferences에 저장
-//                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-//
-//                            //mainactivity로 넘어감
-//                            finish();
-//                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
+                        try {
+                            //response를 json object로 변환함.
+                            JSONArray obj = new JSONArray(response);
+                            int isFound = obj.getInt(0);
+
+                            if (isFound == 0) {
+                                Toast.makeText(BeforeDayExrProgramActivity.this, "dya_program_id is not vlaid", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                JSONObject dayProgramObj = obj.getJSONObject(1);
+
+                                //일별 프로그램의 제목과 운동소개를 받아옴.
+                                title = dayProgramObj.getString("title");
+                                intro = dayProgramObj.getString("intro");
+
+                                //*****상단 추가하면 일별 프로그램 제목도 title로 변경시켜줘야 함.
+                                textViewIntro.setText(intro);
+
+                                int videoCount = obj.getInt(2);
+
+                                for (int i =0; i < videoCount; i++) {
+                                    JSONObject videoObj = obj.getJSONObject(3+i);
+                                    DayProgramVideoModel temp = new DayProgramVideoModel(
+                                            videoObj.getInt("counts"),
+                                            videoObj.getInt("sets"),
+                                            videoObj.getString("thumb_img"),
+                                            videoObj.getString("video"),
+                                            videoObj.getString("title")
+                                    );
+                                    videoInfos.add(temp);
+                                }
+
+                                LinearLayoutManager layoutManager = new LinearLayoutManager(BeforeDayExrProgramActivity.this, LinearLayoutManager.VERTICAL, false);
+                                recyclerView.setLayoutManager(layoutManager);
+                                BeforeDayExrProgramAdapter adapter = new BeforeDayExrProgramAdapter();
+                                if (videoInfos.size() > 0) {
+                                    adapter.setItems(videoInfos);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                recyclerView.setAdapter(adapter);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "response error", Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
@@ -142,6 +138,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
                 params.put("day_program_id", String.valueOf(day_program_id));
+                Log.d("xxxxxxxxxxxx",String.valueOf(day_program_id));
                 return params;
             }
         };
