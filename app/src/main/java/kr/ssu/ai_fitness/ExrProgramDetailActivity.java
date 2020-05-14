@@ -6,13 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,19 +20,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import kr.ssu.ai_fitness.dto.Member;
-import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
-import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class ExrProgramDetailActivity extends AppCompatActivity {
@@ -57,24 +42,63 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     JSONArray peoples = null;
     ListView list;
     ArrayList<HashMap<String, String>> personList;
-    String myJSON;
+    String id = "";
     String title="";
+    String name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exr_program_detail);
-        TextView title_ = (TextView) findViewById(R.id.title);
-        Intent intent = getIntent();
-        title = intent.getStringExtra("title"); //"title"문자 받아옴
-        title_.setText(title);
-        getData(title);
-    }
 
-    private void getData(final String title) {
+        TextView title_ = (TextView) findViewById(R.id.title);
+        TextView name_ = (TextView) findViewById(R.id.name);
+        Intent intent = getIntent();
+        id = intent.getStringExtra("id");
+        title = intent.getStringExtra("title"); //"title"문자 받아옴
+        name = intent.getStringExtra("name");
+        title_.setText(title);
+        name_.setText(name);
+        getData(id);
+    }
+/*
+    private class CheckTypesTask extends AsyncTask<Void, Void, Void>
+    {
+        ProgressDialog asyncDialog = new ProgressDialog(ExrProgramDetailActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("로딩 중 입니다...");
+            asyncDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try{
+                for(int i = 0; i < 5; i++)
+                {
+                    Thread.sleep(500);
+                }
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            asyncDialog.dismiss();
+            super.onPostExecute(aVoid);
+        }
+    }*/
+
+
+    private void getData(final String id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200511t153630-dot-ai-fitness-369.an.r.appspot.com/member/exrDetail",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200514t205712-dot-ai-fitness-369.an.r.appspot.com/exr/read_exr_program",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -84,11 +108,25 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             //response를 json object로 변환함.
                             JSONArray obj = new JSONArray(response);
                             JSONObject userJson = obj.getJSONObject(0);
-
+                            int level = userJson.getInt("level");
+                            String gender = userJson.getString("gender");
+                            int period = userJson.getInt("period");
+                            int max = userJson.getInt("max");
                             String equip = userJson.getString("equip");
-
-                            TextView txt = (TextView)findViewById(R.id.equip);
+                            String intro = userJson.getString("intro");
+                            TextView txt;
+                            txt = (TextView)findViewById(R.id.level);
+                            txt.setText("LV. "+level);
+                            txt = (TextView)findViewById(R.id.gender);
+                            if(gender.equals("2")){ txt.setText("모 두");}
+                            txt = (TextView)findViewById(R.id.period);
+                            txt.setText(period + " 일");
+                            txt = (TextView)findViewById(R.id.max);
+                            txt.setText(max + "명");
+                            txt = (TextView)findViewById(R.id.equip);
                             txt.setText(equip);
+                            txt = (TextView)findViewById(R.id.intro);
+                            txt.setText(intro);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -105,7 +143,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                params.put("title", title);
+                params.put("id", id);
                 return params;
             }
         };
