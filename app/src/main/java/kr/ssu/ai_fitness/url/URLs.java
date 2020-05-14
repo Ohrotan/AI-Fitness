@@ -9,7 +9,7 @@ public class URLs {
     public static final String URL_VIDEO= ROOT_URL + "/video/tr_video_read";
     public static final String URL_HOMEDATA= ROOT_URL + "/member/read_home_data";
     public static final String URL_CHATLIST= ROOT_URL + "/member/read_chat_list";
-    public static final String URL_DAYPROGRAM= ROOT_URL + "/member/read_day_program";
+    public static final String URL_DAYPROGRAM= ROOT_URL + "/day_exr/read_day_program";
     public static final String URL_ADMINUSERMANAGE = ROOT_URL + "/member/readAdminUserManage";
     public static final String URL_DELETEADMINUSERMANAGE = ROOT_URL + "/member/deleteAdminUserManage";
     public static final String URL_READTRAINERLIST = ROOT_URL + "/member/readTrainerList";
