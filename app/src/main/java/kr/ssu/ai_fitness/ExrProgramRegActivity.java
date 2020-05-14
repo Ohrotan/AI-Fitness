@@ -3,6 +3,7 @@ package kr.ssu.ai_fitness;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -38,6 +39,7 @@ public class ExrProgramRegActivity extends AppCompatActivity {
     CheckBox gender_m;
     CheckBox gender_f;
 
+    Button exr_pro_next_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,44 +55,45 @@ public class ExrProgramRegActivity extends AppCompatActivity {
         gender_f = findViewById(R.id.gender_f);
 
         //로그인 사용자 처리
+        exr_pro_next_btn = findViewById(R.id.exr_pro_next_btn);
+        exr_pro_next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExrProgram exr = new ExrProgram();
 
+                exr.setTrainer_id("99"); //로그인 사용자
+                exr.setTitle(exr_title_etv.getText().toString());
+                exr.setPeriod(Integer.parseInt(period_etv.getText().toString()));
+                exr.setLevel(level_rating_bar.getNumStars());
+                exr.setMax(Integer.parseInt(max_etv.getText().toString()));
 
-    }
+                char gender = ' ';
+                if (gender_f.isChecked()) {
+                    gender = 'F';
+                }
+                if (gender_m.isChecked()) {
+                    if (gender == 'F')
+                        gender = 'A';
+                    else
+                        gender = 'M';
 
-    void onClick(View v) {
-        if (v == findViewById(R.id.exr_pro_next_btn)) {
-            ExrProgram exr = new ExrProgram();
+                }
+                exr.setGender(gender);
 
-            exr.setTrainer_id(""); //로그인 사용자
-            exr.setTitle(exr_title_etv.getText().toString());
-            exr.setPeriod(Integer.parseInt(period_etv.getText().toString()));
-            exr.setLevel(level_rating_bar.getNumStars());
-            exr.setMax(Integer.parseInt(max_etv.getText().toString()));
+                exr.setEquip(equip_etv.getText().toString());
+                exr.setIntro(exr_intro_etv.getText().toString());
+                Toast.makeText(getApplicationContext(), exr.toString(), Toast.LENGTH_SHORT).show();
 
-            char gender = ' ';
-            if (gender_f.isChecked()) {
-                gender = 'F';
+                saveExrProgram(exr);
+
             }
-            if (gender_m.isChecked()) {
-                if (gender == 'F')
-                    gender = 'A';
-                else
-                    gender = 'M';
+        });
 
-            }
-            exr.setGender(gender);
-
-            exr.setEquip(equip_etv.getText().toString());
-            exr.setIntro(exr_intro_etv.getText().toString());
-
-            saveExrProgram(exr);
-
-        }
     }
 
     void saveExrProgram(final ExrProgram exr) {
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_LOGIN,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_EXR_CREATE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -102,7 +105,8 @@ public class ExrProgramRegActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(ExrProgramRegActivity.this, DayExrProgramRegActivity.class);
                             intent.putExtra("exr_id", obj.getInt("id"));//DB에 저장된 아이디 받아옴
-                            intent.putExtra("period", exr.getPeriod());//DB에 저장된 아이디 받아옴
+                            intent.putExtra("period", exr.getPeriod());
+                            intent.putExtra("title", exr.getTitle());
                             startActivity(intent);
 
                         } catch (JSONException e) {

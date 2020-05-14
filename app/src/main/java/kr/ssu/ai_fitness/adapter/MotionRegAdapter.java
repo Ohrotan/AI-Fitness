@@ -11,24 +11,24 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
-import kr.ssu.ai_fitness.dto.DayProgramVideoList;
+import kr.ssu.ai_fitness.dto.DayProgramVideo;
 
 public class MotionRegAdapter extends BaseAdapter {
 
-    private ArrayList<DayProgramVideoList> items;
+    private ArrayList<DayProgramVideo> items;
     private Context context;
-    DayProgramVideoList item;
+    DayProgramVideo item;
 
     public MotionRegAdapter(Context context) {
         this.context = context;
         items = new ArrayList<>();
-        items.add(new DayProgramVideoList("팔굽혀펴기"));
-        items.add(new DayProgramVideoList("스쿼트"));
-        items.add(new DayProgramVideoList("런지"));
-        items.add(new DayProgramVideoList("윗몸일으키기"));
+        items.add(new DayProgramVideo("팔굽혀펴기"));
+        items.add(new DayProgramVideo("스쿼트"));
+        items.add(new DayProgramVideo("런지"));
+        items.add(new DayProgramVideo("윗몸일으키기"));
     }
 
-    public MotionRegAdapter(Context context, ArrayList<DayProgramVideoList> items) {
+    public MotionRegAdapter(Context context, ArrayList<DayProgramVideo> items) {
         this.context = context;
         this.items = items;
     }
@@ -39,7 +39,7 @@ public class MotionRegAdapter extends BaseAdapter {
     }
 
     @Override
-    public DayProgramVideoList getItem(int position) {
+    public DayProgramVideo getItem(int position) {
         return items.get(position);
     }
 

@@ -1,6 +1,9 @@
 package kr.ssu.ai_fitness.dto;
 
-public class DayProgram {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class DayProgram implements Parcelable {
     private int id;
     private int exr_id;
     private String title;
@@ -30,6 +33,15 @@ public class DayProgram {
         this.seq = seq;
         this.intro = intro;
     }
+
+    protected DayProgram(Parcel in) {
+        id = in.readInt();
+        exr_id = in.readInt();
+        title = in.readString();
+        seq = in.readInt();
+        intro = in.readString();
+    }
+
 
     public int getId() {
         return id;
@@ -69,5 +81,43 @@ public class DayProgram {
 
     public void setIntro(String intro) {
         this.intro = intro;
+    }
+
+    @Override
+    public String toString() {
+        return "DayProgram{" +
+                "id=" + id +
+                ", exr_id=" + exr_id +
+                ", title='" + title + '\'' +
+                ", seq=" + seq +
+                ", intro='" + intro + '\'' +
+                '}';
+    }
+
+    public static final Creator<DayProgram> CREATOR = new Creator<DayProgram>() {
+        @Override
+        public DayProgram createFromParcel(Parcel in) {
+            return new DayProgram(in);
+        }
+
+        @Override
+        public DayProgram[] newArray(int size) {
+            return new DayProgram[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(exr_id);
+        dest.writeString(title);
+        dest.writeInt(seq);
+        dest.writeString(intro);
+
     }
 }

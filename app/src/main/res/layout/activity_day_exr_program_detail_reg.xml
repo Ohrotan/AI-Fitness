@@ -5,98 +5,87 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="25dp"
     tools:context=".DayExrProgramDetailRegActivity">
 
-    <ScrollView
+    <TextView
+        android:id="@+id/exr_program_title_tv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:text="미친 다이어트 7일 프로그램"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="25dp"
-            android:paddingTop="25dp"
-            android:paddingRight="25dp">
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="프로그램명"
+        android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/exr_program_title_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="미친 다이어트 7일 프로그램"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+    <EditText
+        android:id="@+id/day_exr_program_title_etv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
 
-            <TextView
-                android:id="@+id/textView26"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="프로그램명"
-                android:textSize="18sp" />
+    <TextView
+        android:id="@+id/textView28"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="프로그램소개"
+        android:textSize="18sp" />
 
-            <EditText
-                android:id="@+id/day_exr_program_title_etv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10" />
+    <EditText
+        android:id="@+id/day_exr_program_intro_etv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine" />
 
-            <TextView
-                android:id="@+id/textView28"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="프로그램소개"
-                android:textSize="18sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editText2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textMultiLine" />
+        <TextView
+            android:id="@+id/textView29"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:text="동작구성"
+            android:textSize="18sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+        <Button
+            android:id="@+id/tr_video_add_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_background1"
+            android:minWidth="75dip"
+            android:minHeight="30dip"
+            android:text="동작추가"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/textView29"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:text="동작구성"
-                    android:textSize="18sp" />
+    </LinearLayout>
 
-                <Button
-                    android:id="@+id/button33"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_background1"
-                    android:minWidth="75dip"
-                    android:minHeight="30dip"
-                    android:text="동작추가"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp" />
-            </LinearLayout>
+    <ListView
+        android:id="@+id/motion_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-            <ListView
-                android:id="@+id/motion_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+    </ListView>
 
-            <Button
-                android:id="@+id/button34"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_background1"
-                android:text="저장하기"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp" />
-
-
-
-        </LinearLayout>
-    </ScrollView>
+    <Button
+        android:id="@+id/day_exr_save_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background1"
+        android:text="저장하기"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>
