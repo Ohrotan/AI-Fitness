@@ -37,8 +37,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     Button button;
 
-    int exr_id;
-    int day_program_order;
+    int day_program_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +50,8 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
 
 
 
-        //*****여기 액티비티로 넘어오기 전에 intent로 exr_id, order(예를들어 3일차라면 2값)를 넘겨줘야 한다.
-        exr_id = 1;
-        day_program_order = 1;
+        //*****여기 액티비티로 넘어오기 전에 intent로 day_program 의 id를 넘겨줘야 한다.
+        day_program_id = 1;
 
 
         textView.setText("오\n늘\n은\n이것들을 할거다.!!");
@@ -89,7 +87,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
 
     void requestInfo() {
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_LOGIN,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DAYPROGRAM,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -143,8 +141,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                params.put("exr_id", String.valueOf(exr_id));
-                params.put("day_program_order", String.valueOf(day_program_order));
+                params.put("day_program_id", String.valueOf(day_program_id));
                 return params;
             }
         };
