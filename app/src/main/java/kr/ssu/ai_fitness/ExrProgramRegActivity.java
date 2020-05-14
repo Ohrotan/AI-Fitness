@@ -16,7 +16,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,8 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.dto.ExrProgram;
-import kr.ssu.ai_fitness.dto.Member;
-import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -86,11 +83,12 @@ public class ExrProgramRegActivity extends AppCompatActivity {
             exr.setEquip(equip_etv.getText().toString());
             exr.setIntro(exr_intro_etv.getText().toString());
 
+            saveExrProgram(exr);
 
         }
     }
 
-    void saveExrProgram(ExrProgram exr) {
+    void saveExrProgram(final ExrProgram exr) {
         //서버에서 받아오는 부분
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_LOGIN,
                 new Response.Listener<String>() {
@@ -100,34 +98,12 @@ public class ExrProgramRegActivity extends AppCompatActivity {
 
                         try {
                             //response를 json object로 변환함.
-                            JSONArray obj = new JSONArray(response);
-                            JSONObject userJson = obj.getJSONObject(0);
+                            JSONObject obj = new JSONObject(response);
 
-                            //받은 정보를 토대로 user 객체 생성
-                            Member user = new Member(
-                                    userJson.getInt("id"),
-                                    userJson.getString("email"),
-                                    userJson.getString("pwd"),
-                                    userJson.getString("name"),
-                                    userJson.getDouble("height"),
-                                    userJson.getDouble("weight"),
-                                    (byte) userJson.getInt("gender"),
-                                    userJson.getString("birth"),
-                                    userJson.getDouble("muscle"),
-                                    userJson.getDouble("fat"),
-                                    userJson.getString("intro"),
-                                    userJson.getString("image"),
-                                    (byte) userJson.getInt("trainer"),
-                                    (byte) userJson.getInt("admin"),
-                                    (byte) userJson.getInt("alarm")
-                            );
-
-                            //user를 shared preferences에 저장
-                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-
-                            //mainactivity로 넘어감
-                            finish();
-                            startActivity(new Intent(ExrProgramRegActivity.this, HomeActivity.class));
+                            Intent intent = new Intent(ExrProgramRegActivity.this, DayExrProgramRegActivity.class);
+                            intent.putExtra("exr_id", obj.getInt("id"));//DB에 저장된 아이디 받아옴
+                            intent.putExtra("period", exr.getPeriod());//DB에 저장된 아이디 받아옴
+                            startActivity(intent);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -144,8 +120,15 @@ public class ExrProgramRegActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                //params.put("email", email);
-               // params.put("pwd", pwd);
+                params.put("trainer_id", exr.getTrainer_id());
+                params.put("title", exr.getTitle());
+                params.put("period", exr.getPeriod() + "");
+                params.put("equip", exr.getEquip());
+                params.put("gender", exr.getGender() + "");
+                params.put("level", exr.getLevel() + "");
+                params.put("max", exr.getMax() + "");
+                params.put("intro", exr.getIntro());
+
                 return params;
             }
         };
