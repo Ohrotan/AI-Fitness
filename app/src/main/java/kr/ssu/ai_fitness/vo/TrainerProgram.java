@@ -3,7 +3,8 @@ package kr.ssu.ai_fitness.vo;
 public class TrainerProgram {
     private String title;
     private int period;
-    private byte gender;
+    //private int gender;
+    private String gender;
     private double level;
     private int curNum;
     private int max;
@@ -11,7 +12,7 @@ public class TrainerProgram {
     private double rating;
     private String equip;
 
-    public TrainerProgram(String title, int period, int curNum, int max, int totalNum, double rating, double level, String equip, byte gender){
+    public TrainerProgram(String title, int period, int curNum, int max, int totalNum, double rating, double level, String equip, String gender){
         this.title = title;
         this.period = period;
         this.curNum = curNum;
@@ -39,11 +40,11 @@ public class TrainerProgram {
         this.period = period;
     }
 
-    public byte getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(byte gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 

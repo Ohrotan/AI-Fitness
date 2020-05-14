@@ -73,7 +73,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
     private int memberNum;
     private TextView intro;
     private String introValue;
-    private int i;
+    private int flag = 0;
 
     private ArrayList<Integer> exrProgramIdList = new ArrayList<Integer>();
 
@@ -95,6 +95,14 @@ public class TrainerProfileActivity extends AppCompatActivity {
         fat = findViewById(R.id.fatTrainerProfile);
         curNumMember = findViewById(R.id.memberNumTrainerProfile);
         intro = findViewById(R.id.infoSelfTrainerProfile);
+
+        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
+        final RecyclerView recyclerViewTrainerProfile = findViewById(R.id.trainerProfileRecyclerView);
+
+        // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
+        final TrainerProfileAdapter adapter = new TrainerProfileAdapter(getApplicationContext());
+
+        recyclerViewTrainerProfile.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         Intent intent = getIntent();
         trainerID = intent.getExtras().getInt("id");
@@ -213,13 +221,19 @@ public class TrainerProfileActivity extends AppCompatActivity {
 
         getProgramId(trainerID);
 
+        //for(int i = 0; i < exrProgramIdList.size(); i++) {
+        //    setAdapter(i);
+        //}
+
         Handler handler1 = new Handler();
         handler1.postDelayed(new Runnable() {
             public void run() {
                 //recyclerViewTrainerProfile.setAdapter(adapter);
-                setAdapter();
+                for(int i = 0; i < exrProgramIdList.size(); i++) {
+                    setAdapter(i, recyclerViewTrainerProfile, adapter);
+                }
             }
-        }, 500);  // 2000은 2초를 의미합니다.
+        }, 200);  // 2000은 2초를 의미합니다.
 
         /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -322,103 +336,99 @@ public class TrainerProfileActivity extends AppCompatActivity {
         //recyclerViewTrainerProfile.setAdapter(adapter);
     }
 
-    private void setAdapter(){
-        for(int i = 0; i < exrProgramIdList.size(); i++){
+    private void setAdapter(final int it, final RecyclerView Rv, final TrainerProfileAdapter adapter){
+        for(int i = 0; i < exrProgramIdList.size(); i++) {
             Log.d("PROGRAM_ID_LIST", "Program ID = " + exrProgramIdList.get(i));
         }
 
-        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-        final RecyclerView recyclerViewTrainerProfile = findViewById(R.id.trainerProfileRecyclerView);
-        recyclerViewTrainerProfile.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        //for(i = 0; i < exrProgramIdList.size(); i++) {
 
-        // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        final TrainerProfileAdapter adapter = new TrainerProfileAdapter(getApplication());
+        Log.d("Iterator Check", "iterator = " + it);
+        queue = Volley.newRequestQueue(getApplicationContext());
 
-        for(i = 0; i < exrProgramIdList.size(); i++) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READTRAINERPROGRAM,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //Log.d("Iterator Check", "onResponse Start : " + it);
 
-            Log.d("Iterator Check", "iterator = " + i);
-            queue = Volley.newRequestQueue(getApplicationContext());
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READTRAINERPROGRAM,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                Log.d("Iterator Check", "onResponse Start : " + i);
-
-                                SystemClock.sleep(100);
+                                /*SystemClock.sleep(100);
                                 Handler handler = new Handler();
                                 handler.postDelayed(new Runnable() {
                                     public void run() {
                                         recyclerViewTrainerProfile.setAdapter(adapter);
                                     }
-                                }, 200);  // 2000은 2초를 의미합니다.
-                                Log.d("GETPROGRAMINFO_RESPONSE", response);
+                                }, 200);  // 2000은 2초를 의미합니다.*/
+                            Log.d("GETPROGRAMINFO_RESPONSE", response);
 
-                                JSONArray jArray = new JSONArray(response);
-                                //ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
-                                TrainerProgram trainerProgram;
+                            JSONArray jArray = new JSONArray(response);
+                            //ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
+                            TrainerProgram trainerProgram;
 
-                                JSONObject jObject0 = jArray.getJSONObject(0);
-                                String title = jObject0.getString("title");
-                                int period = jObject0.getInt("period");
-                                String equip = jObject0.getString("equip");
-                                byte gender = (byte)jObject0.getInt("gender");
-                                double level = jObject0.getDouble("level");
-                                int max = jObject0.getInt("max");
+                            JSONObject jObject0 = jArray.getJSONObject(0);
+                            String title = jObject0.getString("title");
+                            int period = jObject0.getInt("period");
+                            String equip = jObject0.getString("equip");
+                            String gender = jObject0.getString("gender");
+                            double level = jObject0.getDouble("level");
+                            int max = jObject0.getInt("max");
 
-                                Log.d("parsedJSON_PR_INFO_0", "title =  " + title + " period = " + period + " equip = " + equip + " gender = " + gender + " level = " + level + " max = " + max);
+                            Log.d("parsedJSON_PR_INFO_0", "title =  " + title + " period = " + period + " equip = " + equip + " gender = " + gender + " level = " + level + " max = " + max);
 
-                                JSONObject jObject1 = jArray.getJSONObject(1);
-                                int curMemberNum = jObject1.getInt("cur_member_num");
+                            JSONObject jObject1 = jArray.getJSONObject(1);
+                            int curMemberNum = jObject1.getInt("cur_member_num");
 
-                                Log.d("parseJSON_PR_INFO_1", "curMemberNum = " + curMemberNum);
+                            Log.d("parseJSON_PR_INFO_1", "curMemberNum = " + curMemberNum);
 
-                                JSONObject jObject2 = jArray.getJSONObject(2);
-                                int totalMemberNum = jObject2.getInt("total_member_num");
+                            JSONObject jObject2 = jArray.getJSONObject(2);
+                            int totalMemberNum = jObject2.getInt("total_member_num");
 
-                                Log.d("parseJSON_PR_INFO_1", "totalMemberNum = " + totalMemberNum);
+                            Log.d("parseJSON_PR_INFO_1", "totalMemberNum = " + totalMemberNum);
 
-                                JSONObject jObject3 = jArray.getJSONObject(3);
-                                double avgRating = jObject3.getDouble("avg_rating");
+                            JSONObject jObject3 = jArray.getJSONObject(3);
+                            double avgRating = jObject3.getDouble("avg_rating");
 
-                                Log.d("parseJSON_PR_INFO_1", "avgRating = " + avgRating);
+                            Log.d("parseJSON_PR_INFO_1", "avgRating = " + avgRating);
 
-                                trainerProgram = new TrainerProgram(title, period, curMemberNum, max, totalMemberNum, avgRating, level, equip, gender);
+                            trainerProgram = new TrainerProgram(title, period, curMemberNum, max, totalMemberNum, avgRating, level, equip, gender);
 
-                                adapter.addItem(trainerProgram);
+                            adapter.addItem(trainerProgram);
+                            Log.d("ADD_ITEM", "trainerProgram_title = " + trainerProgram.getTitle());
+                            flag++;
+                            //recyclerViewTrainerProfile.setAdapter(adapter);
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            if(flag == exrProgramIdList.size()){
+                                //SystemClock.sleep(2000);
+                                Log.d("SET_ADAPTER", "flag = exrProgramList.size() / " + flag + " == " + exrProgramIdList.size());
+                                //SystemClock.sleep(2000);
+                                Rv.setAdapter(adapter);
+                                flag = 0;
                             }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    //서버가 요청하는 파라미터를 담는 부분
-                    Map<String, String> params = new HashMap<>();
-                    Log.d("SEND_EXR_ID", "exrID = " + exrProgramIdList.get(i));
-                    params.put("exr_id", Integer.toString(exrProgramIdList.get(i)));
-                    return params;
-                }
-            };
-
-            stringRequest.setTag(TAG);
-            queue.add(stringRequest);
-            Log.d("Iterator Check", "End of the iteration : " + i);
-        }
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                recyclerViewTrainerProfile.setAdapter(adapter);
             }
-        }, 200);  // 2000은 2초를 의미합니다.
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                Map<String, String> params = new HashMap<>();
+                Log.d("SEND_EXR_ID", "exrID = " + exrProgramIdList.get(it));
+                params.put("exr_id", Integer.toString(exrProgramIdList.get(it)));
+                return params;
+            }
+        };
+
+        stringRequest.setTag(TAG);
+        queue.add(stringRequest);
+        //Log.d("Iterator Check", "End of the iteration : " + it);
     }
 
     private void getProgramId(final int trainerId){
