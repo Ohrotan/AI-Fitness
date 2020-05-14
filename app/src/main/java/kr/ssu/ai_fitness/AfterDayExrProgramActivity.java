@@ -131,6 +131,8 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
                         try {
                             //response를 json object로 변환함.
                             JSONArray obj = new JSONArray(response);
+
+                            Log.d("xxxxxxx", obj.toString());
                             int isFound = obj.getInt(0);
 
                             if (isFound == 0) {
@@ -139,7 +141,9 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
                             else {
 
                                 //화면에 보이는 피드백 부분을 바꿔줌
-                                videoInfos.get(position).setFeedback(feedback);
+                                MemberExrVideoModel temp = adapter.getItem(position);
+                                temp.setFeedback(feedback);
+                                adapter.setItem(position,temp);
                                 adapter.notifyDataSetChanged();
 
                                 Toast.makeText(AfterDayExrProgramActivity.this, "피드백 등록 완료", Toast.LENGTH_SHORT).show();
