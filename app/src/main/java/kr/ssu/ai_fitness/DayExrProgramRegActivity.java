@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +14,7 @@ import kr.ssu.ai_fitness.dto.DayProgram;
 
 public class DayExrProgramRegActivity extends AppCompatActivity {
 
-
+    TextView exr_title_tv;
     ListView day_exr_list;
     DayProgramTitleAdapter dayProgramTitleAdapter;
 
@@ -21,7 +22,7 @@ public class DayExrProgramRegActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_exr_program_reg);
-
+        exr_title_tv = findViewById(R.id.exr_title_tv);
         day_exr_list = findViewById(R.id.day_exr_list);
 
 
@@ -29,6 +30,8 @@ public class DayExrProgramRegActivity extends AppCompatActivity {
         int period = intent.getIntExtra("period", 3);
         int exr_id = intent.getIntExtra("exr_id", 99);
         final String title = intent.getStringExtra("title");
+
+        exr_title_tv.setText(title);
 
         dayProgramTitleAdapter = new DayProgramTitleAdapter(this, exr_id, period);
         day_exr_list.setAdapter(dayProgramTitleAdapter);

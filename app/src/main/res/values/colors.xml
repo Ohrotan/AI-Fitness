@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#3498db</color>
     <color name="colorAccent">#3498db</color>
     <color name="accent">#3498db</color>
+    <color name="lightBlue">#6FAED9F6</color>
     <color name="lightGray">#BEBEBE</color>
     <color name="darkGray">#404040</color>
     <color name="red">#D11010</color>
