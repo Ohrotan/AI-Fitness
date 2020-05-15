@@ -6,7 +6,7 @@
     android:padding="25dp">
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/exr_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="프로그램명"

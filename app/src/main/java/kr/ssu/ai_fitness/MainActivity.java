@@ -1,11 +1,11 @@
 package kr.ssu.ai_fitness;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 
@@ -21,7 +21,7 @@ db - exr_program 테이블에 title 추가해야됨
  */
 public class MainActivity extends AppCompatActivity {
     //승혁
-    Button	 btn1;
+
     Button	 btn2;
     Button	 btn3;
     Button	 btn4;
@@ -56,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
     Button	 btn27;
     Button	 btn28;
     Button	 btn29;
-    Button	 btn30;
-    Button	 btn31;
+
 
 
     @Override
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn1 = 	findViewById(R.id.button1);
+
         btn2 = 	findViewById(R.id.button2);
         btn3 =	findViewById(R.id.button3);
         btn4 =	findViewById(R.id.button4);
@@ -97,14 +96,12 @@ public class MainActivity extends AppCompatActivity {
         btn27 =	findViewById(R.id.button27);
         btn28 =	findViewById(R.id.button28);
         btn29 =	findViewById(R.id.button29);
-        btn30 =	findViewById(R.id.button30);
-        btn31 =	findViewById(R.id.button31);
+
 
     }
     public void onClick(View v) {
         Intent intent = new Intent();
-        if (v == btn1) {
-        } else if (v == btn2) {
+         if (v == btn2) {
             intent = new Intent(getApplicationContext(), MemberExrProgramListActivity.class);
         } else if (v == btn3) {
             intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class);
@@ -165,8 +162,6 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, TrainerVideoListActivity.class);
         } else if (v == btn29) {
             intent = new Intent(this, AdminVideoManageActivity.class);
-        } else if (v == btn30) {
-        } else if (v == btn31) {
         }
         startActivity(intent);
     }

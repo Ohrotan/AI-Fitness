@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@+id/motion_list"
+        android:id="@+id/day_video_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
