@@ -1,5 +1,8 @@
 package kr.ssu.ai_fitness.dto;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class DayProgramVideo {
     private int id;
     private int day_id;
@@ -22,6 +25,22 @@ public class DayProgramVideo {
         this.counts = counts;
         this.sets = sets;
         this.seq = seq;
+    }
+
+    public DayProgramVideo(JSONObject obj) {
+        try {
+
+            this.id = obj.getInt("id");
+            this.day_id = obj.getInt("day_id");
+            this.video_id = obj.getInt("video_id");
+            this.name = obj.getString("name");
+            this.counts = obj.getInt("counts");
+            this.sets = obj.getInt("sets");
+            this.seq = obj.getInt("seq");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String getName() {

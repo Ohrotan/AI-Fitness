@@ -48,6 +48,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
     DayProgram dayProgram;
     ArrayList<DayProgramVideo> trainerVideoDtoList = new ArrayList<>();
     ArrayList<DayProgramVideo> selectedVideoDtoList = new ArrayList<>();
+    boolean trVideoListDownloaded = false;
     AlertDialog dialog;//비디오 추가 팝업
 
     int day_id;
@@ -56,6 +57,8 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_exr_program_detail_reg);
+        getTrainerVideoList();
+
         day_video_list = findViewById(R.id.day_video_list);
         exr_program_title_tv = findViewById(R.id.exr_program_title_tv);
         day_exr_program_title_etv = findViewById(R.id.day_exr_program_title_etv);
@@ -108,6 +111,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
                 final LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 final View videoAddPopup = inflater.inflate(R.layout.layout_tr_video_choose, null);
                 final GridView list = videoAddPopup.findViewById(R.id.tr_video_choose_list);
+                while (!trVideoListDownloaded) ;  //트레이너 비디오 리스트가 다운로드 될때까지 여기서 멈춤
                 final DayVideoChooseAdapter dayVideoChooseAdapter = new DayVideoChooseAdapter(DayExrProgramDetailRegActivity.this, trainerVideoDtoList);
                 list.setAdapter(dayVideoChooseAdapter);
 
@@ -124,7 +128,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         DayProgramVideo dto = dayVideoChooseAdapter.getSelectedItem();
-                       // Toast.makeText(DayExrProgramDetailRegActivity.this, dto.toString(), Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(DayExrProgramDetailRegActivity.this, dto.toString(), Toast.LENGTH_SHORT).show();
                         selectedVideoDtoList.add(dto);
                         dayVideoRegAdapter.notifyDataSetChanged();
                     }
@@ -138,7 +142,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
         });
     }
 
-    void saveDayExrVideo(int day_id) {
+    void saveDayExrVideo(final int day_id, final DayProgramVideo video) {
         //서버에서 받아오는 부분
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DAY_VIDEO_CREATE,
                 new Response.Listener<String>() {
@@ -168,19 +172,17 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
                     }
                 }) {
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-           /*     params.put("trainer_id", exr.getTrainer_id());
-                params.put("title", exr.getTitle());
-                params.put("period", exr.getPeriod() + "");
-                params.put("equip", exr.getEquip());
-                params.put("gender", exr.getGender() + "");
-                params.put("level", exr.getLevel() + "");
-                params.put("max", exr.getMax() + "");
-                params.put("intro", exr.getIntro());
-*/
+                params.put("video_id", video.getVideo_id() + "");
+                params.put("day_id", day_id + "");
+                params.put("seq", video.getSeq() + "");
+                params.put("sets", video.getSets() + "");
+                params.put("counts", video.getCounts() + "");
+
                 return params;
             }
         };
@@ -205,7 +207,9 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
                             //response를 json object로 변환함.
                             JSONObject obj = new JSONObject(response);
                             day_id = obj.getInt("id");
-                            saveDayExrVideo(day_id);
+                            for (DayProgramVideo video : ((DayVideoRegAdapter) day_video_list.getAdapter()).getList()) {
+                                saveDayExrVideo(day_id, video);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -235,7 +239,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
     }
 
     void getTrainerVideoList() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DAY_EXR_CREATE,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_VIDEO,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -247,11 +251,9 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
                             JSONObject obj;
                             for (int i = 0; i < arr.length(); i++) {
                                 obj = arr.getJSONObject(i);
-                                //  obj.getString()
+                                trainerVideoDtoList.add(new DayProgramVideo(obj));
                             }
-
-                            //  day_id = obj.getInt("id");
-                            saveDayExrVideo(day_id);
+                            trVideoListDownloaded = true;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -267,10 +269,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버에 요청할때 보내는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                params.put("exr_id", dayProgram.getExr_id() + "");
-                params.put("title", dayProgram.getTitle());
-                params.put("seq", dayProgram.getSeq() + "");
-                params.put("intro", dayProgram.getIntro());
+                params.put("trainer_id", "99"); //로그인 유저 처리
 
                 return params;
             }
