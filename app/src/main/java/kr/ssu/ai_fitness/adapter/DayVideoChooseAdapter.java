@@ -39,6 +39,7 @@ public class DayVideoChooseAdapter extends BaseAdapter {
         return getItem(selectedPosition);
     }
 
+
     public void setSelectedPosition(int position) {
         selectedPosition = position;
     }

@@ -42,7 +42,7 @@ android:layout_gravity="center"
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editText7"
+                android:id="@+id/tr_video_counts_etv"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -61,7 +61,7 @@ android:layout_gravity="center"
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editText8"
+                android:id="@+id/tr_video_sets_etv"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
