@@ -1,6 +1,7 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import kr.ssu.ai_fitness.AfterDayExrProgramActivity;
+import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.dto.ExrProgram;
 import kr.ssu.ai_fitness.vo.TrainerProgram;
@@ -74,8 +77,15 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
                     if(pos != RecyclerView.NO_POSITION){
                         //mData.set(pos, "item clicked. pos = " + pos);
                         Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(mContext, ExrProgramDetailActivity.class);
 
-                        notifyItemChanged(pos);
+                        //intent.putExtra("id", mData.get(pos).getId());
+                        //intent.putExtra("title", mData.get(pos).getTitle());
+                        //intent.putExtra("exrId", mData.get(pos).getExrId());
+
+                        mContext.startActivity(intent);
+
+                        //notifyItemChanged(pos);
                     }
                     else{
 
@@ -265,9 +275,13 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
             int img = R.drawable.rating_4_5_b;
             holder.rating.setImageResource(img);
         }
-        else{
+        else if(item.getRating() > 4.5){
             int img = R.drawable.rating_5_b;
             holder.rating.setImageResource(img);
+        }
+        else {
+            int img = R.drawable.rating_0_b;
+            holder.difficulty.setImageResource(img);
         }
 
         if(item.getLevel() <= 0.5){
@@ -307,7 +321,7 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
             holder.difficulty.setImageResource(img);
         }
         else{
-            int img = R.drawable.rating_5_b;
+            int img = R.drawable.rating_0_b;
             holder.difficulty.setImageResource(img);
         }
     }
