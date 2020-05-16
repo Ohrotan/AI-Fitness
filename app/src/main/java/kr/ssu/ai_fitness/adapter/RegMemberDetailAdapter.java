@@ -1,6 +1,7 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import kr.ssu.ai_fitness.AfterDayExrProgramActivity;
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.RegMemberDetailActivity;
 
 public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetailAdapter.ViewHolder> {
 
@@ -46,9 +49,15 @@ public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetail
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
                         //mData.set(pos, "item clicked. pos = " + pos);
-                        Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(mContext, AfterDayExrProgramActivity.class);
 
-                        notifyItemChanged(pos);
+                        //intent.putExtra("id", mData.get(pos).getId());
+                        //intent.putExtra("title", mData.get(pos).getTitle());
+                        //intent.putExtra("exrId", mData.get(pos).getExrId());
+
+                        mContext.startActivity(intent);
+                        //notifyItemChanged(pos);
                     }
                     else{
 

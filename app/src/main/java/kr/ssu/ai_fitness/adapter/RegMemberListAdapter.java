@@ -61,6 +61,7 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
 
                         intent.putExtra("id", mData.get(pos).getId());
                         intent.putExtra("title", mData.get(pos).getTitle());
+                        intent.putExtra("exrId", mData.get(pos).getExrId());
 
                         mContext.startActivity(intent);
                     }

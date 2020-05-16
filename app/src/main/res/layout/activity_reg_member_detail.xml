@@ -7,11 +7,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarRegMemberDetail"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
-        app:subtitle="체지방 다이어트"
         app:subtitleTextAppearance="@style/ToolbarSubTitleText"
         app:title="회원님!"
         app:titleTextAppearance="@style/ToolbarTitleText"
@@ -23,7 +22,7 @@
         android:id="@+id/separator"
         android:layout_width="wrap_content"
         android:layout_height="0.2dp"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/toolbarRegMemberDetail"
         android:background="@color/darkGray"
         android:visibility="visible" />
 
@@ -57,7 +56,7 @@
                     android:id="@+id/memberNameRegMemberDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="류제호님"
+
                     android:textColor="@color/darkGray"
                     android:textSize="30sp"
                     android:textStyle="bold"
@@ -67,7 +66,7 @@
                     android:id="@+id/memberAgeRegMemberDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(남, 26세)"
+
                     android:textColor="@color/darkGray"
                     android:textSize="18sp"
                     android:layout_marginLeft="5dp"
@@ -122,41 +121,45 @@
                     android:textColor="@color/darkGray"/>
 
                 <TextView
+                    android:id="@+id/heightRegMemberDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="178cm"
+
                     android:textColor="@color/accent"
                     android:layout_marginBottom="5dp"
                     android:layout_gravity="center"
                     android:textSize="20dp"/>
                 <TextView
+                    android:id="@+id/weightRegMemberDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:layout_gravity="center"
-                    android:text="65kg"
+
                     android:textColor="@color/accent"
                     android:textSize="20dp"/>
                 <TextView
+                    android:id="@+id/muscleRegMemberDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_gravity="center"
-                    android:text="19.8%"
+
                     android:textColor="@color/accent"
                     android:textSize="20dp"/>
                 <TextView
+                    android:id="@+id/fatRegMemberDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="12.7%"
+
                     android:textColor="@color/accent"
                     android:layout_gravity="center"
                     android:textSize="20dp"/>
                 />
             </GridLayout>
 
-            <TextView
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/infoGridLayout"
@@ -164,25 +167,25 @@
                 android:text="2020.04.01 기준"
                 android:textColor="@color/lightGray"
                 android:layout_marginRight="20dp"
-                android:id="@+id/infoRegDate"/>
+                android:id="@+id/infoRegDate"/>-->
 
             <TextView
-                android:id="@+id/infoSelf"
+                android:id="@+id/infoSelfRegMemberDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/infoRegDate"
+                android:layout_below="@+id/infoGridLayout"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="25dp"
                 android:layout_marginHorizontal="50dp"
                 android:textSize="17sp"
                 android:textColor="@color/darkGray"
-                android:text="안녕하세요 저는 운동을 열심히 하고싶은 ~~~ 입니다.~~~~ 잘 부탁드립니다~~~"
+
                 />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/infoSelf"
+                android:layout_below="@+id/infoSelfRegMemberDetail"
                 android:layout_marginLeft="30dp"
                 android:id="@+id/programRegPeriodLinearLayout">
                 <TextView
@@ -197,7 +200,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/programRegPeriod"
-                    android:text="2020.04.01 ~ 2020.04.08"
+
                     android:textSize="17sp"
                     android:textColor="@color/accent"
                     />
@@ -222,7 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/programProgress"
-                    android:text="2020.04.01 ~ 2020.04.08"
+                    android:text="2 / 30"
                     android:textSize="17sp"
                     android:textColor="@color/accent"
                     />

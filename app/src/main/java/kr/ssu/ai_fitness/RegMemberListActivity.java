@@ -82,26 +82,35 @@ public class RegMemberListActivity  extends AppCompatActivity {
                         try {
                             Log.d("REG_MEM_LIST_RESPONSE", response);
 
-                            JSONArray jArray = jArray = new JSONArray(response);
+                            JSONArray jArray = new JSONArray(response);
                             //ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
                             //AllTrainer trainer;
                             //ArrayList<Member> members = new ArrayList<>();
                             RegMember member;
 
-                            for (int i = 0; i < jArray.length(); i++) {
-                                JSONObject jObject = jObject = jArray.getJSONObject(i);
+                            JSONObject jObject0 = jArray.getJSONObject(0);
+                            int memberNum = jObject0.getInt("memberNum");
+                            Log.d("REG_MEM_LIST_memNUM", "Number of member = " + memberNum);
 
-                                int id = jObject.getInt("id");
-                                String name = jObject.getString("name");
-                                toolbarTitle = jObject.getString("title");
-                                member = new RegMember(id, name, toolbarTitle);
-
-                                Log.d("REG_MEM_LIST_parsedJSON", "name = " + String.format(name) + " toolbarTitle = " + toolbarTitle);
-
-                                //members.add(member);
-                                toolbar.setSubtitle(toolbarTitle);
-                                adapterMember.addItem(member);
+                            if(memberNum == 0){
+                                Log.d("REG_MEM_LIST_memNUM", "MemberNum is 0");
+                                return;
                             }
+
+                            //for (int i = 0; i < jArray.length(); i++) {
+                            JSONObject jObject = jArray.getJSONObject(1);
+
+                            int id = jObject.getInt("id");
+                            String name = jObject.getString("name");
+                            toolbarTitle = jObject.getString("title");
+                            member = new RegMember(id, name, toolbarTitle, Integer.parseInt(exrId));
+
+                            Log.d("REG_MEM_LIST_parsedJSON", "name = " + String.format(name) + " toolbarTitle = " + toolbarTitle);
+
+                            //members.add(member);
+                            toolbar.setSubtitle(toolbarTitle);
+                            adapterMember.addItem(member);
+                            //}
                             Log.d("REG_MEM_LIST_setAdapter", "RegMemberListActivity setAdapter");
                             recyclerViewRegMember.setAdapter(adapterMember);
 

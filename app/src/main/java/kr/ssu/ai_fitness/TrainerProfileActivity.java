@@ -214,8 +214,12 @@ public class TrainerProfileActivity extends AppCompatActivity {
             int img = R.drawable.rating_4_5;
             trainerRating.setImageResource(img);
         }
-        else{
+        else if(avgRating > 4.5){
             int img = R.drawable.rating_5;
+            trainerRating.setImageResource(img);
+        }
+        else{
+            int img = R.drawable.rating_0;
             trainerRating.setImageResource(img);
         }
 
