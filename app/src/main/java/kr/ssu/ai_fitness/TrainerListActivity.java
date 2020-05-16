@@ -81,13 +81,6 @@ public class TrainerListActivity extends AppCompatActivity {
         stringRequest.setTag(TAG);
         queue.add(stringRequest);
 
-        //adapterTrainerList.addItem(String.format("류제호 트레이너"));
-        //adapterTrainerList.addItem(String.format("최승혁 트레이너"));
-        //adapterTrainerList.addItem(String.format("한관욱 트레이너"));
-        //adapterTrainerList.addItem(String.format("조란 트레이너"));
-        //adapterTrainerList.addItem(String.format("홍길동 트레이너"));
-        //adapterTrainerList.addItem(String.format("장훈 트레이너"));
-
         //recyclerViewTrainerList.setAdapter(adapterTrainerList);
 
         //RecyclerView recyclerViewTrainer = findViewById(R.id.regMemberListRecyclerviewTrainer);

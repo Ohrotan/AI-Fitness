@@ -7,11 +7,10 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarRegMemberList"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
-        app:subtitle="안녕하세요"
         app:subtitleTextAppearance="@style/ToolbarSubTitleText"
         app:title="회원님!"
         app:titleTextAppearance="@style/ToolbarTitleText"
@@ -23,7 +22,7 @@
         android:id="@+id/separator"
         android:layout_width="wrap_content"
         android:layout_height="0.2dp"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/toolbarRegMemberList"
         android:background="@color/darkGray"
         android:visibility="visible" />
 

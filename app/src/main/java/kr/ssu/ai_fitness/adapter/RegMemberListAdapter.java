@@ -1,6 +1,8 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
-import kr.ssu.ai_fitness.RegMemberListActivity;
+import kr.ssu.ai_fitness.RegMemberDetailActivity;
+import kr.ssu.ai_fitness.TrainerProfileActivity;
+import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.vo.RegMember;
 
 public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdapter.ViewHolder> {
 
-    private ArrayList<String> mData = new ArrayList<String>() ;
+    //private ArrayList<String> mData = new ArrayList<String>() ;
+    private ArrayList<RegMember> mData = new ArrayList<>();
     private Context mContext;
 
-    public void addItem(String item) {
+    public void addItem(RegMember item) {
         mData.add(item);
     }
 
@@ -38,6 +44,7 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
             super(itemView) ;
 
             // 뷰 객체에 대한 참조. (hold strong reference)
+            alarmDot = itemView.findViewById(R.id.alarmDotRegMemberList);
             regMemberListItem = itemView.findViewById(R.id.regMemberListTextItem);
             //regMemberListNextIcon = itemView.findViewById(R.id.regMemberListNext);
             itemView.setOnClickListener(new View.OnClickListener(){
@@ -47,9 +54,15 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
                         //mData.set(pos, "item clicked. pos = " + pos);
-                        Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
+                        Log.d("VIEWHOLDER_ONCLICK", "member id = " + mData.get(pos).getId() + " title = " + mData.get(pos).getTitle());
 
-                        notifyItemChanged(pos);
+                        Intent intent = new Intent(mContext, RegMemberDetailActivity.class);
+
+                        intent.putExtra("id", mData.get(pos).getId());
+                        intent.putExtra("title", mData.get(pos).getTitle());
+
+                        mContext.startActivity(intent);
                     }
                     else{
 
@@ -65,7 +78,7 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
         Context context = parent.getContext() ;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
-        View view = inflater.inflate(R.layout.layout_reg_member_list_item, parent, false) ;
+        View view = inflater.inflate(R.layout.item_reg_member_list, parent, false) ;
         RegMemberListAdapter.ViewHolder vh = new RegMemberListAdapter.ViewHolder(view) ;
 
         return vh ;
@@ -74,8 +87,8 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(RegMemberListAdapter.ViewHolder holder, int position) {
-        String text = mData.get(position) ;
-        holder.regMemberListItem.setText(text) ;
+        RegMember member = mData.get(position) ;
+        holder.regMemberListItem.setText(member.getName()) ;
         //holder.regMemberListNextIcon.getAccessibilityClassName();
     }
 

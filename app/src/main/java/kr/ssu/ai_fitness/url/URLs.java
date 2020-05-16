@@ -18,6 +18,7 @@ public class URLs {
     public static final String URL_READTRAINERDATA = ROOT_URL + "/member/read_trainer_data";
     public static final String URL_READTRAINERPROGRAM = ROOT_URL + "/member/read_trainer_program";
     public static final String URL_READTRAINERPROGRAMNUM = ROOT_URL + "/member/read_trainer_program_num";
+    public static final String URL_READREGMEMBER = ROOT_URL + "/member/read_reg_member";
 
     public static final String URL_EXR_CREATE = ROOT_URL + "/exr/create";
 

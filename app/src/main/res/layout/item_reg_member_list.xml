@@ -24,7 +24,7 @@
         <ImageView
             android:layout_width="7dip"
             android:layout_height="7dip"
-            android:id="@+id/alarmDot"
+            android:id="@+id/alarmDotRegMemberList"
             android:layout_toRightOf="@+id/regMemberListTextItem"
             android:layout_marginTop="20dp"
             android:layout_marginRight="1dp"

@@ -17,8 +17,9 @@ public class Member {
     private byte admin;
     private byte alarm;
 
-    public Member(){
-
+    public Member(int id, String name){
+        this.id = id;
+        this.name = name;
     }
 
     public Member(int id){
