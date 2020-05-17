@@ -79,13 +79,17 @@ public class DayVideoRegAdapter extends BaseAdapter {
         holder.tr_video_counts_etv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                item.setCounts(Integer.parseInt(holder.tr_video_counts_etv.getText().toString()));
+                String num = holder.tr_video_counts_etv.getText().toString();
+                if (num != null && num.matches("%d"))
+                    item.setCounts(Integer.parseInt(num));
             }
         });
         holder.tr_video_sets_etv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                item.setSets(Integer.parseInt(holder.tr_video_sets_etv.getText().toString()));
+                String num = holder.tr_video_sets_etv.getText().toString();
+                if (num != null && num.matches("%d"))
+                    item.setSets(Integer.parseInt(num));
             }
         });
 

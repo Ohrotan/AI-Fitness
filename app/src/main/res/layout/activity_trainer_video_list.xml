@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".TrainerVideoListActivity">
 
-    <ScrollView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:subtitle="~~ 트레이너님의 운동 프로그램"
+        app:subtitleTextAppearance="@style/ToolbarSubTitleText"
+        app:title="회원님!"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        tools:ignore="MissingConstraints"></androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +27,10 @@
             android:id="@+id/tr_video_reg_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:background="@drawable/button_background1"
             android:text="동작 등록"
             android:textColor="#FFFFFF"
@@ -38,4 +43,4 @@
             android:numColumns="2" />
 
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

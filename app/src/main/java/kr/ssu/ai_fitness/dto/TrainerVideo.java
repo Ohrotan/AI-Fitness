@@ -1,5 +1,8 @@
 package kr.ssu.ai_fitness.dto;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class TrainerVideo {
 
     private int id;
@@ -12,16 +15,17 @@ public class TrainerVideo {
     public TrainerVideo() {
     }
 
-    public TrainerVideo(String title){
+    public TrainerVideo(String title) {
         this.title = title;
     }
 
-    public TrainerVideo( int trainer_id, String thumb_img, String video, String title) {
+    public TrainerVideo(int trainer_id, String thumb_img, String video, String title) {
         this.trainer_id = trainer_id;
         this.thumb_img = thumb_img;
         this.video = video;
         this.title = title;
     }
+
     public TrainerVideo(int id, int trainer_id, String thumb_img, String video, String title, String analysis) {
         this.id = id;
         this.trainer_id = trainer_id;
@@ -29,6 +33,21 @@ public class TrainerVideo {
         this.video = video;
         this.title = title;
         this.analysis = analysis;
+    }
+
+    public TrainerVideo(JSONObject obj) {
+        try {
+            this.id = obj.getInt("id");
+            this.trainer_id = Integer.parseInt(obj.getString("trainer_id"));
+            this.thumb_img = obj.getString("thumb_img");
+            this.video = obj.getString("video");
+            this.title = obj.getString("title");
+            this.analysis = obj.getString("analysis");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public int getId() {

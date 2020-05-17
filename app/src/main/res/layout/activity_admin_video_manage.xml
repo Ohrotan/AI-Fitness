@@ -7,6 +7,17 @@
     android:orientation="vertical"
     tools:context=".AdminVideoManageActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:subtitle="전체 동영상 목록 조회"
+        app:subtitleTextAppearance="@style/ToolbarSubTitleText"
+        app:title="회원님!"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        tools:ignore="MissingConstraints">
+    </androidx.appcompat.widget.Toolbar>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

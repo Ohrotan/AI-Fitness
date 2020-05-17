@@ -1,26 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="25dp">
+    tools:context=".DayExrProgramRegActivity">
 
-    <TextView
-        android:id="@+id/exr_title_tv"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="프로그램명"
-        android:textSize="24sp" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:subtitle="운동 프로그램 등록 - 일별 프로그램"
+        app:subtitleTextAppearance="@style/ToolbarSubTitleText"
+        app:title="회원님!"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        tools:ignore="MissingConstraints"></androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/textView24"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="일차별로 세부 계획을 정해주세요!" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingTop="5dp"
+        android:paddingRight="25dp"
+        android:paddingBottom="10dp">
 
-    <ListView
-        android:id="@+id/day_exr_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/exr_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:text="프로그램명"
+            android:textSize="24sp" />
 
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="일차별로 세부 계획을 정해주세요!" />
+
+        <ListView
+            android:id="@+id/day_exr_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 </LinearLayout>

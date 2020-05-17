@@ -7,10 +7,23 @@
     android:orientation="vertical"
     tools:context=".TrainerVideoRegActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:subtitle="동작 등록"
+        app:subtitleTextAppearance="@style/ToolbarSubTitleText"
+        app:title="회원님!"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        tools:ignore="MissingConstraints">
+    </androidx.appcompat.widget.Toolbar>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="25dp">
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +36,8 @@
                 android:layout_height="400dp"
                 android:background="#00FFFFFF"
                 android:onClick="onClick"
-                android:padding="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/video_reg" />
 

@@ -3,6 +3,7 @@ package kr.ssu.ai_fitness;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,6 +35,7 @@ import kr.ssu.ai_fitness.adapter.DayVideoChooseAdapter;
 import kr.ssu.ai_fitness.adapter.DayVideoRegAdapter;
 import kr.ssu.ai_fitness.dto.DayProgram;
 import kr.ssu.ai_fitness.dto.DayProgramVideo;
+import kr.ssu.ai_fitness.dto.TrainerVideo;
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -67,6 +69,9 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
         day_exr_save_btn = findViewById(R.id.day_exr_save_btn);
 
         Intent intent = getIntent();
+        if("edit".equals(intent.getStringExtra("mode"))){
+
+        }
         dayProgram = intent.getParcelableExtra("dayProgram");
 
         dayProgram = new DayProgram(0, "테스트", 1, "설명~");
@@ -89,7 +94,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
             }
         });
 
-
+/*
         trainerVideoDtoList.add(new DayProgramVideo("팔굽혀펴기"));
         trainerVideoDtoList.add(new DayProgramVideo("스쿼트"));
         trainerVideoDtoList.add(new DayProgramVideo("런지"));
@@ -102,7 +107,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
         trainerVideoDtoList.add(new DayProgramVideo("스쿼트"));
         trainerVideoDtoList.add(new DayProgramVideo("런지"));
         trainerVideoDtoList.add(new DayProgramVideo("윗몸일으키기"));
-
+*/
         tr_video_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,7 +256,9 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
                             JSONObject obj;
                             for (int i = 0; i < arr.length(); i++) {
                                 obj = arr.getJSONObject(i);
-                                trainerVideoDtoList.add(new DayProgramVideo(obj));
+                                TrainerVideo a= new TrainerVideo(obj);
+                                Log.v("tr_video_from db",a.toString());
+                                trainerVideoDtoList.add(new DayProgramVideo(a));
                             }
                             trVideoListDownloaded = true;
                         } catch (JSONException e) {
