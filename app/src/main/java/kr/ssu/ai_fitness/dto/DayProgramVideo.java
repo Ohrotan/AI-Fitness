@@ -29,18 +29,22 @@ public class DayProgramVideo {
 
     public DayProgramVideo(JSONObject obj) {
         try {
-
             this.id = obj.getInt("id");
-            this.day_id = obj.getInt("day_id");
-            this.video_id = obj.getInt("video_id");
+            this.day_id = Integer.parseInt(obj.getString("day_id"));
+            this.video_id = Integer.parseInt(obj.getString("video_id"));
             this.name = obj.getString("name");
-            this.counts = obj.getInt("counts");
-            this.sets = obj.getInt("sets");
-            this.seq = obj.getInt("seq");
+            this.counts = Integer.parseInt(obj.getString("counts"));
+            this.sets = Integer.parseInt(obj.getString("sets"));
+            this.seq = Integer.parseInt(obj.getString("seq"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public DayProgramVideo(TrainerVideo a) {
+        this.video_id = a.getId();
+        this.name = a.getTitle();
     }
 
     public String getName() {

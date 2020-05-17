@@ -31,5 +31,5 @@ public class URLs {
 
     public static final String URL_DAY_VIDEO_CREATE = ROOT_URL + "/day_video/create";
 
-    public static final String URL_VIDEO = ROOT_URL + "/video/tr_video_read";
+    public static final String URL_VIDEO = ROOT_URL + "/video/read_tr_video";
 }
