@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,7 @@ import java.util.Map;
 import kr.ssu.ai_fitness.adapter.AfterDayExrProgramAdapter;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.FileDownloadTask;
 import kr.ssu.ai_fitness.vo.MemberExrVideoModel;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -110,6 +112,15 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
             public void onItemClick(View view, int position) {
                 //*****썸네일 클릭하면 동영상 재생해주도록 수정해야 함
                 Toast.makeText(AfterDayExrProgramActivity.this, "동영상 재생", Toast.LENGTH_SHORT).show();
+
+//                //영상 다운로드 받아온다.
+//                FileDownloadTask fileDownloadTask = new FileDownloadTask(AfterDayExrProgramActivity.this);
+//                fileDownloadTask.execute(videoInfos.get(position).getVideo());
+
+                //비디오 재생 액티비티로 넘어간다.
+                Intent intent = new Intent(AfterDayExrProgramActivity.this, VideoPlayActivity.class);
+                startActivity(intent);
+
             }
         });
 

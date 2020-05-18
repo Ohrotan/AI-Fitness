@@ -175,7 +175,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
         recyclerViewRegMemberDetail.setLayoutManager(new LinearLayoutManager(this));
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        final RegMemberDetailAdapter adapterMember = new RegMemberDetailAdapter(getApplication());
+        final RegMemberDetailAdapter adapterMember = new RegMemberDetailAdapter(this);
 
         getDayTitle(recyclerViewRegMemberDetail, adapterMember);
     }
