@@ -35,6 +35,7 @@ import kr.ssu.ai_fitness.TrainerProfileActivity;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.vo.AllProgram;
 import kr.ssu.ai_fitness.vo.AllTrainer;
 import kr.ssu.ai_fitness.vo.MyProgram;
@@ -242,18 +243,27 @@ public class HomeFragment extends Fragment {
                                 textView_myProgram3.setText(myPrograms.get(2).getTrainer_name() + "-" + myPrograms.get(2).getProgram_title());
                             }
 
+                            ImageViewTask imageViewTask;
                             //*****트레이너 목록을 표시한다. 이미지 수정하는 코드 추가해야 함
                             if (allTrainerCount >= 1) {
                                 textView_trainer1.setText(allTrainer.get(0).getName());
+                                imageViewTask = new ImageViewTask(imageView_trainer1);
+                                imageViewTask.execute(allTrainer.get(0).getImage());
                             }
                             if(allTrainerCount >= 2) {
                                 textView_trainer2.setText(allTrainer.get(1).getName());
+                                imageViewTask = new ImageViewTask(imageView_trainer2);
+                                imageViewTask.execute(allTrainer.get(1).getImage());
                             }
                             if (allTrainerCount >= 3) {
                                 textView_trainer3.setText(allTrainer.get(2).getName());
+                                imageViewTask = new ImageViewTask(imageView_trainer3);
+                                imageViewTask.execute(allTrainer.get(2).getImage());
                             }
                             if (allTrainerCount >= 4) {
                                 textView_trainer4.setText(allTrainer.get(3).getName());
+                                imageViewTask = new ImageViewTask(imageView_trainer4);
+                                imageViewTask.execute(allTrainer.get(3).getImage());
                             }
 
                             //*****전체 운동 프로그램을 표시한다.
