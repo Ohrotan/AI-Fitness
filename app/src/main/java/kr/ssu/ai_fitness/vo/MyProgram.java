@@ -1,12 +1,22 @@
 package kr.ssu.ai_fitness.vo;
 
 public class MyProgram {
+    private int id;
     private String trainer_name;
     private String program_title;
 
-    public MyProgram(String trainer_name, String program_title) {
+    public MyProgram(int id, String trainer_name, String program_title) {
+        this.id = id;
         this.trainer_name = trainer_name;
         this.program_title = program_title;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTrainer_name() {

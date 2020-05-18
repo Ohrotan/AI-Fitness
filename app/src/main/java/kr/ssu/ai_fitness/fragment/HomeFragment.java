@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,13 +30,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.ssu.ai_fitness.AdminProgramManageActivity;
+import kr.ssu.ai_fitness.AdminUserManageActivity;
+import kr.ssu.ai_fitness.AdminVideoManageActivity;
+import kr.ssu.ai_fitness.AfterDayExrProgramActivity;
+import kr.ssu.ai_fitness.BeforeDayExrProgramActivity;
+import kr.ssu.ai_fitness.ChattingListActivity;
+import kr.ssu.ai_fitness.DayExrProgramDetailRegActivity;
+import kr.ssu.ai_fitness.DayExrProgramRegActivity;
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
+import kr.ssu.ai_fitness.ExrProgramRegActivity;
+import kr.ssu.ai_fitness.ExrResultActivity;
 import kr.ssu.ai_fitness.HomeActivity;
 import kr.ssu.ai_fitness.LoginActivity;
+import kr.ssu.ai_fitness.MainActivity;
 import kr.ssu.ai_fitness.MemberAllExrProgramListActivity;
+import kr.ssu.ai_fitness.ProfileActivity;
+import kr.ssu.ai_fitness.ProfileEditActivity;
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.RegMemberDetailActivity;
+import kr.ssu.ai_fitness.RegMemberListActivity;
+import kr.ssu.ai_fitness.SignupActivity;
 import kr.ssu.ai_fitness.TrainerListActivity;
 import kr.ssu.ai_fitness.TrainerProfileActivity;
+import kr.ssu.ai_fitness.TrainerVideoListActivity;
+import kr.ssu.ai_fitness.TrainerVideoRegActivity;
+import kr.ssu.ai_fitness.VideoPlayActivity;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
@@ -45,7 +65,7 @@ import kr.ssu.ai_fitness.vo.AllTrainer;
 import kr.ssu.ai_fitness.vo.MyProgram;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     Member user;
 
@@ -104,7 +124,6 @@ public class HomeFragment extends Fragment {
                         if (user.getTrainer() == 1) {//트레이너인 경우 TrainerExrProgramListActivity 로 화면 전환
 
                             ((HomeActivity)getActivity()).setFrag(4);
-
                         }
                         else {//트레이너 아니라면 MemberExrProgramListFragment 로 화면 전환
                             ((HomeActivity)getActivity()).setFrag(1);
@@ -122,18 +141,6 @@ public class HomeFragment extends Fragment {
             }
         };
 
-        TextView.OnClickListener onClickListener2 = new TextView.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
-                //*****intent.putExtra() 사용해서 해당 프로그램 id 같은 걸 인텐트로 넘겨줘야 할 수도 있음
-//                intent.putExtra("id", myPrograms.get().);
-//                intent.putExtra("title", myPrograms.get());
-//                intent.putExtra("name", myPrograms.get());
-
-                startActivity(intent);
-            }
-        };
 
         ImageView.OnClickListener onClickListener3 = new ImageView.OnClickListener() {
             @Override
@@ -155,21 +162,21 @@ public class HomeFragment extends Fragment {
 
         //'등록한 프로그램 or 신청한 프로그램'
         textView_myProgram1 = view.findViewById(R.id.fragment_home_myprogram1);
-        textView_myProgram1.setOnClickListener(onClickListener2);
+        textView_myProgram1.setOnClickListener(this);
         textView_myProgram2 = view.findViewById(R.id.fragment_home_myprogram2);
-        textView_myProgram2.setOnClickListener(onClickListener2);
+        textView_myProgram2.setOnClickListener(this);
         textView_myProgram3 = view.findViewById(R.id.fragment_home_myprogram3);
-        textView_myProgram3.setOnClickListener(onClickListener2);
+        textView_myProgram3.setOnClickListener(this);
 
         //'트레이너 목록'
         imageView_trainer1 = view.findViewById(R.id.fragment_home_imageview_trainer1);
-        imageView_trainer1.setOnClickListener(onClickListener3);
+        imageView_trainer1.setOnClickListener(this);
         imageView_trainer2 = view.findViewById(R.id.fragment_home_imageview_trainer2);
-        imageView_trainer2.setOnClickListener(onClickListener3);
+        imageView_trainer2.setOnClickListener(this);
         imageView_trainer3 = view.findViewById(R.id.fragment_home_imageview_trainer3);
-        imageView_trainer3.setOnClickListener(onClickListener3);
+        imageView_trainer3.setOnClickListener(this);
         imageView_trainer4 = view.findViewById(R.id.fragment_home_imageview_trainer4);
-        imageView_trainer4.setOnClickListener(onClickListener3);
+        imageView_trainer4.setOnClickListener(this);
         textView_trainer1 = view.findViewById(R.id.fragment_home_textview_trainer1);
         textView_trainer2 = view.findViewById(R.id.fragment_home_textview_trainer2);
         textView_trainer3 = view.findViewById(R.id.fragment_home_textview_trainer3);
@@ -177,20 +184,108 @@ public class HomeFragment extends Fragment {
 
         //'전체 프로그램'
         textView_program1 = view.findViewById(R.id.fragment_home_textview_program1);
-        textView_program1.setOnClickListener(onClickListener2);
+        textView_program1.setOnClickListener(this);
         textView_program2 = view.findViewById(R.id.fragment_home_textview_program2);
-        textView_program2.setOnClickListener(onClickListener2);
+        textView_program2.setOnClickListener(this);
         textView_program3 = view.findViewById(R.id.fragment_home_textview_program3);
-        textView_program3.setOnClickListener(onClickListener2);
+        textView_program3.setOnClickListener(this);
 
         if (user.getTrainer() == 1) {
             textView_title.setText("피드백 기다리는 프로그램");
         }
 
-        //*****서버로 데이터를 요청한다.
+        //서버로 데이터를 요청한다.
         requestHomeData();
 
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent();
+
+        switch (v.getId()){
+            case R.id.fragment_home_myprogram1:
+                intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
+                //*****intent.putExtra() 사용해서 해당 프로그램 id 같은 걸 인텐트로 넘겨줘야 할 수도 있음
+                intent.putExtra("id", String.valueOf(myPrograms.get(0).getId()));
+                intent.putExtra("title", myPrograms.get(0).getProgram_title());
+                intent.putExtra("name", myPrograms.get(0).getTrainer_name());
+
+                Log.d("xxxxx", "" + myPrograms.get(0).getId()+ myPrograms.get(0).getProgram_title()+myPrograms.get(0).getTrainer_name());
+                break;
+
+            case R.id.fragment_home_myprogram2:
+                intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
+                intent.putExtra("id", String.valueOf(myPrograms.get(1).getId()));
+                intent.putExtra("title", myPrograms.get(1).getProgram_title());
+                intent.putExtra("name", myPrograms.get(1).getTrainer_name());
+                break;
+
+            case R.id.fragment_home_myprogram3:
+                intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
+                intent.putExtra("id", String.valueOf(myPrograms.get(2).getId()));
+                intent.putExtra("title", myPrograms.get(2).getProgram_title());
+                intent.putExtra("name", myPrograms.get(2).getTrainer_name());
+                break;
+
+            case R.id.fragment_home_textview_program1:
+                intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
+                intent.putExtra("id", String.valueOf(allProgram.get(0).getId()));
+                intent.putExtra("title", allProgram.get(0).getTitle());
+                intent.putExtra("name", allProgram.get(0).getName());
+                break;
+
+            case R.id.fragment_home_textview_program2:
+                intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
+                intent.putExtra("id", String.valueOf(allProgram.get(1).getId()));
+                intent.putExtra("title", allProgram.get(1).getTitle());
+                intent.putExtra("name", allProgram.get(1).getName());
+                break;
+
+            case R.id.fragment_home_textview_program3:
+                intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
+                intent.putExtra("id", String.valueOf(allProgram.get(2).getId()));
+                intent.putExtra("title", allProgram.get(2).getTitle());
+                intent.putExtra("name", allProgram.get(2).getName());
+                break;
+
+            case R.id.fragment_home_imageview_trainer1:
+                intent = new Intent(getActivity(), TrainerProfileActivity.class);
+                intent.putExtra("id", allTrainer.get(0).getId());
+//                trainerID = intent.getExtras().getInt("id");
+//                trainerName = intent.getExtras().getString("trainerName");
+//                avgRating = intent.getExtras().getDouble("rating");
+//                heightValue = intent.getExtras().getDouble("height");
+//                weightValue = intent.getExtras().getDouble("weight");
+//                muscleValue = intent.getExtras().getDouble("muscle");
+//                fatValue = intent.getExtras().getDouble("fat");
+//                introValue = intent.getExtras().getString("intro");
+//                gender = intent.getExtras().getInt("gender");
+//                birthValue = intent.getExtras().getString("birth");
+//                memberNum = intent.getExtras().getInt("memberNum");
+//                imagePath = intent.getExtras().getString("imagePath");
+
+                break;
+
+            case R.id.fragment_home_imageview_trainer2:
+                intent = new Intent(getActivity(), TrainerProfileActivity.class);
+                intent.putExtra("id", allTrainer.get(1).getId());
+                break;
+
+            case R.id.fragment_home_imageview_trainer3:
+                intent = new Intent(getActivity(), TrainerProfileActivity.class);
+                intent.putExtra("id", allTrainer.get(2).getId());
+                break;
+
+            case R.id.fragment_home_imageview_trainer4:
+                intent = new Intent(getActivity(), TrainerProfileActivity.class);
+                intent.putExtra("id", allTrainer.get(3).getId());
+                break;
+
+        }
+
+        startActivity(intent);
     }
 
     public void requestHomeData () {
@@ -209,6 +304,7 @@ public class HomeFragment extends Fragment {
                             //myProgramCount개수 만큼 list에 넣어줌;
                             for (int i =0; i < myProgramCount; ++i) {
                                 myPrograms.add(new MyProgram(
+                                        obj.getJSONObject(1+i).getInt("id"),
                                         obj.getJSONObject(1 + i).getString("name"),
                                         obj.getJSONObject(1 + i).getString("title")
                                 ));
