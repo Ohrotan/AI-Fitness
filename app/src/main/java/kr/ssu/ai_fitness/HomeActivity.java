@@ -18,7 +18,7 @@ import kr.ssu.ai_fitness.fragment.ProfileFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private BottomNavigationView bottomNavigationView; // 바텀 네비게이션 뷰
+    public BottomNavigationView bottomNavigationView; // 바텀 네비게이션 뷰
     private FragmentManager fm;
     private FragmentTransaction ft;
     private HomeFragment homeFragment;
@@ -39,6 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         //*****사용자(회원, 트레이너, 관리자)마다 다르게 해줘야함
         //하단 네비게이션 선택에 따라 프레그먼트 변경해줌
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -77,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
 
     //*****프레그먼트 교환 메서드도 사용자(회원, 트레이너, 관리자)마다 다르게 만들어야 한다.
     // 프레그먼트 교체해주는 setFrag() 정의
-    private void setFrag(int n)
+    public void setFrag(int n)
     {
         fm = getSupportFragmentManager();
         ft= fm.beginTransaction();

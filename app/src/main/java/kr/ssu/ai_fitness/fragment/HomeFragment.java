@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
+import kr.ssu.ai_fitness.HomeActivity;
 import kr.ssu.ai_fitness.LoginActivity;
 import kr.ssu.ai_fitness.MemberAllExrProgramListActivity;
 import kr.ssu.ai_fitness.R;
@@ -95,11 +96,12 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.fragment_home_more1:
+                        ((HomeActivity)getActivity()).bottomNavigationView.setSelectedItemId(R.id.action_exercise);
                         if (user.getTrainer() == 1) {//트레이너인 경우 TrainerExrProgramListActivity 로 화면 전환
                             startActivity(new Intent(getActivity(), TrainerExrProgramActivity.class));
                         }
-                        else {//트레이너 아니라면 MemberExrProgramListActivity 로 화면 전환
-                            //startActivity(new Intent(getActivity(), MemberExrProgramListActivity.class));
+                        else {//트레이너 아니라면 MemberExrProgramListFragment 로 화면 전환
+                            ((HomeActivity)getActivity()).setFrag(1);
                         }
                         break;
                     case R.id.fragment_home_more2:
