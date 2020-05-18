@@ -14,7 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import kr.ssu.ai_fitness.fragment.ChattingListFragment;
 import kr.ssu.ai_fitness.fragment.HomeFragment;
 import kr.ssu.ai_fitness.fragment.MemberExrProgramListFragment;
-import kr.ssu.ai_fitness.fragment.ProfileEditFragment;
+import kr.ssu.ai_fitness.fragment.ProfileFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     private MemberExrProgramListFragment memberExrProgramListFragment; //*****일반 회원인 경우랑 트레이너인 경우 다른 프레그먼트 띄우도록 수정해야함
     private ChattingListFragment chattingListFragment;
-    private ProfileEditFragment profileEditFragment;
+    private ProfileFragment profileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         memberExrProgramListFragment = new MemberExrProgramListFragment();
         chattingListFragment = new ChattingListFragment();
-        profileEditFragment = new ProfileEditFragment();
+        profileFragment = new ProfileFragment();
 
         setFrag(0);     //첫 프레그먼트를 무엇으로 할 것인지 선택(여기서는 홈화면)
 
@@ -99,7 +99,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
 
             case 3:
-                ft.replace(R.id.main_frame, profileEditFragment);
+                ft.replace(R.id.main_frame, profileFragment);
                 ft.commit();
                 break;
 
