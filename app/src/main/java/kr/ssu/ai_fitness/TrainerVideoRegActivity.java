@@ -86,6 +86,7 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             if (requestCode == SELECT_VIDEO) {
                 System.out.println("SELECT_VIDEO");
                 selectedVideoImageUri = data.getData();
+
                 selectedPath = selectedVideoImageUri.getPath();
 
                 //썸네일

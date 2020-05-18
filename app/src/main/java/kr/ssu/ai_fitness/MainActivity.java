@@ -22,41 +22,41 @@ db - exr_program 테이블에 title 추가해야됨
 public class MainActivity extends AppCompatActivity {
     //승혁
 
-    Button	 btn2;
-    Button	 btn3;
-    Button	 btn4;
-    Button	 btn5;
-    Button	 btn6;
-    Button	 btn7;
+    Button btn2;
+    Button btn3;
+    Button btn4;
+    Button btn5;
+    Button btn6;
+    Button btn7;
 
     //제호
-    Button	 btn8;
-    Button	 btn9;
-    Button	 btn10;
-    Button	 btn11;
-    Button	 btn12;
-    Button	 btn13;
-    Button	 btn14;
-    Button	 btn15;
+    Button btn8;
+    Button btn9;
+    Button btn10;
+    Button btn11;
+    Button btn12;
+    Button btn13;
+    Button btn14;
+    Button btn15;
 
     //관욱
-    Button	 btn16;
-    Button	 btn17;
-    Button	 btn18;
-    Button	 btn19;
-    Button	 btn20;
-    Button	 btn21;
-    Button	 btn22;
-    Button	 btn23;
+    Button btn16;
+    Button btn17;
+    Button btn18;
+    Button btn19;
+    Button btn20;
+    Button btn21;
+    Button btn22;
+    Button btn23;
 
     //란 화면
-    Button	 btn24;
-    Button	 btn25;
-    Button	 btn26;
-    Button	 btn27;
-    Button	 btn28;
-    Button	 btn29;
-
+    Button btn24;
+    Button btn25;
+    Button btn26;
+    Button btn27;
+    Button btn28;
+    Button btn29;
+    Button btn30;
 
 
     @Override
@@ -65,43 +65,44 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        btn2 = 	findViewById(R.id.button2);
-        btn3 =	findViewById(R.id.button3);
-        btn4 =	findViewById(R.id.button4);
-        btn5 =	findViewById(R.id.button5);
-        btn6 =	findViewById(R.id.button6);
-        btn7 =	findViewById(R.id.button7);
+        btn2 = findViewById(R.id.button2);
+        btn3 = findViewById(R.id.button3);
+        btn4 = findViewById(R.id.button4);
+        btn5 = findViewById(R.id.button5);
+        btn6 = findViewById(R.id.button6);
+        btn7 = findViewById(R.id.button7);
 
-        btn8 =	findViewById(R.id.button8);
-        btn9 =	findViewById(R.id.button9);
-        btn10 =	findViewById(R.id.button10);
-        btn11 =	findViewById(R.id.button11);
-        btn12 =	findViewById(R.id.button12);
-        btn13 =	findViewById(R.id.button13);
-        btn14 =	findViewById(R.id.button14);
-        btn15 =	findViewById(R.id.button15);
+        btn8 = findViewById(R.id.button8);
+        btn9 = findViewById(R.id.button9);
+        btn10 = findViewById(R.id.button10);
+        btn11 = findViewById(R.id.button11);
+        btn12 = findViewById(R.id.button12);
+        btn13 = findViewById(R.id.button13);
+        btn14 = findViewById(R.id.button14);
+        btn15 = findViewById(R.id.button15);
 
-        btn16 =	findViewById(R.id.button16);
-        btn17 =	findViewById(R.id.button17);
-        btn18 =	findViewById(R.id.button18);
-        btn19 =	findViewById(R.id.button19);
-        btn20 =	findViewById(R.id.button20);
-        btn21 =	findViewById(R.id.button21);
-        btn22 =	findViewById(R.id.button22);
-        btn23 =	findViewById(R.id.button23);
+        btn16 = findViewById(R.id.button16);
+        btn17 = findViewById(R.id.button17);
+        btn18 = findViewById(R.id.button18);
+        btn19 = findViewById(R.id.button19);
+        btn20 = findViewById(R.id.button20);
+        btn21 = findViewById(R.id.button21);
+        btn22 = findViewById(R.id.button22);
+        btn23 = findViewById(R.id.button23);
 
-        btn24 =	findViewById(R.id.button24);
-        btn25 =	findViewById(R.id.button25);
-        btn26 =	findViewById(R.id.button26);
-        btn27 =	findViewById(R.id.button27);
-        btn28 =	findViewById(R.id.button28);
-        btn29 =	findViewById(R.id.button29);
-
+        btn24 = findViewById(R.id.button24);
+        btn25 = findViewById(R.id.button25);
+        btn26 = findViewById(R.id.button26);
+        btn27 = findViewById(R.id.button27);
+        btn28 = findViewById(R.id.button28);
+        btn29 = findViewById(R.id.button29);
+        btn30 = findViewById(R.id.button30);
 
     }
+
     public void onClick(View v) {
         Intent intent = new Intent();
-         if (v == btn2) {
+        if (v == btn2) {
             intent = new Intent(getApplicationContext(), MemberExrProgramListActivity.class);
         } else if (v == btn3) {
             intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class);
@@ -162,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, TrainerVideoListActivity.class);
         } else if (v == btn29) {
             intent = new Intent(this, AdminVideoManageActivity.class);
+        } else if (v == btn30) {
+            intent = new Intent(this, VideoPlayActivity.class);
         }
         startActivity(intent);
     }

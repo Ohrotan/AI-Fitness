@@ -2,16 +2,14 @@ package kr.ssu.ai_fitness.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -98,6 +96,7 @@ public class HomeFragment extends Fragment {
                 switch (view.getId()) {
                     case R.id.fragment_home_more1:
                         if (user.getTrainer() == 1) {//트레이너인 경우 TrainerExrProgramListActivity 로 화면 전환
+
                             startActivity(new Intent(getActivity(), TrainerExrProgramActivity.class));
                         }
                         else {//트레이너 아니라면 MemberExrProgramListActivity 로 화면 전환

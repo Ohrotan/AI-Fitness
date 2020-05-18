@@ -103,10 +103,6 @@ public class TrainerVideoListActivity extends AppCompatActivity {
             }
         };
 
-        //아래 큐에 add 할 때 Volley라고 하는 게 내부에서 캐싱을 해준다, 즉, 한번 보내고 받은 응답결과가 있으면
-        //그 다음에 보냈을 떄 이전 게 있으면 그냥 이전거를 보여줄수도  있다.
-        //따라서 이렇게 하지말고 매번 받은 결과를 그대로 보여주기 위해 다음과같이 setShouldCache를 false로한다.
-        //결과적으로 이전 결과가 있어도 새로 요청한 응답을 보여줌
         stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }

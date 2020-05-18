@@ -24,17 +24,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.adapter.AfterDayExrProgramAdapter;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
-import kr.ssu.ai_fitness.util.FileDownloadTask;
 import kr.ssu.ai_fitness.vo.MemberExrVideoModel;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 

@@ -1,6 +1,7 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.VideoPlayActivity;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
 import kr.ssu.ai_fitness.util.ImageViewTask;
 
@@ -57,10 +59,24 @@ public class TrainerVideoAdapter extends BaseAdapter {
         }
 
         item = items.get(position);
-        holder.title.setText(item.getTitle());
 
         ImageViewTask task = new ImageViewTask(holder.img);
         task.execute(item.getThumb_img());
+
+        holder.img.setTag(item);
+        holder.title.setText(item.getTitle());
+
+        holder.img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                TrainerVideo dto = (TrainerVideo) v.getTag();
+                Intent intent = new Intent(context, VideoPlayActivity.class);
+                intent.putExtra("path", dto.getVideo());
+                context.startActivity(intent);
+            }
+        });
+
 
         return convertView;
     }
