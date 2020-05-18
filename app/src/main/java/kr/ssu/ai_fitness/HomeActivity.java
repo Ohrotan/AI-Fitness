@@ -1,13 +1,13 @@
 package kr.ssu.ai_fitness;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -45,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //*****사용자(회원, 트레이너, 관리자)마다 다르게 해줘야함
         //하단 네비게이션 선택에 따라 프레그먼트 변경해줌
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -88,6 +89,7 @@ public class HomeActivity extends AppCompatActivity {
         setFrag(0);     //첫 프레그먼트를 무엇으로 할 것인지 선택(여기서는 홈화면)
 
     }
+
 
     //*****프레그먼트 교환 메서드도 사용자(회원, 트레이너, 관리자)마다 다르게 만들어야 한다.
     // 프레그먼트 교체해주는 setFrag() 정의
