@@ -1,11 +1,14 @@
 package kr.ssu.ai_fitness;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
@@ -42,11 +45,23 @@ public class TrainerVideoListActivity extends AppCompatActivity {
 
         tr_video_reg_btn = findViewById(R.id.tr_video_reg_btn);
         tr_video_list_view = findViewById(R.id.tr_video_list_view);
+        tr_video_reg_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TrainerVideoListActivity.this, TrainerVideoRegActivity.class);
+                startActivityForResult(intent, 100);
+            }
+        });
+
+        getData();
 
 
-         getData();
+    }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        getData();
     }
 
     private void getData() {
