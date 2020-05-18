@@ -85,7 +85,7 @@ public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetail
     @Override
     public void onBindViewHolder(RegMemberDetailAdapter.ViewHolder holder, int position) {
         String text = mData.get(position).getTitle() ;
-        holder.regMemberDetailItem.setText(text) ;
+        holder.regMemberDetailItem.setText(String.valueOf(position + 1) + ". " + text) ;
 
         Log.d("Program Title", "title = " + mData.get(position).getTitle());
         //holder.regMemberListNextIcon.getAccessibilityClassName();

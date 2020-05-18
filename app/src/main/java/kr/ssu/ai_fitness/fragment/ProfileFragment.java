@@ -247,7 +247,7 @@ public class ProfileFragment extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPause();
+                getActivity().finish();
                 startActivity(new Intent(getActivity(), ProfileEditActivity.class));
             }
         });

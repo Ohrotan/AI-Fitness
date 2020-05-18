@@ -457,7 +457,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
-                Log.d("INFO_PROFILE_EDIT_MAP", "name = " + name + " height = " + height + " weight = " + weight + " muscle = " + muscle + " fat = " + fat + " intro = " + intro + " isTrainer = " + trainer + " imagePath = " + imagePath);
+                Log.d("INFO_PROFILE_EDIT_MAP", "id = " + id + " height = " + height + " weight = " + weight + " muscle = " + muscle + " fat = " + fat + " intro = " + intro + " isTrainer = " + trainer + " imagePath = " + imagePath);
                 Map<String, String> params = new HashMap<>();
                 params.put("id", Integer.toString(id));
                 params.put("height", height);
