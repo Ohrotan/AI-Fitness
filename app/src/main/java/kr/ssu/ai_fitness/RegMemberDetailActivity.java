@@ -106,7 +106,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
         handler0.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d("REG_MEM_DETAIL", "After getData()");
+                /*Log.d("REG_MEM_DETAIL", "After getData()");
 
                 //이름설정
                 name.setText(mName);
@@ -165,8 +165,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                     regPeriod.setText(mStDate + " ~ " + mEdDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
-                }
-
+                }*/
             }
         }, 300);
 
@@ -204,6 +203,67 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                                 adapter.addItem(dayTitle);
                             }
                             rView.setAdapter(adapter);
+
+                            Log.d("REG_MEM_DETAIL", "After getData()");
+
+                            //이름설정
+                            name.setText(mName);
+
+                            //성별 설정
+                            if(gender == 1){
+                                mGender = "남";
+                            }
+                            else {
+                                mGender = "여";
+                            }
+
+                            String birthDate = birthValue;
+                            long now = System.currentTimeMillis();
+                            Date mDate = new Date(now);
+                            try{ // String Type을 Date Type으로 캐스팅하면서 생기는 예외로 인해 여기서 예외처리 해주지 않으면 컴파일러에서 에러가 발생해서 컴파일을 할 수 없다.
+                                SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+                                String nowDate = format.format(mDate);
+                                // date1, date2 두 날짜를 parse()를 통해 Date형으로 변환.
+                                Date FirstDate = format.parse(nowDate);
+                                Date SecondDate = format.parse(birthDate);
+
+                                // Date로 변환된 두 날짜를 계산한 뒤 그 리턴값으로 long type 변수를 초기화 하고 있다.
+                                // 연산결과 -950400000. long type 으로 return 된다.
+                                long calDate = FirstDate.getTime() - SecondDate.getTime();
+
+                                // Date.getTime() 은 해당날짜를 기준으로1970년 00:00:00 부터 몇 초가 흘렀는지를 반환해준다.
+                                // 이제 24*60*60*1000(각 시간값에 따른 차이점) 을 나눠주면 일수가 나온다.
+                                long calDateDays = calDate / ( 24*60*60*1000);
+
+                                calDateDays = Math.abs(calDateDays);
+                                age = (int) (calDateDays / 365);
+                            }
+                            catch(ParseException e) {
+                                e.printStackTrace();
+                                // 예외 처리
+                            }
+                            //성별 + 나이 설정
+                            genderAge.setText("(" + mGender + ", " + age + "세)");
+
+                            //신장, 체중, 근육량, 체지방량 설정
+                            height.setText(mHeight + "cm");
+                            weight.setText(mWeight + "kg");
+                            muscle.setText(mMuscle + "%");
+                            fat.setText(mFat + "%");
+                            intro.setText(mIntro);
+
+                            try {
+                                SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-mm-dd");
+                                Date sDate = mFormat.parse(endDate);
+                                Date fDate = mFormat.parse(startDate);
+
+                                String mStDate = mFormat.format(fDate);
+                                String mEdDate = mFormat.format(sDate);
+
+                                regPeriod.setText(mStDate + " ~ " + mEdDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
