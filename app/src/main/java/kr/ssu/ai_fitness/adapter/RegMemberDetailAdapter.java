@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,6 +86,8 @@ public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetail
     public void onBindViewHolder(RegMemberDetailAdapter.ViewHolder holder, int position) {
         String text = mData.get(position).getTitle() ;
         holder.regMemberDetailItem.setText(text) ;
+
+        Log.d("Program Title", "title = " + mData.get(position).getTitle());
         //holder.regMemberListNextIcon.getAccessibilityClassName();
     }
 
