@@ -1,6 +1,8 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.dto.DayProgramVideo;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 
 public class DayVideoRegAdapter extends BaseAdapter {
 
@@ -79,6 +82,11 @@ public class DayVideoRegAdapter extends BaseAdapter {
         holder.tr_video_sets_etv.setTag(item);
         holder.tr_video_counts_etv.setTag(item);
         holder.day_video_delete_btn.setTag(item);
+
+        String path = SharedPrefManager.getInstance(context).getTrVideoThumbPath(item.getVideo_id() + "");
+
+        Bitmap bmp = BitmapFactory.decodeFile(context.getFilesDir() + "/" + path);
+        holder.img.setImageBitmap(bmp);
 
 /*
         convertView.setOnFocusChangeListener(new View.OnFocusChangeListener() {

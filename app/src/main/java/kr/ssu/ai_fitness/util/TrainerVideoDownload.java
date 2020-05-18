@@ -38,17 +38,16 @@ public class TrainerVideoDownload {
     // String storagePath;
     // String fileName;
 
-    TrainerVideoDownload() {
+    public TrainerVideoDownload() {
 
     }
 
-    TrainerVideoDownload(Context con) {
+    public TrainerVideoDownload(Context con) {
         this.context = con;
-
-
     }
 
-    public void downloadTrainerVideos(final String trainer_id) {
+    public void downloadTrainerVideos(final int trainer_id) {
+        Log.v("tr_preload","tr_id:"+trainer_id);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_VIDEO,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
@@ -75,6 +74,7 @@ public class TrainerVideoDownload {
                             }
 
                             for (TrainerVideo dto : videoLists) {
+
                                 downloadOneFile(dto.getVideo());
                                 downloadOneFile(dto.getThumb_img());
                             }
@@ -96,7 +96,7 @@ public class TrainerVideoDownload {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
                 //params.put("id", "1");
-                params.put("trainer_id", trainer_id);
+                params.put("trainer_id", trainer_id + "");
                 return params;
             }
         };
@@ -106,9 +106,10 @@ public class TrainerVideoDownload {
     }
 
     public void downloadOneFile(String storagePath) {
+        Log.v("tr_preload","tr_video downloading:"+storagePath);
         String[] tempName = storagePath.split("/");
         final String fileName = tempName[tempName.length - 1];
-        if (new File("").exists()) {
+        if (new File(context.getFilesDir() + "/" + fileName).exists()) {
             return;
         }
         FileDownloadService downloadService = ServiceGenerator.create(FileDownloadService.class);
@@ -136,7 +137,7 @@ public class TrainerVideoDownload {
         });
     }
 
-    private boolean writeResponseBodyToDisk(ResponseBody body, String filename) {
+    public boolean writeResponseBodyToDisk(ResponseBody body, String filename) {
         try {
 
             File futureStudioIconFile = new File(context.getFilesDir() + "/" + filename);
@@ -165,7 +166,7 @@ public class TrainerVideoDownload {
 
                     fileSizeDownloaded += read;
 
-                    Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
+                  //  Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
                 }
 
                 outputStream.flush();
