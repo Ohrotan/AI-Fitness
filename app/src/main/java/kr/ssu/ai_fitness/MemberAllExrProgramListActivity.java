@@ -57,7 +57,7 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200518t152122-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200518t161719-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -69,9 +69,12 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
 
                             for (int i = 0; i < peoples.length(); i++) {
                                 JSONObject c = peoples.getJSONObject(i);
-                                String id = c.getString(TAG_ID);
-                                String name = c.getString(TAG_NAME);
-                                String title = c.getString(TAG_TITLE);
+                                String id = "";
+                                id = c.getString(TAG_ID);
+                                String name = "";
+                                name = c.getString(TAG_NAME);
+                                String title = "";
+                                title = c.getString(TAG_TITLE);
                                 int level = c.getInt(TAG_LEVEL);
                                 int mem_cnt = c.getInt(TAG_MEMCNT);
                                 int rating = c.getInt(TAG_RATING);
