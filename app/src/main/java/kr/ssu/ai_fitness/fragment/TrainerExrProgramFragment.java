@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.TrainerVideoListActivity;
 import kr.ssu.ai_fitness.dto.Member_reg_program;
 import kr.ssu.ai_fitness.view.Trainer_reg_programView;
 
@@ -20,6 +23,7 @@ public class TrainerExrProgramFragment extends Fragment {
 
     private ListView mListview;
 
+    Button buttonMotion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,6 +32,7 @@ public class TrainerExrProgramFragment extends Fragment {
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_trainer_exr_program, container, false);
 
         ListView listView = (ListView)view.findViewById(R.id.fragment_trainer_exr_program_listview);
+        buttonMotion = view.findViewById(R.id.fragment_trainer_exr_program_button_motion);
 
         TrainerExrProgramFragment.ListAdapter adapter = new TrainerExrProgramFragment.ListAdapter();
         //adapter에 data값
@@ -40,6 +45,16 @@ public class TrainerExrProgramFragment extends Fragment {
         listView.setAdapter(adapter);
         //이렇게해서 listView껍데기가 어뎁터에게 몇 개의 데이터가 있고 어떤 뷰를 집어넣어야하는지
         //물어보면 어뎁터가 아래의 코드를 통해 만들어놓은 정보를 종합하여 전달함
+
+        buttonMotion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //*****트레이너의 동작 동영상 목록 화면으로 넘어가는데, 인텐트로 넘겨줄 값이 있을 수도 있음
+                Intent intent = new Intent(getActivity(), TrainerVideoListActivity.class);
+
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

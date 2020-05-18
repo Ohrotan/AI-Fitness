@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment {
                     case R.id.fragment_home_more1:
                         ((HomeActivity)getActivity()).bottomNavigationView.setSelectedItemId(R.id.action_exercise);
                         if (user.getTrainer() == 1) {//트레이너인 경우 TrainerExrProgramListActivity 로 화면 전환
-                            //startActivity(new Intent(getActivity(), TrainerExrProgramActivity.class));
+                            ((HomeActivity)getActivity()).setFrag(4);
                         }
                         else {//트레이너 아니라면 MemberExrProgramListFragment 로 화면 전환
                             ((HomeActivity)getActivity()).setFrag(1);
