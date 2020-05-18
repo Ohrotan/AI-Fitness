@@ -12,18 +12,29 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.util.VideoUpload;
+import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class TrainerVideoRegActivity extends AppCompatActivity {
 
@@ -37,6 +48,7 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
     Uri selectedVideoImageUri;
     InputStream thumbImgInputStream;
 
+    TrainerVideo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,19 +112,18 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false);
         }
 
-        int byteSize = bitmap.getRowBytes() * bitmap.getHeight();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(byteSize);
-        bitmap.copyPixelsToBuffer(byteBuffer);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] jpgdata = bos.toByteArray();
 
-        byte[] byteArray = byteBuffer.array();
-
-        return new ByteArrayInputStream(byteArray);
+        return new ByteArrayInputStream(jpgdata);
     }
 
     public InputStream getVideoInputStream(Uri uri) {
         InputStream is = null;
         try {
             is = getContentResolver().openInputStream(uri);
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,6 +132,8 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
     }
 
     private void uploadVideo(Uri selectedVideoImageUri) {
+
+
         class UploadVideoTask extends AsyncTask<Uri, Void, String> {
 
             ProgressDialog uploading;
@@ -143,6 +156,7 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 uploading.dismiss();
+                setTitleKorean();
                 //  Toast.makeText(TrainerVideoRegActivity.this,"complete",Toast.LENGTH_SHORT).show();
             }
 
@@ -154,15 +168,52 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
                 return msg;
             }
         }
+
+
         //예시 데이터
         SharedPrefManager.getInstance(getApplicationContext()).userLogin(new Member(99));
         int userId = SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();
 
 
-        TrainerVideo info = new TrainerVideo(userId, UUID.randomUUID() + ".bmp", UUID.randomUUID() + ".mp4", video_title_etv.getText().toString());
+        info = new TrainerVideo(userId, UUID.randomUUID() + ".jpg", UUID.randomUUID() + ".mp4", video_title_etv.getText().toString());
         Log.i("Huzza", "Member : " + info.toString());
         UploadVideoTask uv = new UploadVideoTask(info, thumbImgInputStream);
         uv.execute(selectedVideoImageUri);
+
+
+    }
+
+    void setTitleKorean() {
+        Log.v("video title", "video title update");
+        Log.v("video title", info.getTitle());
+        Log.v("video title", info.getVideo());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_UPDATE_VIDEO_TITLE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //서버에서 요청을 받았을 때 수행되는 부분
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                Map<String, String> params = new HashMap<>();
+                params.put("video", "ai-fitness/tr_video/"+info.getVideo());
+                params.put("title", info.getTitle());
+
+                return params;
+            }
+        };
+        stringRequest.setShouldCache(false);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
 

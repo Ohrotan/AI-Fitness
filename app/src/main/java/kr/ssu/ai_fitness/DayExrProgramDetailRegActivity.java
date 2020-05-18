@@ -69,12 +69,12 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
         day_exr_save_btn = findViewById(R.id.day_exr_save_btn);
 
         Intent intent = getIntent();
-        if("edit".equals(intent.getStringExtra("mode"))){
+        if ("edit".equals(intent.getStringExtra("mode"))) {
 
         }
         dayProgram = intent.getParcelableExtra("dayProgram");
 
-        dayProgram = new DayProgram(0, "테스트", 1, "설명~");
+         dayProgram = new DayProgram(0, "테스트", 1, "설명~");
 
         String exr_title = intent.getStringExtra("exr_title");
 
@@ -94,20 +94,6 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
             }
         });
 
-/*
-        trainerVideoDtoList.add(new DayProgramVideo("팔굽혀펴기"));
-        trainerVideoDtoList.add(new DayProgramVideo("스쿼트"));
-        trainerVideoDtoList.add(new DayProgramVideo("런지"));
-        trainerVideoDtoList.add(new DayProgramVideo("윗몸일으키기"));
-        trainerVideoDtoList.add(new DayProgramVideo("팔굽혀펴기"));
-        trainerVideoDtoList.add(new DayProgramVideo("스쿼트"));
-        trainerVideoDtoList.add(new DayProgramVideo("런지"));
-        trainerVideoDtoList.add(new DayProgramVideo("윗몸일으키기"));
-        trainerVideoDtoList.add(new DayProgramVideo("팔굽혀펴기"));
-        trainerVideoDtoList.add(new DayProgramVideo("스쿼트"));
-        trainerVideoDtoList.add(new DayProgramVideo("런지"));
-        trainerVideoDtoList.add(new DayProgramVideo("윗몸일으키기"));
-*/
         tr_video_add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +134,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
     }
 
     void saveDayExrVideo(final int day_id, final DayProgramVideo video) {
+        Log.v("save_motion_fun_start", video.toString());
         //서버에서 받아오는 부분
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DAY_VIDEO_CREATE,
                 new Response.Listener<String>() {
@@ -159,13 +146,6 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
                             //response를 json object로 변환함.
                             JSONObject obj = new JSONObject(response);
 
-/*
-                            Intent intent = new Intent(ExrProgramRegActivity.this, DayExrProgramRegActivity.class);
-                            intent.putExtra("exr_id", obj.getInt("id"));//DB에 저장된 아이디 받아옴
-                            intent.putExtra("period", exr.getPeriod());
-                            intent.putExtra("title", exr.getTitle());
-                            startActivity(intent);
-*/
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -181,6 +161,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
+                Log.v("save_motion", video.toString());
                 Map<String, String> params = new HashMap<>();
                 params.put("video_id", video.getVideo_id() + "");
                 params.put("day_id", day_id + "");
@@ -192,25 +173,24 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
             }
         };
 
-        //아래 큐에 add 할 때 Volley라고 하는 게 내부에서 캐싱을 해준다, 즉, 한번 보내고 받은 응답결과가 있으면
-        //그 다음에 보냈을 떄 이전 게 있으면 그냥 이전거를 보여줄수도  있다.
-        //따라서 이렇게 하지말고 매번 받은 결과를 그대로 보여주기 위해 다음과같이 setShouldCache를 false로한다.
-        //결과적으로 이전 결과가 있어도 새로 요청한 응답을 보여줌
         stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     void saveDayExrProgram() {
+        getCurrentFocus().clearFocus();
         //서버에서 받아오는 부분
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DAY_EXR_CREATE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         //서버에서 응답을 받았을 때 수행되는 부분
-
+                        Log.v("save day_id", response);
                         try {
                             //response를 json object로 변환함.
                             JSONObject obj = new JSONObject(response);
+
+                            Log.v("save day_id", obj.toString());
                             day_id = obj.getInt("id");
                             for (DayProgramVideo video : ((DayVideoRegAdapter) day_video_list.getAdapter()).getList()) {
                                 saveDayExrVideo(day_id, video);
@@ -223,17 +203,21 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Log.v("save day_id", error.toString());
                         Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버에 요청할때 보내는 파라미터를 담는 부분
+                Log.v("save", dayProgram.toString());
                 Map<String, String> params = new HashMap<>();
                 params.put("exr_id", dayProgram.getExr_id() + "");
                 params.put("title", dayProgram.getTitle());
                 params.put("seq", dayProgram.getSeq() + "");
-                params.put("intro", dayProgram.getIntro());
+                if (dayProgram.getIntro() != null)
+                    params.put("intro", dayProgram.getIntro());
 
                 return params;
             }
@@ -256,8 +240,8 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
                             JSONObject obj;
                             for (int i = 0; i < arr.length(); i++) {
                                 obj = arr.getJSONObject(i);
-                                TrainerVideo a= new TrainerVideo(obj);
-                                Log.v("tr_video_from db",a.toString());
+                                TrainerVideo a = new TrainerVideo(obj);
+                                Log.v("tr_video_from db", a.toString());
                                 trainerVideoDtoList.add(new DayProgramVideo(a));
                             }
                             trVideoListDownloaded = true;

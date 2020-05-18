@@ -102,13 +102,11 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View v) {
         Intent intent = new Intent();
          if (v == btn2) {
-            intent = new Intent(getApplicationContext(), MemberExrProgramListActivity.class);
         } else if (v == btn3) {
             intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class);
         } else if (v == btn4) {
             intent = new Intent(getApplicationContext(), MemberAllExrProgramListActivity.class);
         } else if (v == btn5) {
-            intent = new Intent(getApplicationContext(), TrainerExrProgramActivity.class);
         } else if (v == btn6) {
             intent = new Intent(getApplicationContext(), AdminProgramManageActivity.class);
         } else if (v == btn7) {

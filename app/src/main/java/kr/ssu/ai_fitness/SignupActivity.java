@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -55,6 +56,7 @@ import kr.ssu.ai_fitness.volley.VolleySingleton;
 public class SignupActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 2;
+
 
     EditText editTextEmail;           //이메일
     EditText editTextPwd;        //비밀번호
@@ -103,6 +105,7 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
+
         editTextEmail = (EditText)findViewById(R.id.activity_signup_edittext_email);
         editTextPwd = (EditText)findViewById(R.id.activity_signup_edittext_password);
         editTextPwdCheck = (EditText)findViewById(R.id.activity_signup_edittext_check);
@@ -122,6 +125,9 @@ public class SignupActivity extends AppCompatActivity {
         editTextIntro = (EditText)findViewById(R.id.activity_signup_edittext_intro);
 
         buttonComplete = (Button)findViewById(R.id.activity_signup_button_complete);
+
+
+        //툴바 세팅
 
 
         //생일 textveiw 클릭

@@ -13,13 +13,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import kr.ssu.ai_fitness.dto.TrainerVideo;
+import kr.ssu.ai_fitness.url.URLs;
 
 /**
  * Created by Belal on 11/22/2015.
  */
 public class VideoUpload {
-
-    public static final String UPLOAD_URL = "https://ai-fitness-369.an.r.appspot.com/video/tr_video_create";
 
     private int serverResponseCode;
 
@@ -38,7 +37,7 @@ public class VideoUpload {
         //Log.i("Huzza", "Member2 : " + info.toString());
 
         try {
-            URL url = new URL(UPLOAD_URL);
+            URL url = new URL(URLs.URL_CREATE_VIDEO);
             conn = (HttpURLConnection) url.openConnection();
 
             conn.setDoInput(true);
@@ -100,13 +99,6 @@ public class VideoUpload {
                 bytesRead = imgIs.read(buffer, 0, bufferSize);
             }
 
-            dos.writeBytes(lineEnd);
-
-            dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"title\"  " + twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Type: text/plain" + lineEnd);
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(info.getTitle());
             dos.writeBytes(lineEnd);
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);

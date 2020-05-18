@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.MemberExrProgramListFragment">
+    android:orientation="vertical"
+    tools:context=".MemberExrProgramListActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment_member_exr_program_list_listview"
+        android:layout_weight="5"
+        />
 
-</FrameLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="60dp"/>
+
+</LinearLayout>

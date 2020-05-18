@@ -179,7 +179,9 @@ public class RegMemberDetailActivity extends AppCompatActivity {
             }
         }, 300);*/
 
+
         //
+
     }
 
     private void getDayTitle(final RecyclerView rView, final RegMemberDetailAdapter adapter){
