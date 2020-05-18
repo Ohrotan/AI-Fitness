@@ -71,7 +71,7 @@ public class RegMemberListActivity  extends AppCompatActivity {
         recyclerViewRegMember.setLayoutManager(new LinearLayoutManager(this));
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        final RegMemberListAdapter adapterMember = new RegMemberListAdapter(getApplication());
+        final RegMemberListAdapter adapterMember = new RegMemberListAdapter(this);
 
         //queue = Volley.newRequestQueue(this);
 
