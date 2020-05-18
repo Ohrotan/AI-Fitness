@@ -124,7 +124,9 @@ public class ChattingActivity extends AppCompatActivity {
 
         finish();
         //*****채팅방에서 뒤로가기 눌렀을 때 홈화면으로 돌아가는 문제 해결해야함.
-        startActivity(new Intent(ChattingActivity.this, HomeActivity.class));
+        Intent intent = new Intent(ChattingActivity.this, HomeActivity.class);
+        intent.putExtra("isChattingBack", 1);
+        startActivity(intent);
     }
 
     void checkChatRoom(final ChatModel.Comment comment) {
