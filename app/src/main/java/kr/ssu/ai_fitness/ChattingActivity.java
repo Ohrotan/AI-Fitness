@@ -123,7 +123,8 @@ public class ChattingActivity extends AppCompatActivity {
         //super.onBackPressed();
 
         finish();
-        startActivity(new Intent(ChattingActivity.this, ChattingListActivity.class));
+        //*****채팅방에서 뒤로가기 눌렀을 때 홈화면으로 돌아가는 문제 해결해야함.
+        startActivity(new Intent(ChattingActivity.this, HomeActivity.class));
     }
 
     void checkChatRoom(final ChatModel.Comment comment) {
