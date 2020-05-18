@@ -16,13 +16,15 @@ import java.util.ArrayList;
 import kr.ssu.ai_fitness.AfterDayExrProgramActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.RegMemberDetailActivity;
+import kr.ssu.ai_fitness.vo.DayProgram;
 
 public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetailAdapter.ViewHolder> {
 
-    private ArrayList<String> mData = new ArrayList<String>() ;
+    //private ArrayList<String> mData = new ArrayList<String>() ;
+    private ArrayList<DayProgram> mData = new ArrayList<>();
     private Context mContext;
 
-    public void addItem(String item) {
+    public void addItem(DayProgram item) {
         mData.add(item);
     }
 
@@ -43,7 +45,6 @@ public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetail
             regMemberDetailItem = itemView.findViewById(R.id.regMemberDetailTextItem);
 
             itemView.setOnClickListener(new View.OnClickListener(){
-
                 @Override
                 public void onClick(View V){
                     int pos = getAdapterPosition();
@@ -52,7 +53,7 @@ public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetail
                         //Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(mContext, AfterDayExrProgramActivity.class);
 
-                        //intent.putExtra("id", mData.get(pos).getId());
+                        intent.putExtra("day_id", mData.get(pos).getId());
                         //intent.putExtra("title", mData.get(pos).getTitle());
                         //intent.putExtra("exrId", mData.get(pos).getExrId());
 
@@ -82,7 +83,7 @@ public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetail
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(RegMemberDetailAdapter.ViewHolder holder, int position) {
-        String text = mData.get(position) ;
+        String text = mData.get(position).getTitle() ;
         holder.regMemberDetailItem.setText(text) ;
         //holder.regMemberListNextIcon.getAccessibilityClassName();
     }

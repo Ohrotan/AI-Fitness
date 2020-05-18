@@ -35,6 +35,7 @@ import java.util.Map;
 import kr.ssu.ai_fitness.adapter.RegMemberDetailAdapter;
 import kr.ssu.ai_fitness.adapter.RegMemberListAdapter;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.vo.DayProgram;
 import kr.ssu.ai_fitness.vo.TrainerProgram;
 
 public class RegMemberDetailActivity extends AppCompatActivity {
@@ -190,6 +191,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                             Log.d("GET_DAY_TITLE_RESPONSE", response);
 
                             JSONArray jArray = new JSONArray(response);
+                            DayProgram dayProgram;
                             totalProgramNum = jArray.length();
                             progress.setText(curProgramNum + " / " + totalProgramNum);
                             //ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
@@ -197,10 +199,12 @@ public class RegMemberDetailActivity extends AppCompatActivity {
 
                             for(int i = 0; i < jArray.length(); i++) {
                                 JSONObject jObject = jArray.getJSONObject(i);
+                                int dayId = jObject.getInt("id");
                                 String dayTitle = jObject.getString("title");
-                                Log.d("GET_DAY_TITLE_JSON", "title = " + dayTitle);
+                                Log.d("GET_DAY_TITLE_JSON", "id = " + dayId + " title = " + dayTitle);
                                 //mName = jObject.getString("name");
-                                adapter.addItem(dayTitle);
+                                dayProgram = new DayProgram(dayId, dayTitle);
+                                adapter.addItem(dayProgram);
                             }
                             rView.setAdapter(adapter);
 
