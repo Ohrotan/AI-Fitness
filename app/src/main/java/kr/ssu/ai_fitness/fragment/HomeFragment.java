@@ -253,34 +253,66 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.fragment_home_imageview_trainer1:
                 intent = new Intent(getActivity(), TrainerProfileActivity.class);
                 intent.putExtra("id", allTrainer.get(0).getId());
-//                trainerID = intent.getExtras().getInt("id");
-//                trainerName = intent.getExtras().getString("trainerName");
-//                avgRating = intent.getExtras().getDouble("rating");
-//                heightValue = intent.getExtras().getDouble("height");
-//                weightValue = intent.getExtras().getDouble("weight");
-//                muscleValue = intent.getExtras().getDouble("muscle");
-//                fatValue = intent.getExtras().getDouble("fat");
-//                introValue = intent.getExtras().getString("intro");
-//                gender = intent.getExtras().getInt("gender");
-//                birthValue = intent.getExtras().getString("birth");
-//                memberNum = intent.getExtras().getInt("memberNum");
-//                imagePath = intent.getExtras().getString("imagePath");
+                intent.putExtra("trainerName", allTrainer.get(0).getName());
+                intent.putExtra("rating", allTrainer.get(0).getRating());
+                intent.putExtra("height", allTrainer.get(0).getHeightValue());
+                intent.putExtra("weight", allTrainer.get(0).getWeightValue());
+                intent.putExtra("muscle", allTrainer.get(0).getMuscleValue());
+                intent.putExtra("fat", allTrainer.get(0).getFatValue());
+                intent.putExtra("intro", allTrainer.get(0).getIntroValue());
+                intent.putExtra("gender", allTrainer.get(0).getGender());
+                intent.putExtra("birth", allTrainer.get(0).getBirthValue());
+                intent.putExtra("memberNum", allTrainer.get(0).getRegMemberNum());
+                intent.putExtra("imagePath", allTrainer.get(0).getImage());
 
                 break;
 
             case R.id.fragment_home_imageview_trainer2:
                 intent = new Intent(getActivity(), TrainerProfileActivity.class);
                 intent.putExtra("id", allTrainer.get(1).getId());
+                intent.putExtra("trainerName", allTrainer.get(1).getName());
+                intent.putExtra("rating", allTrainer.get(1).getRating());
+                intent.putExtra("height", allTrainer.get(1).getHeightValue());
+                intent.putExtra("weight", allTrainer.get(1).getWeightValue());
+                intent.putExtra("muscle", allTrainer.get(1).getMuscleValue());
+                intent.putExtra("fat", allTrainer.get(1).getFatValue());
+                intent.putExtra("intro", allTrainer.get(1).getIntroValue());
+                intent.putExtra("gender", allTrainer.get(1).getGender());
+                intent.putExtra("birth", allTrainer.get(1).getBirthValue());
+                intent.putExtra("memberNum", allTrainer.get(1).getRegMemberNum());
+                intent.putExtra("imagePath", allTrainer.get(1).getImage());
                 break;
 
             case R.id.fragment_home_imageview_trainer3:
                 intent = new Intent(getActivity(), TrainerProfileActivity.class);
                 intent.putExtra("id", allTrainer.get(2).getId());
+                intent.putExtra("trainerName", allTrainer.get(2).getName());
+                intent.putExtra("rating", allTrainer.get(2).getRating());
+                intent.putExtra("height", allTrainer.get(2).getHeightValue());
+                intent.putExtra("weight", allTrainer.get(2).getWeightValue());
+                intent.putExtra("muscle", allTrainer.get(2).getMuscleValue());
+                intent.putExtra("fat", allTrainer.get(2).getFatValue());
+                intent.putExtra("intro", allTrainer.get(2).getIntroValue());
+                intent.putExtra("gender", allTrainer.get(2).getGender());
+                intent.putExtra("birth", allTrainer.get(2).getBirthValue());
+                intent.putExtra("memberNum", allTrainer.get(2).getRegMemberNum());
+                intent.putExtra("imagePath", allTrainer.get(2).getImage());
                 break;
 
             case R.id.fragment_home_imageview_trainer4:
                 intent = new Intent(getActivity(), TrainerProfileActivity.class);
                 intent.putExtra("id", allTrainer.get(3).getId());
+                intent.putExtra("trainerName", allTrainer.get(3).getName());
+                intent.putExtra("rating", allTrainer.get(3).getRating());
+                intent.putExtra("height", allTrainer.get(3).getHeightValue());
+                intent.putExtra("weight", allTrainer.get(3).getWeightValue());
+                intent.putExtra("muscle", allTrainer.get(3).getMuscleValue());
+                intent.putExtra("fat", allTrainer.get(3).getFatValue());
+                intent.putExtra("intro", allTrainer.get(3).getIntroValue());
+                intent.putExtra("gender", allTrainer.get(3).getGender());
+                intent.putExtra("birth", allTrainer.get(3).getBirthValue());
+                intent.putExtra("memberNum", allTrainer.get(3).getRegMemberNum());
+                intent.putExtra("imagePath", allTrainer.get(3).getImage());
                 break;
 
         }
@@ -312,12 +344,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                             //Log.d("mypromgrams", String.valueOf(myPrograms.size()) + "-" + myPrograms.get(0).getProgram_title());
 
+                            Log.d("xxxxxxx", ""+ allTrainerCount);
                             for (int i =0; i < allTrainerCount; ++i) {
                                 allTrainer.add(new AllTrainer(
                                         obj.getJSONObject(2 + myProgramCount + i).getInt("id"),
                                         obj.getJSONObject(2 + myProgramCount + i).getString("name"),
-                                        obj.getJSONObject(2 + myProgramCount + i).getString("image")
+                                        obj.getJSONObject(2 + myProgramCount + i).getString("image"),
+                                        obj.getJSONObject(2 + myProgramCount + i).getDouble("avg_rating"),
+                                        obj.getJSONObject(2 + myProgramCount + i).getDouble("height"),
+                                        obj.getJSONObject(2 + myProgramCount + i).getDouble("weight"),
+                                        obj.getJSONObject(2 + myProgramCount + i).getDouble("muscle"),
+                                        obj.getJSONObject(2 + myProgramCount + i).getDouble("fat"),
+                                        obj.getJSONObject(2 + myProgramCount + i).getInt("gender"),
+                                        obj.getJSONObject(2 + myProgramCount + i).getString("birth"),
+                                        obj.getJSONObject(2 + myProgramCount + i).getString("intro"),
+                                        obj.getJSONObject(2 + myProgramCount + i).getInt("memberNum")
                                 ));
+
+                                Log.d("xxxxxxx", obj.getJSONObject(2 + myProgramCount + i).toString());
                             }
 
 
