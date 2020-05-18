@@ -74,7 +74,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
         }
         dayProgram = intent.getParcelableExtra("dayProgram");
 
-         dayProgram = new DayProgram(0, "테스트", 1, "설명~");
+     //    dayProgram = new DayProgram(0, "테스트", 1, "설명~");
 
         String exr_title = intent.getStringExtra("exr_title");
 
