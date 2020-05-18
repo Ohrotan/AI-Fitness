@@ -36,7 +36,7 @@ public class Member_reg_programView extends RelativeLayout {
         inflater.inflate(R.layout.member_all_exr_program_listview,this,true);
 
         //이렇게 객체화시켜준 다음부터는 findViewById로 가져와 참조할 수 있음
-        title = (TextView)findViewById(R.id.titleOfProg);//프로그램명
+        title = (TextView)findViewById(R.id.title);//프로그램명
         difficulty = (TextView)findViewById(R.id.level_star);//난이도
         rating = (TextView)findViewById(R.id.rating_star);//평점
         mem_id_cnt = (TextView)findViewById(R.id.numOfProg);//인원수

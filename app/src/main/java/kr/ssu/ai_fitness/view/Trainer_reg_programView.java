@@ -38,10 +38,10 @@ public class Trainer_reg_programView extends LinearLayout {
         inflater.inflate(R.layout.trainer_exr_program_listview,this,true);
 
         //이렇게 객체화시켜준 다음부터는 findViewById로 가져와 참조할 수 있음
-        title = (TextView)findViewById(R.id.titleOfProg);//프로그램명
+        title = (TextView)findViewById(R.id.title);//프로그램명
         difficulty = (TextView)findViewById(R.id.difficulty);//난이도
         rating = (TextView)findViewById(R.id.rating);//평점
-        mem_id_cnt = (TextView)findViewById(R.id.mem_id_cnt);//인원수
+        mem_id_cnt = (TextView)findViewById(R.id.mem_cnt);//인원수
         mem_id_cnt_sum = (TextView)findViewById(R.id.mem_id_cnt_sum);
         equip = (TextView)findViewById(R.id.equip);
         gender = (TextView)findViewById(R.id.gender);

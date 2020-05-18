@@ -8,116 +8,166 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import kr.ssu.ai_fitness.ExrProgramRegActivity;
+import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.TrainerVideoListActivity;
-import kr.ssu.ai_fitness.dto.Member_reg_program;
-import kr.ssu.ai_fitness.view.Trainer_reg_programView;
+import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class TrainerExrProgramFragment extends Fragment {
 
     private ListView mListview;
+    private static final String TAG_RESULTS = "result";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_TITLE = "title";
+    private static final String TAG_PERIOD = "period"; //period
+    private static final String TAG_MEM_CNT = "mem_cnt";//mem_cnt
+    private static final String TAG_MAX = "max";//max
+    private static final String TAG_LEVEL = "level";//level
+    private static final String TAG_EQUIP = "equip";//equip
+    private static final String TAG_RATING = "rating";//rating
+    private static final String TAG_GENDER = "gender"; //gender
+    private static final String TAG_FEEDBACK = "feedback";//feedback
 
-    Button buttonExrProgram;
-    Button buttonMotion;
+    JSONArray peoples = null;
+    ListView list;
+    ArrayList<HashMap<String, String>> personList;
+    String myJSON;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_trainer_exr_program, container, false);
+        ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_trainer_exr_program_list, container, false);
 
-        ListView listView = (ListView)view.findViewById(R.id.fragment_trainer_exr_program_listview);
-        buttonMotion = view.findViewById(R.id.fragment_trainer_exr_program_button_motion);
-        buttonExrProgram = view.findViewById(R.id.fragment_trainer_exr_program_button_exrprogram);
+        list = (ListView) view.findViewById(R.id.listView);
+        personList = new ArrayList<HashMap<String, String>>();
 
-        TrainerExrProgramFragment.ListAdapter adapter = new TrainerExrProgramFragment.ListAdapter();
-        //adapter에 data값
-        adapter.addItem(new Member_reg_program("다이어트1", "★★★★☆","★★★★☆","30 명","","","",""));
-        adapter.addItem(new Member_reg_program("다이어트2", "★★★★☆","★★★★☆","30 명","","","",""));
-        adapter.addItem(new Member_reg_program("다이어트3", "★★★★☆","★★★★☆","30 명","","","",""));
-        adapter.addItem(new Member_reg_program("다이어트4", "★★★★☆","★★★★☆","30 명","","","",""));
-
-
-        listView.setAdapter(adapter);
-        //이렇게해서 listView껍데기가 어뎁터에게 몇 개의 데이터가 있고 어떤 뷰를 집어넣어야하는지
-        //물어보면 어뎁터가 아래의 코드를 통해 만들어놓은 정보를 종합하여 전달함
-
-        buttonMotion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //*****트레이너의 동작 동영상 목록 화면으로 넘어가는데, 인텐트로 넘겨줄 값이 있을 수도 있음
-                Intent intent = new Intent(getActivity(), TrainerVideoListActivity.class);
-
-                startActivity(intent);
-            }
-        });
-
-        buttonExrProgram.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //*****프로그램 틍록 화면으로 넘어가는데, 인텐트로 넘겨줄 값이 있을 수도 있음
-                Intent intent = new Intent(getActivity(), ExrProgramRegActivity.class);
-
-                startActivity(intent);
-            }
-        });
+        getData("2");
 
         return view;
     }
 
-    class ListAdapter extends BaseAdapter {
-        //어뎁터가 데이터를 관리하며 데이터를 넣었다가 뺄 수도 있으므로 ArrayList를 활용
+    private void getData(final String mem_id) {
 
-        ArrayList<Member_reg_program> items = new ArrayList<Member_reg_program>();
-        //데이터형을 다양하게 담고있는 java파일을 하나 더 만들어줄거에요
+        //서버에서 받아오는 부분
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200518t193540-dot-ai-fitness-369.an.r.appspot.com/member/readtrainerexrprogram",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //서버에서 요청을 받았을 때 수행되는 부분
+                        String copied_string = "";
 
-        //!! 그런데 ArrayList에 데이터를 넣는 기능이 지금 없으므로 함수를 하나 더 만듬
-        public void addItem(Member_reg_program item){
-            items.add(item);
-        }
+                        try {
+                            JSONObject jsonObj = new JSONObject(response);
+                            peoples = jsonObj.getJSONArray(TAG_RESULTS);
 
-        //너네 어뎁터 안에 몇 개의 아이템이 있니? 아이템갯수 반환함수
-        @Override
-        public int getCount() {
-            return items.size(); //위의 ArrayList내부의 아이템이 몇 개나 들었는지 알려주게됨
-        }
+                            for (int i = 0; i < peoples.length(); i++) {
+                                JSONObject c = peoples.getJSONObject(i);
+                                String id = c.getString("trainer_id");
+                                String name = c.getString(TAG_NAME);
+                                String title = c.getString(TAG_TITLE);
+                                String period = c.getString(TAG_PERIOD);
+                                String mem_cnt = c.getString(TAG_MEM_CNT);
+                                String max = c.getString(TAG_MAX);
+                                String level = c.getString(TAG_LEVEL);
+                                String equip = c.getString(TAG_EQUIP);
+                                String rating = c.getString(TAG_RATING);
+                                String gender = c.getString(TAG_GENDER);
+                                String feedback = c.getString(TAG_FEEDBACK);
+                                String anyfeedback = "";
+                                HashMap<String, String> persons = new HashMap<String, String>();
 
-        @Override
-        public Object getItem(int position) {
-            return items.get(position); //position번째의 아이템을 얻을거야.
-        }
+                                persons.put("trainer_id", id);
+                                name = name + " - ";
+                                persons.put(TAG_NAME, name);
+                                if(title.equals(copied_string)){continue;}
+                                persons.put(TAG_TITLE, title);
+                                period += "일 프로그램";
+                                persons.put(TAG_PERIOD, period);
+                                String cnt_people = mem_cnt + "명 / " + max + "명";
+                                persons.put(TAG_MEM_CNT, cnt_people);
+                                persons.put(TAG_LEVEL, level);
+                                persons.put(TAG_EQUIP, equip);
+                                persons.put(TAG_RATING, rating);
+                                persons.put(TAG_GENDER, gender);
+                                if(feedback.equals("null"))
+                                {
+                                    anyfeedback += "피드백이 필요합니다!";
+                                }
+                                persons.put(TAG_FEEDBACK, anyfeedback);
+                                personList.add(persons);
+                                copied_string = new String(title);
+                            }
 
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
+                            //adapter에 data값
+                            //adapter.addItem(new Member_reg_program(ddd[0], "★★★★☆","★★★★☆","30 명","","","",""));
+                            ListAdapter adapter = new SimpleAdapter(
+                                    getActivity(), personList, R.layout.trainer_exr_program_listview,
+                                    new String[]{"id",TAG_TITLE,TAG_PERIOD,TAG_MEM_CNT,TAG_LEVEL,TAG_EQUIP,TAG_RATING,TAG_GENDER,TAG_FEEDBACK}, //
+                                    new int[]{R.id.id, R.id.title,R.id.period,R.id.mem_cnt,R.id.level,R.id.equip, R.id.rating, R.id.gender,R.id.feedback}
+                            );
+
+                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    view = list.getChildAt(i);// 얘 안쓰면 해당 리스트뷰의 값을 못 읽음.
+                                    TextView txt = view.findViewById(R.id.id);
+                                    String id = txt.getText().toString();
+                                    Intent intent = new Intent(getActivity(), TrainerVideoListActivity.class); // 다음 넘어갈 클래스 지정
+                                    intent.putExtra("trainer_id", id);
+                                    startActivity(intent); // 다음 화면으로 넘어간다
+                                }
+                            });
+
+                            list.setAdapter(adapter);
 
 
-        //어뎁터가 데이터를 관리하기 때문에 화면에 보여질 각각의 화면에 보일 뷰도 만들어달라는 것
-        //각각의 아이템 데이터 뷰(레이아웃)을 만들어주어 객체를 만든다음에 데이터를 넣고 리턴해줄 것임
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Trainer_reg_programView view = new Trainer_reg_programView(getActivity());
-            //어떤 뷰든 안드로이드에서는 Context객체를 받게 되어있으므로 getApplicationCotext로 넣어줍니다.
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                Map<String, String> params = new HashMap<>();
+                params.put("mem_id", mem_id);
+                return params;
+            }
+        };
 
-            //이제 이 뷰를 반환해주면 되는데 이 뷰가 몇 번째 뷰를 달라는 것인지 position값이 넘어오므로
-            Member_reg_program item  = items.get(position); //SigerItem은 참고로 Dataset임. 따로 기본적인것만 구현해놓음
-            //이 position값을 갖는 아이템의 SigerItem객체를 새로 만들어준 뒤
-            view.setTitle(item.getTitle());
-            view.setLevel(item.getLevel());
-            view.setRate(item.getRating());
-            view.setMem_id_cnt(item.getMem_id_cnt());
-            //이렇게 해당 position에 맞는 값으로 설정
-
-            //그렇게 설정을 잘 해놓은 다음에 view를 반환해야 데이터값이 들어간 레이아웃이 반환
-            return view;
-        }
+        //아래 큐에 add 할 때 Volley라고 하는 게 내부에서 캐싱을 해준다, 즉, 한번 보내고 받은 응답결과가 있으면
+        //그 다음에 보냈을 떄 이전 게 있으면 그냥 이전거를 보여줄수도  있다.
+        //따라서 이렇게 하지말고 매번 받은 결과를 그대로 보여주기 위해 다음과같이 setShouldCache를 false로한다.
+        //결과적으로 이전 결과가 있어도 새로 요청한 응답을 보여줌
+        stringRequest.setShouldCache(false);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 }
