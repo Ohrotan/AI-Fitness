@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".SignupActivity">
 
+
     <ScrollView
+        android:id="@+id/activity_signup_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/activity_signup_button_complete"

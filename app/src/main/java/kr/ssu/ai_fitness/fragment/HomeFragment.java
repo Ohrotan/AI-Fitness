@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import java.util.Map;
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.LoginActivity;
 import kr.ssu.ai_fitness.MemberAllExrProgramListActivity;
-import kr.ssu.ai_fitness.MemberExrProgramListActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.TrainerExrProgramActivity;
 import kr.ssu.ai_fitness.TrainerListActivity;
@@ -101,7 +99,7 @@ public class HomeFragment extends Fragment {
                             startActivity(new Intent(getActivity(), TrainerExrProgramActivity.class));
                         }
                         else {//트레이너 아니라면 MemberExrProgramListActivity 로 화면 전환
-                            startActivity(new Intent(getActivity(), MemberExrProgramListActivity.class));
+                            //startActivity(new Intent(getActivity(), MemberExrProgramListActivity.class));
                         }
                         break;
                     case R.id.fragment_home_more2:
