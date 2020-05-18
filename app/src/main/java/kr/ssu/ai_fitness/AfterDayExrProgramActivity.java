@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +37,8 @@ import kr.ssu.ai_fitness.vo.MemberExrVideoModel;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class AfterDayExrProgramActivity extends AppCompatActivity {
+
+    Toolbar toolbar;
 
     int isTrainer;
     int mem_id;
