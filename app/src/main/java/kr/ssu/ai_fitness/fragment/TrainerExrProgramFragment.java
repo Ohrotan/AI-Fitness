@@ -1,27 +1,35 @@
-package kr.ssu.ai_fitness;
-
-import androidx.appcompat.app.AppCompatActivity;
-import kr.ssu.ai_fitness.dto.*;
-import kr.ssu.ai_fitness.view.Trainer_reg_programView;
+package kr.ssu.ai_fitness.fragment;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+
 import java.util.ArrayList;
 
-public class TrainerExrProgramActivity extends AppCompatActivity {
+import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.dto.Member_reg_program;
+import kr.ssu.ai_fitness.view.Trainer_reg_programView;
+
+public class TrainerExrProgramFragment extends Fragment {
 
     private ListView mListview;
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trainer_exr_program);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_trainer_exr_program, container, false);
 
-        ListView listView = (ListView)findViewById(R.id.listView);
+        ListView listView = (ListView)view.findViewById(R.id.fragment_trainer_exr_program_listview);
 
-        ListAdapter adapter = new ListAdapter();
+        TrainerExrProgramFragment.ListAdapter adapter = new TrainerExrProgramFragment.ListAdapter();
         //adapter에 data값
         adapter.addItem(new Member_reg_program("다이어트1", "★★★★☆","★★★★☆","30 명","","","",""));
         adapter.addItem(new Member_reg_program("다이어트2", "★★★★☆","★★★★☆","30 명","","","",""));
@@ -32,9 +40,11 @@ public class TrainerExrProgramActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         //이렇게해서 listView껍데기가 어뎁터에게 몇 개의 데이터가 있고 어떤 뷰를 집어넣어야하는지
         //물어보면 어뎁터가 아래의 코드를 통해 만들어놓은 정보를 종합하여 전달함
+
+        return view;
     }
 
-    class ListAdapter extends BaseAdapter{
+    class ListAdapter extends BaseAdapter {
         //어뎁터가 데이터를 관리하며 데이터를 넣었다가 뺄 수도 있으므로 ArrayList를 활용
 
         ArrayList<Member_reg_program> items = new ArrayList<Member_reg_program>();
@@ -66,7 +76,7 @@ public class TrainerExrProgramActivity extends AppCompatActivity {
         //각각의 아이템 데이터 뷰(레이아웃)을 만들어주어 객체를 만든다음에 데이터를 넣고 리턴해줄 것임
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Trainer_reg_programView view = new Trainer_reg_programView(getApplicationContext());
+            Trainer_reg_programView view = new Trainer_reg_programView(getActivity());
             //어떤 뷰든 안드로이드에서는 Context객체를 받게 되어있으므로 getApplicationCotext로 넣어줍니다.
 
             //이제 이 뷰를 반환해주면 되는데 이 뷰가 몇 번째 뷰를 달라는 것인지 position값이 넘어오므로
