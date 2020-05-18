@@ -54,7 +54,7 @@ public class MemberExrProgramListFragment extends Fragment {
         list = (ListView) view.findViewById(R.id.fragment_member_exr_program_list_listview);
         personList = new ArrayList<HashMap<String, String>>();
 
-        getData("4");
+        getData("2");
 
         return view;
     }

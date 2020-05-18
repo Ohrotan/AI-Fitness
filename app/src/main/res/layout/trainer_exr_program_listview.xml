@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/titleOfProg"
+            android:id="@+id/title"
             android:text="체지방 다이어트"
             android:textSize="20dp"
             android:layout_gravity=""
@@ -22,11 +22,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:id="@+id/howlongProg"
+            android:id="@+id/period"
             android:text="30일 프로그램"
             android:textSize="20dp"
             android:textColor="@color/darkGray"
             android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/white"
+            android:id="@+id/id"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +61,7 @@
                     android:textColor="@color/darkGray"
                     android:textSize="16dp"
                     android:text="31명 / 50명"
-                    android:id="@+id/mem_id_cnt"/>
+                    android:id="@+id/mem_cnt"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -117,7 +123,7 @@
                     android:textColor="@color/darkGray"
                     android:textSize="16dp"
                     android:text="★★★★★"
-                    android:id="@+id/difficulty"/>
+                    android:id="@+id/level"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
