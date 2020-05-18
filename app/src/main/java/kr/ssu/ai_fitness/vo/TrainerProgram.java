@@ -1,6 +1,7 @@
 package kr.ssu.ai_fitness.vo;
 
 public class TrainerProgram {
+    private int exrId;
     private String title;
     private int period;
     //private int gender;
@@ -12,7 +13,8 @@ public class TrainerProgram {
     private double rating;
     private String equip;
 
-    public TrainerProgram(String title, int period, int curNum, int max, int totalNum, double rating, double level, String equip, String gender){
+    public TrainerProgram(int exrId, String title, int period, int curNum, int max, int totalNum, double rating, double level, String equip, String gender){
+        this.exrId = exrId;
         this.title = title;
         this.period = period;
         this.curNum = curNum;
@@ -22,6 +24,14 @@ public class TrainerProgram {
         this.level = level;
         this.equip = equip;
         this.gender = gender;
+    }
+
+    public int getExrId(){
+        return exrId;
+    }
+
+    public void setExrId(int exrId) {
+        this.exrId = exrId;
     }
 
     public String getTitle() {

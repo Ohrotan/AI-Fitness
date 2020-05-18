@@ -340,7 +340,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
         //recyclerViewTrainerProfile.setAdapter(adapter);
     }
 
-    private void setAdapter(final int it, final RecyclerView Rv, final TrainerProfileAdapter adapter){
+    private void setAdapter(final int it, final RecyclerView Rv, final TrainerProfileAdapter adapter, final int exrId){
         for(int i = 0; i < exrProgramIdList.size(); i++) {
             Log.d("PROGRAM_ID_LIST", "Program ID = " + exrProgramIdList.get(i));
         }
@@ -395,7 +395,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
 
                             Log.d("parseJSON_PR_INFO_1", "avgRating = " + avgRating);
 
-                            trainerProgram = new TrainerProgram(title, period, curMemberNum, max, totalMemberNum, avgRating, level, equip, gender);
+                            trainerProgram = new TrainerProgram(exrId, title, period, curMemberNum, max, totalMemberNum, avgRating, level, equip, gender);
 
                             adapter.addItem(trainerProgram);
                             Log.d("ADD_ITEM", "trainerProgram_title = " + trainerProgram.getTitle());
@@ -459,7 +459,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
                             }
 
                             for(int i = 0; i < exrProgramIdList.size(); i++) {
-                                setAdapter(i, recyclerViewTrainerProfile, adapter);
+                                setAdapter(i, recyclerViewTrainerProfile, adapter, exrProgramIdList.get(i));
                             }
 
                         } catch (JSONException e) {
