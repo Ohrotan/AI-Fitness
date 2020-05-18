@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -63,7 +64,7 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
                         intent.putExtra("title", mData.get(pos).getTitle());
                         intent.putExtra("exrId", mData.get(pos).getExrId());
 
-                        mContext.startActivity(intent);
+                        ((Activity)mContext).startActivity(intent);
                     }
                     else{
 
