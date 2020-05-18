@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/tab1"
+        android:id="@+id/action_home"
         app:showAsAction="always"
         android:icon="@drawable/home_not_selected"
         android:enabled="true"
@@ -11,7 +11,7 @@
         android:iconTint="@drawable/item_color"/>
 
     <item
-        android:id="@+id/tab2"
+        android:id="@+id/action_exercise"
         app:showAsAction="always"
         android:icon="@drawable/workout_not_selected"
         android:enabled="true"
@@ -19,7 +19,7 @@
         android:iconTint="@drawable/item_color"/>
 
     <item
-        android:id="@+id/tab3"
+        android:id="@+id/action_chatting"
         app:showAsAction="always"
         android:icon="@drawable/chat_not_selected_01"
         android:enabled="true"
@@ -27,7 +27,7 @@
         android:iconTint="@drawable/item_color"/>
 
     <item
-        android:id="@+id/tab4"
+        android:id="@+id/action_setting"
         app:showAsAction="always"
         android:icon="@drawable/setting_not_selected"
         android:enabled="true"
