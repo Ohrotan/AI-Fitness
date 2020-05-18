@@ -1,6 +1,7 @@
 package kr.ssu.ai_fitness;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +34,9 @@ import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class BeforeDayExrProgramActivity extends AppCompatActivity {
 
+
+    Toolbar toolbar;
+
     TextView textViewIntro;
     RecyclerView recyclerView;
     Button button;
@@ -49,6 +53,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_before_day_exr_program);
 
+        toolbar = findViewById(R.id.activity_before_day_exr_program_toolbar);
         textViewIntro = findViewById(R.id.activity_before_day_exr_program_intro_content);
         recyclerView = findViewById(R.id.activity_before_day_exr_program_rv);
         button = findViewById(R.id.activity_before_day_exr_program_button);
@@ -98,6 +103,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
                                 intro = dayProgramObj.getString("intro");
 
                                 //*****상단 추가하면 일별 프로그램 제목도 title로 변경시켜줘야 함.
+                                toolbar.setSubtitle(title);
                                 textViewIntro.setText(intro);
 
                                 int videoCount = obj.getInt(2);
