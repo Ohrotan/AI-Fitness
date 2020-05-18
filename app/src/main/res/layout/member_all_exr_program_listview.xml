@@ -48,6 +48,7 @@
         android:layout_below="@+id/name"
         android:layout_toRightOf="@+id/difficulty"
         android:id="@+id/level_star"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
