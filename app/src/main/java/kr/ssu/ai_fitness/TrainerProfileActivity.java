@@ -223,13 +223,13 @@ public class TrainerProfileActivity extends AppCompatActivity {
             trainerRating.setImageResource(img);
         }
 
-        getProgramId(trainerID);
+        getProgramId(trainerID, recyclerViewTrainerProfile, adapter);
 
         //for(int i = 0; i < exrProgramIdList.size(); i++) {
         //    setAdapter(i);
         //}
 
-        Handler handler1 = new Handler();
+        /*Handler handler1 = new Handler();
         handler1.postDelayed(new Runnable() {
             public void run() {
                 //recyclerViewTrainerProfile.setAdapter(adapter);
@@ -237,7 +237,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
                     setAdapter(i, recyclerViewTrainerProfile, adapter);
                 }
             }
-        }, 200);  // 2000은 2초를 의미합니다.
+        }, 200);  // 2000은 2초를 의미합니다.*/
 
         /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -435,7 +435,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
         //Log.d("Iterator Check", "End of the iteration : " + it);
     }
 
-    private void getProgramId(final int trainerId){
+    private void getProgramId(final int trainerId, final RecyclerView recyclerViewTrainerProfile, final TrainerProfileAdapter adapter){
         queue = Volley.newRequestQueue(this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READTRAINERPROGRAMNUM,
@@ -456,6 +456,10 @@ public class TrainerProfileActivity extends AppCompatActivity {
                                 Log.d("parsedJSON_GET_PG_NUM", "id = " + programId);
 
                                 exrProgramIdList.add(programId);
+                            }
+
+                            for(int i = 0; i < exrProgramIdList.size(); i++) {
+                                setAdapter(i, recyclerViewTrainerProfile, adapter);
                             }
 
                         } catch (JSONException e) {
