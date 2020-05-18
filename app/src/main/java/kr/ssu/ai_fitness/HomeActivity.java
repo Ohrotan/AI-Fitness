@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         isTrainer = SharedPrefManager.getInstance(this).getUser().getTrainer();
 
         Intent intent = getIntent();
-        String email = intent.getStringExtra("email"); //날아온 string형태 데이터를 여기에 받는다.
+        int isChattingBack = intent.getIntExtra("isChattingBack", 0);
 
         bottomNavigationView = findViewById(R.id.bottom_navi);
 
@@ -86,7 +86,13 @@ public class HomeActivity extends AppCompatActivity {
         chattingListFragment = new ChattingListFragment();
         profileFragment = new ProfileFragment();
 
-        setFrag(0);     //첫 프레그먼트를 무엇으로 할 것인지 선택(여기서는 홈화면)
+        if (isChattingBack == 1) {//채팅 액티비티에서 뒤로가기 누른 경우
+            bottomNavigationView.setSelectedItemId(R.id.action_chatting);
+            setFrag(2);
+        }
+        else {
+            setFrag(0);     //첫 프레그먼트를 무엇으로 할 것인지 선택(여기서는 홈화면)
+        }
 
     }
 
