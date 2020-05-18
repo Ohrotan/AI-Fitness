@@ -120,7 +120,6 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
     }
 
     public void requestUpdateFeedback(final int member_exr_history_id, final String feedback, final int position) {
-
         //feedback 내용을 서버에 전달해서 수정하는 부분
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_UPDATEMEMBERHISTORYFEEDBACK,
                 new Response.Listener<String>() {
