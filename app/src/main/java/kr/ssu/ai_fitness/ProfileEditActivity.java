@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -36,7 +35,7 @@ import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
-public class ProfileEditActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProfileEditActivity extends AppCompatActivity implements View.OnClickListener{
 
     private ImageView profilePic;
     private TextView name;
@@ -70,6 +69,8 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
 
     private Member user;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,11 +97,6 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
         //weight = weightLayout.getEditText().getText().toString();
         //muscle = muscleLayout.getEditText().getText().toString();
         //fat = fatLayout.getEditText().getText().toString();
-
-        //heightLayout.setPasswordVisibilityToggleEnabled(true);
-        //weightLayout.setPasswordVisibilityToggleEnabled(true);
-        //muscleLayout.setPasswordVisibilityToggleEnabled(true);
-        //fatLayout.setPasswordVisibilityToggleEnabled(true);
 
         isTrainer = findViewById(R.id.isTrainerSwitch);
         //a = findViewById(R.id.isTrainerSwitch);

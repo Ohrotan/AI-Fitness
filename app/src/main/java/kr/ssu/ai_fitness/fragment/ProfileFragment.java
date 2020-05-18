@@ -1,14 +1,20 @@
-package kr.ssu.ai_fitness;
+package kr.ssu.ai_fitness.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,18 +22,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,118 +36,97 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.ssu.ai_fitness.AdminProgramManageActivity;
+import kr.ssu.ai_fitness.AdminUserManageActivity;
+import kr.ssu.ai_fitness.AdminVideoManageActivity;
+import kr.ssu.ai_fitness.ProfileActivity;
+import kr.ssu.ai_fitness.ProfileEditActivity;
+import kr.ssu.ai_fitness.PwdEditDialog;
+import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.dto.Member;
-import kr.ssu.ai_fitness.fragment.ChattingListFragment;
-import kr.ssu.ai_fitness.fragment.HomeFragment;
-import kr.ssu.ai_fitness.fragment.MemberExrProgramListFragment;
-import kr.ssu.ai_fitness.fragment.ProfileFragment;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileFragment extends Fragment {
 
-//    final Context context = this;
-////
-////    private ImageView profilePic;
-////    private TextView name;
-////    private TextView genderAge;
-////    private String gender;
-////    private int age;
-////    private RelativeLayout trainerBadge;
-////    private ImageButton editButton;
-////    private TextView height;
-////    private TextView weight;
-////    private TextView muscle;
-////    private TextView fat;
-////    //private TextView infoRegDate;
-////    private TextView infoSelf;
-////    private RelativeLayout pwdChange;
-////    private RelativeLayout logout;
-////    private RelativeLayout adminSetting;
-////    private RelativeLayout allMemberManage;
-////    private RelativeLayout allProgramManage;
-////    private RelativeLayout allVideoManage;
-////    private Switch alarmSwitch;
-////
-////    AlertDialog.Builder logoutDialog;
+    //final Context context = this;
+    private ImageView profilePic;
+    private TextView name;
+    private TextView genderAge;
+    private String gender;
+    private int age;
+    private RelativeLayout trainerBadge;
+    private ImageButton editButton;
+    private TextView height;
+    private TextView weight;
+    private TextView muscle;
+    private TextView fat;
+    //private TextView infoRegDate;
+    private TextView infoSelf;
+    private RelativeLayout pwdChange;
+    private RelativeLayout logout;
+    private RelativeLayout adminSetting;
+    private RelativeLayout allMemberManage;
+    private RelativeLayout allProgramManage;
+    private RelativeLayout allVideoManage;
+    private Switch alarmSwitch;
 
-    private BottomNavigationView bottomNavigationView; // 바텀 네비게이션 뷰
-    private FragmentManager fm;
-    private FragmentTransaction ft;
-    private HomeFragment homeFragment;
-    private MemberExrProgramListFragment memberExrProgramListFragment; //*****일반 회원인 경우랑 트레이너인 경우 다른 프레그먼트 띄우도록 수정해야함
-    private ChattingListFragment chattingListFragment;
-    private ProfileFragment profileFragment;
+    AlertDialog.Builder logoutDialog;
 
-    @SuppressLint("SetTextI18n")
+    public ProfileFragment() {
+        // Required empty public constructor
+    }
+
+    /*public static ProfileEditFragment newInstance(String param1, String param2) {
+        ProfileEditFragment fragment = new ProfileEditFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }*/
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
 
-        bottomNavigationView = findViewById(R.id.bottom_navi);
+    }
 
-        //*****사용자(회원, 트레이너, 관리자)마다 다르게 해줘야함
-        //하단 네비게이션 선택에 따라 프레그먼트 변경해줌
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        /*if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }*/
 
-                switch (menuItem.getItemId())
-                {
-                    case R.id.action_home:
-                        setFrag(0);
-                        break;
+        // Inflate the layout for this fragment
+        ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_profile, container, false);
 
-                    case R.id.action_exercise:
-                        setFrag(1);
-                        break;
-
-                    case R.id.action_chatting:
-                        setFrag(2);
-                        break;
-
-                    case R.id.action_setting:
-                        setFrag(3);
-                        break;
-                }
-
-                return true;
-            }
-        });
-
-        //*****사용자(회원, 트레이너, 관리자)마다 연결된 프레그먼트가 달라야함
-        homeFragment = new HomeFragment();
-        memberExrProgramListFragment = new MemberExrProgramListFragment();
-        chattingListFragment = new ChattingListFragment();
-        profileFragment = new ProfileFragment();
-
-        setFrag(3);     //첫 프레그먼트를 무엇으로 할 것인지 선택(여기서는 홈화면)
-
-        /*trainerBadge = findViewById(R.id.trainerBadgeLayout);
-        profilePic = findViewById(R.id.memberPicProfile);
-        name = findViewById(R.id.memberNameProfile);
-        genderAge = findViewById(R.id.memberAgeProfile);
-        editButton = findViewById(R.id.editProfile);
-        height = findViewById(R.id.heightProfile);
-        weight = findViewById(R.id.weightProfile);
-        muscle = findViewById(R.id.muscleProfile);
-        fat = findViewById(R.id.fatProfile);
-        infoSelf = findViewById(R.id.infoSelf);
+        trainerBadge = view.findViewById(R.id.trainerBadgeLayout);
+        profilePic = view.findViewById(R.id.memberPicProfile);
+        name = view.findViewById(R.id.memberNameProfile);
+        genderAge = view.findViewById(R.id.memberAgeProfile);
+        editButton = view.findViewById(R.id.editProfile);
+        height = view.findViewById(R.id.heightProfile);
+        weight = view.findViewById(R.id.weightProfile);
+        muscle = view.findViewById(R.id.muscleProfile);
+        fat = view.findViewById(R.id.fatProfile);
+        infoSelf = view.findViewById(R.id.infoSelf);
         //infoRegDate = findViewById(R.id.infoRegDate);
-        alarmSwitch = findViewById(R.id.noticeSwitch);
-        pwdChange = findViewById(R.id.pwdChangeLayout);
-        logout = findViewById(R.id.logoutLayout);
-        adminSetting = findViewById(R.id.adminSetting);
-        allMemberManage = findViewById(R.id.allMemberManageLayout);
-        allProgramManage = findViewById(R.id.allProgramManageLayout);
-        allVideoManage = findViewById(R.id.allVideoManageLayout);
+        alarmSwitch = view.findViewById(R.id.noticeSwitch);
+        pwdChange = view.findViewById(R.id.pwdChangeLayout);
+        logout = view.findViewById(R.id.logoutLayout);
+        adminSetting = view.findViewById(R.id.adminSetting);
+        allMemberManage = view.findViewById(R.id.allMemberManageLayout);
+        allProgramManage = view.findViewById(R.id.allProgramManageLayout);
+        allVideoManage = view.findViewById(R.id.allVideoManageLayout);
 
         final Member user;
 
         //SharedPrefManager에 저장된 user 데이터 가져오기
-        user = SharedPrefManager.getInstance(ProfileActivity.this).getUser();
+        user = SharedPrefManager.getInstance(getActivity()).getUser();
 
         //프로필 이미지 설정
         //profilePic.setI
@@ -201,9 +181,9 @@ public class ProfileActivity extends AppCompatActivity {
         infoSelf.setText(user.getIntro());
 
         //정보 표시한 날짜 설정
-        *//*SimpleDateFormat regDateForm = new SimpleDateFormat("yyyy.mm.dd");
+        /*SimpleDateFormat regDateForm = new SimpleDateFormat("yyyy.mm.dd");
         String regDate = regDateForm.format(mDate);
-        infoRegDate.setText(regDate);*//*
+        infoRegDate.setText(regDate);*/
 
         //신장, 체중, 근육량, 체지방량 설정
         height.setText(String.format(Double.toString(user.getHeight())) + "cm");
@@ -225,30 +205,55 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 if(isChecked) {
-                    Toast.makeText(getApplicationContext(), "알림 수신에 동의하셨습니다", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "알림 수신에 동의하셨습니다", Toast.LENGTH_SHORT).show();
                     //Member alarmConsent = new Member();
-                    SharedPrefManager.getInstance(getApplicationContext()).setAlarm(1);
+                    SharedPrefManager.getInstance(getActivity()).setAlarm(1);
                     setAlarm(user.getName(), 1);
                     Log.d("IS_ALARM_ON_CHANGE", "user.getAlarm = " + user.getAlarm());
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "알림 수신을 거부하셨습니다", Toast.LENGTH_SHORT).show();
-                    SharedPrefManager.getInstance(getApplicationContext()).setAlarm(0);
+                    Toast.makeText(getActivity(), "알림 수신을 거부하셨습니다", Toast.LENGTH_SHORT).show();
+                    SharedPrefManager.getInstance(getActivity()).setAlarm(0);
                     setAlarm(user.getName(), 0);
                     Log.d("IS_ALARM_ON_CHANGE", "user.getAlarm = " + user.getAlarm());
                 }
             }
         });
         //비밀번호 수정
-        pwdChange.setOnClickListener(this);
+        pwdChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //requestName = nameEt.getText().toString();
+                PwdEditDialog dialog = new PwdEditDialog(getActivity());
+
+                /*dialog.setDialogListener(new MyDialogListener() {  // MyDialogListener 를 구현
+                    @Override
+                    public void onPositiveClicked(String email, String name) {
+
+                    }
+
+                    @Override
+                    public void onNegativeClicked() {
+                        Log.d("MyDialogListener","onNegativeClicked");
+                    }
+                });*/
+                dialog.show();
+            }
+        });
         //개인정보 수정 버튼
-        editButton.setOnClickListener(this);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPause();
+                startActivity(new Intent(getActivity(), ProfileEditActivity.class));
+            }
+        });
 
         //로그아웃
         logout.setOnClickListener(new RelativeLayout.OnClickListener(){
             @Override
             public void onClick(View V){
-                logoutDialog = new AlertDialog.Builder(context);
+                logoutDialog = new AlertDialog.Builder(getActivity());
                 logoutDialog
                         .setTitle("알림")
                         .setMessage("로그아웃 하시겠습니까?")
@@ -257,8 +262,8 @@ public class ProfileActivity extends AppCompatActivity {
                                 //ProfileEditActivity.this.finish();
                                 dialog.cancel();
                                 //Toast.makeText(getApplicationContext(), "로그아웃하기", Toast.LENGTH_SHORT).show();
-                                finish();
-                                SharedPrefManager.getInstance(getApplicationContext()).logout();
+                                getActivity().finish();
+                                SharedPrefManager.getInstance(getActivity()).logout();
                                 //startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             }
                         })
@@ -282,7 +287,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View V){
                 //Toast.makeText(getApplicationContext(), "전체 회원 관리", Toast.LENGTH_SHORT).show();
                 onPause();
-                startActivity(new Intent(ProfileActivity.this, AdminUserManageActivity.class));
+                startActivity(new Intent(getActivity(), AdminUserManageActivity.class));
             }
         });
 
@@ -291,7 +296,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View V){
                 //Toast.makeText(getApplicationContext(), "전체 프로그램 관리", Toast.LENGTH_SHORT).show();
                 onPause();
-                startActivity(new Intent(ProfileActivity.this, AdminProgramManageActivity.class));
+                startActivity(new Intent(getActivity(), AdminProgramManageActivity.class));
             }
         });
 
@@ -300,43 +305,14 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View V){
                 //Toast.makeText(getApplicationContext(), "전체 영상 관리", Toast.LENGTH_SHORT).show();
                 onPause();
-                startActivity(new Intent(ProfileActivity.this, AdminVideoManageActivity.class));
+                startActivity(new Intent(getActivity(), AdminVideoManageActivity.class));
             }
-        });*/
+        });
+
+        return view;
     }
 
-    //*****프레그먼트 교환 메서드도 사용자(회원, 트레이너, 관리자)마다 다르게 만들어야 한다.
-    // 프레그먼트 교체해주는 setFrag() 정의
-    private void setFrag(int n)
-    {
-        fm = getSupportFragmentManager();
-        ft= fm.beginTransaction();
-        switch (n)
-        {
-            case 0:
-                ft.replace(R.id.main_frame_profile,homeFragment);
-                ft.commit();
-                break;
-
-            case 1:
-                ft.replace(R.id.main_frame_profile, memberExrProgramListFragment);
-                ft.commit();
-                break;
-
-            case 2:
-                ft.replace(R.id.main_frame_profile, chattingListFragment);
-                ft.commit();
-                break;
-
-            case 3:
-                ft.replace(R.id.main_frame_profile, profileFragment);
-                ft.commit();
-                break;
-
-        }
-    }
-
-    /*public void setAlarm(final String name, final int alarm){
+    public void setAlarm(final String name, final int alarm){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SETALARM,
                 new Response.Listener<String>() {
                     @Override
@@ -362,15 +338,15 @@ public class ProfileActivity extends AppCompatActivity {
         };
 
         stringRequest.setShouldCache(false);
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+        VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
-    @Override
+    /*@Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.pwdChangeLayout:
                 //requestName = nameEt.getText().toString();
-                PwdEditDialog dialog = new PwdEditDialog(this);
+                PwdEditDialog dialog = new PwdEditDialog(getActivity());
 
                 *//*dialog.setDialogListener(new MyDialogListener() {  // MyDialogListener 를 구현
                     @Override
@@ -387,7 +363,7 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
             case R.id.editProfile:
                 onPause();
-                startActivity(new Intent(ProfileActivity.this, ProfileEditActivity.class));
+                startActivity(new Intent(getActivity(), ProfileEditActivity.class));
         }
     }*/
 }
