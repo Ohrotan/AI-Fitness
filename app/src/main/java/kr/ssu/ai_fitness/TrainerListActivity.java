@@ -18,9 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import kr.ssu.ai_fitness.adapter.RegMemberListAdapter;
 import kr.ssu.ai_fitness.adapter.TrainerListAdapter;
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.vo.AllTrainer;
@@ -56,12 +53,14 @@ public class TrainerListActivity extends AppCompatActivity {
 
                             for(int i = 0; i < jArray.length(); i++){
                                 JSONObject jObject = jArray.getJSONObject(i);
+                                int id = jObject.getInt("id");
                                 String name = jObject.getString("name") + " 트레이너";
                                 double rating = jObject.getDouble("avg_rating");
-                                trainer = new AllTrainer(name, rating);
+                                String image = jObject.getString("image");
+                                trainer = new AllTrainer(id, name, rating, image);
                                 //int trainer = jObject.getInt("trainer");
 
-                                Log.d("parsedJSON", "name = " + String.format(name) + " average rating = " + rating);
+                                Log.d("parsedJSON", "id = " + id + " name = " + String.format(name) + " average rating = " + rating);
 
                                 adapterTrainerList.addItem(trainer);
                             }

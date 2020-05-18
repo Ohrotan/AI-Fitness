@@ -30,6 +30,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,6 +47,7 @@ import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class ProfileFragment extends Fragment {
@@ -95,7 +97,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState){
         /*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -129,7 +131,8 @@ public class ProfileFragment extends Fragment {
         user = SharedPrefManager.getInstance(getActivity()).getUser();
 
         //프로필 이미지 설정
-        //profilePic.setI
+        ImageViewTask task = new ImageViewTask(profilePic);
+        task.execute(user.getImage());
 
         //트레이너일시 트레이너 배지 보여주기
         //아닐경우 비활성화

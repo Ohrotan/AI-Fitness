@@ -45,7 +45,7 @@
                 android:id="@+id/memberPicProfile"
                 android:background="@drawable/img_rounding"
                 android:scaleType="fitXY"
-                android:src="@drawable/bonobono"/>
+                android:src="@drawable/profile_thumbnail"/>
 
             <RelativeLayout
                 android:layout_width="wrap_content"

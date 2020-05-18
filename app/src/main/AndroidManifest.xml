@@ -18,10 +18,8 @@
         <activity android:name=".ChattingListActivity" />
         <activity android:name=".ChattingActivity" />
         <activity android:name=".AdminProgramManageActivity" />
-        <activity android:name=".TrainerExrProgramActivity" />
         <activity android:name=".MemberAllExrProgramListActivity" />
         <activity android:name=".ExrProgramDetailActivity" />
-        <activity android:name=".MemberExrProgramListActivity" />
         <activity android:name=".AdminVideoManageActivity" />
         <activity android:name=".TrainerVideoListActivity" />
         <activity android:name=".TrainerVideoRegActivity" />

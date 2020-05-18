@@ -53,6 +53,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.activity_before_day_exr_program_rv);
         button = findViewById(R.id.activity_before_day_exr_program_button);
 
+        //******MemberExrProgramListAcitivity에서 여기로 넘어 온다.
         //*****여기 액티비티로 넘어오기 전에 intent로 day_program 의 id를 넘겨줘야 한다.
         day_program_id = 1;
 
@@ -62,6 +63,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //ai와 운동하는 화면으로 넘어간다.
 
+                finish();
                 Intent intent = new Intent(BeforeDayExrProgramActivity.this, ExercisingActivity.class);
 
                 startActivity(intent);

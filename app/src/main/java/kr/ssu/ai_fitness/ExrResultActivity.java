@@ -98,4 +98,11 @@ public class ExrResultActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        finish();
+        startActivity(new Intent(ExrResultActivity.this, AfterDayExrProgramActivity.class));
+    }
 }
