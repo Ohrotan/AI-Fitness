@@ -81,7 +81,7 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
 
                         //intent.putExtra("id", mData.get(pos).getId());
                         //intent.putExtra("title", mData.get(pos).getTitle());
-                        //intent.putExtra("exrId", mData.get(pos).getExrId());
+                        intent.putExtra("id", tData.get(pos).getExrId());
 
                         mContext.startActivity(intent);
 
