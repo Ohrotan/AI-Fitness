@@ -31,6 +31,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -237,13 +238,17 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
             bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false);
         }
 
-        int byteSize = bitmap.getRowBytes() * bitmap.getHeight();
+        /*int byteSize = bitmap.getRowBytes() * bitmap.getHeight();
         ByteBuffer byteBuffer = ByteBuffer.allocate(byteSize);
-        bitmap.copyPixelsToBuffer(byteBuffer);
+        bitmap.copyPixelsToBuffer(byteBuffer);*/
 
-        byte[] byteArray = byteBuffer.array();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] jpgdata = bos.toByteArray();
 
-        return new ByteArrayInputStream(byteArray);
+        //byte[] byteArray = byteBuffer.array();
+
+        return new ByteArrayInputStream(jpgdata);
     }
 
     private void registerUser(Uri selectedImageUri){
@@ -349,7 +354,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
             ProfileEdit u = new ProfileEdit();
 
             //실제 HttpURLConnection 이용해서 서버에 요청하고 응답받는다.
-            String msg = u.upload(imgInputStream,info);
+            String msg = u.upload(imgInputStream,info, getApplicationContext());
 
             Log.d("doInBackground", "msg = " + msg + " imgInputStream = " + imgInputStream);
 

@@ -82,7 +82,7 @@ public class ExrProgramRegActivity extends AppCompatActivity {
 
                 exr.setEquip(equip_etv.getText().toString());
                 exr.setIntro(exr_intro_etv.getText().toString());
-                Toast.makeText(getApplicationContext(), exr.toString(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getApplicationContext(), exr.toString(), Toast.LENGTH_SHORT).show();
 
                 saveExrProgram(exr);
 

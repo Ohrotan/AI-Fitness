@@ -33,6 +33,7 @@ public class URLs {
     public static final String URL_DAY_VIDEO_CREATE = ROOT_URL + "/day_video/create";
 
     public static final String URL_VIDEO = ROOT_URL + "/video/read_tr_video";
+    public static final String URL_DELETE_VIDEO = ROOT_URL + "/video/delete_tr_video";
     public static final String URL_CREATE_VIDEO = ROOT_URL + "/video/create_tr_video";
     public static final String URL_UPDATE_VIDEO_TITLE = ROOT_URL + "/video/update_tr_video";
 }

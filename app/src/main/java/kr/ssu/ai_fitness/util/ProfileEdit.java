@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness.util;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -13,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
 
 public class ProfileEdit {
@@ -20,7 +22,7 @@ public class ProfileEdit {
 
     String rtmsg="";
 
-    public String upload(InputStream is, Member info) {
+    public String upload(InputStream is, Member info, Context context) {
 
         //여기부터는 설정 부분
         HttpURLConnection conn = null; //HttpURLConnection 생성
@@ -84,6 +86,15 @@ public class ProfileEdit {
             Log.d("xxxxxxxx", ""+info.getId()+"**"+info.getEmail()+"**"+info.getPwd()+"**"+info.getName()+"**"+info.getHeight()+"**"+info.getWeight()+"**"+
                     info.getGender()+"**"+info.getBirth()+"**"+info.getMuscle()+"**"+info.getFat()+"**"+info.getIntro()+"**"+info.getImage()+"**"+
                     info.getTrainer()+"**"+info.getAdmin()+"**"+info.getAlarm());
+
+            /*SharedPrefManager.getInstance(context).editProfile(
+                    String.valueOf(info.getHeight()),
+                    String.valueOf(info.getWeight()),
+                    String.valueOf(info.getMuscle()),
+                    String.valueOf(info.getFat()),
+                    info.getIntro(),
+                    String.valueOf(info.getTrainer()),
+                    info.getImage());*/
 
             //보낼 데이터 중에서 이미지 이외에 나머지 데이터들 넣는부분
             dos.writeBytes(twoHyphens + boundary + lineEnd);
