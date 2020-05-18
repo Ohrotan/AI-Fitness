@@ -26,10 +26,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
+import kr.ssu.ai_fitness.HomeActivity;
 import kr.ssu.ai_fitness.LoginActivity;
 import kr.ssu.ai_fitness.MemberAllExrProgramListActivity;
 import kr.ssu.ai_fitness.R;
-import kr.ssu.ai_fitness.TrainerExrProgramActivity;
 import kr.ssu.ai_fitness.TrainerListActivity;
 import kr.ssu.ai_fitness.TrainerProfileActivity;
 import kr.ssu.ai_fitness.dto.Member;
@@ -95,11 +95,12 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.fragment_home_more1:
+                        ((HomeActivity)getActivity()).bottomNavigationView.setSelectedItemId(R.id.action_exercise);
                         if (user.getTrainer() == 1) {//트레이너인 경우 TrainerExrProgramListActivity 로 화면 전환
-                            startActivity(new Intent(getActivity(), TrainerExrProgramActivity.class));
+                            ((HomeActivity)getActivity()).setFrag(4);
                         }
-                        else {//트레이너 아니라면 MemberExrProgramListActivity 로 화면 전환
-                            //startActivity(new Intent(getActivity(), MemberExrProgramListActivity.class));
+                        else {//트레이너 아니라면 MemberExrProgramListFragment 로 화면 전환
+                            ((HomeActivity)getActivity()).setFrag(1);
                         }
                         break;
                     case R.id.fragment_home_more2:
@@ -119,6 +120,10 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
                 //*****intent.putExtra() 사용해서 해당 프로그램 id 같은 걸 인텐트로 넘겨줘야 할 수도 있음
+//                intent.putExtra("id", myPrograms.get().);
+//                intent.putExtra("title", myPrograms.get());
+//                intent.putExtra("name", myPrograms.get());
+
                 startActivity(intent);
             }
         };
