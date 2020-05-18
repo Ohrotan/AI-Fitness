@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void requirePermission() {
-        String[] permissions =  new String[] {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
+        String[] permissions =  new String[] {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
 
         ArrayList<String> listPermissionNeeded = new ArrayList<>();
 
