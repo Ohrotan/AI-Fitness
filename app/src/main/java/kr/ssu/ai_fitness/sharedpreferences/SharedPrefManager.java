@@ -3,6 +3,7 @@ package kr.ssu.ai_fitness.sharedpreferences;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.List;
 
@@ -118,7 +119,7 @@ public class SharedPrefManager {
         editor.apply();
     }
 
-    public void editProfile(String heightInput, String weightInput, String muscleInput, String fatInput, String introInput, String trainerInput, String imageInput){
+    public void editProfile(String heightInput, String weightInput, String muscleInput, String fatInput, String introInput, String trainerInput, String imageInput) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -170,12 +171,22 @@ public class SharedPrefManager {
         mCtx.startActivity(new Intent(mCtx, LoginActivity.class));  //로그인 액티비티로 돌아간다.
     }
 
+    public void setTrVideoPath(int id, String path) {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_PATH, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(id + "", path);
+
+        editor.apply();
+    }
+
     public void setTrVideoAndThumbPath(List<TrainerVideo> list) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_PATH, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         for (TrainerVideo dto : list) {
-            editor.putString(dto.getId() + "", dto.getVideo());
+            String[] tmp = dto.getVideo().split("/");
+            editor.putString(dto.getId() + "", tmp[tmp.length - 1]);
         }
         editor.apply();
 
@@ -183,10 +194,18 @@ public class SharedPrefManager {
         sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_THUMB_PATH, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
+        int test_id = 0;
         for (TrainerVideo dto : list) {
-            editor.putString(dto.getId() + "", dto.getThumb_img());
+
+            Log.v("tr_preload", dto.getId() + ": " + dto.getThumb_img());
+            String[] tmp = dto.getThumb_img().split("/");
+            editor.putString(dto.getId() + "", tmp[tmp.length - 1]);
+            test_id = dto.getId();
         }
         editor.apply();
+
+        String testRst = sharedPreferences.getString(test_id + "", "error");
+        Log.v("pref_test", test_id + "/" + testRst);
     }
 
     public String getTrVideoPath(String video_id) {

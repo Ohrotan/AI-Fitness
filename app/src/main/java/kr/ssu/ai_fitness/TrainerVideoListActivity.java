@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 import kr.ssu.ai_fitness.adapter.TrainerVideoAdapter;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -61,6 +63,8 @@ public class TrainerVideoListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap = data.getParcelableExtra("bitmap");
+        trainerVideoAdapter.notifyDataSetChanged();
         getData();
     }
 
@@ -113,7 +117,8 @@ public class TrainerVideoListActivity extends AppCompatActivity {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
                 //params.put("id", "1");
-                params.put("trainer_id", "99");
+                int id = SharedPrefManager.getInstance(TrainerVideoListActivity.this).getUser().getId();
+                params.put("trainer_id", "" + id);
                 return params;
             }
         };

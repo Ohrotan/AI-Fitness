@@ -1,7 +1,10 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.dto.DayProgramVideo;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 
 public class DayVideoChooseAdapter extends BaseAdapter {
 
@@ -83,7 +87,11 @@ public class DayVideoChooseAdapter extends BaseAdapter {
         item = items.get(position);
         holder.title.setText(item.getName());
 
-    //    ImageViewTask task = new ImageViewTask(holder.img);
+        String path = SharedPrefManager.getInstance(context).getTrVideoThumbPath(item.getVideo_id() + "");
+        Log.v("get_pref","videoId:"+item.getVideo_id());
+
+        Bitmap bmp = BitmapFactory.decodeFile(context.getFilesDir() + "/" + path);
+        holder.img.setImageBitmap(bmp);
 
 
         return convertView;

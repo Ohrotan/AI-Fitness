@@ -112,7 +112,6 @@ public class VideoUpload {
 
             serverResponseCode = conn.getResponseCode();
 
-
             videoIs.close();
             dos.flush();
             dos.close();

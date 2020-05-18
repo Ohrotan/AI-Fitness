@@ -2,6 +2,8 @@ package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +28,6 @@ import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.VideoPlayActivity;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
 import kr.ssu.ai_fitness.url.URLs;
-import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class TrainerVideoAdapter extends BaseAdapter {
@@ -71,9 +73,17 @@ public class TrainerVideoAdapter extends BaseAdapter {
         }
 
         item = items.get(position);
+        String[] tmp = item.getThumb_img().split("/");
 
-        ImageViewTask task = new ImageViewTask(holder.img);
-        task.execute(item.getThumb_img());
+        Bitmap bmp = BitmapFactory.decodeFile(context.getFilesDir() + "/" + tmp[tmp.length - 1]);
+        while (!new File(context.getFilesDir() + "/" + tmp[tmp.length - 1]).exists()) {
+           // Log.v("tr_preload", "thumb null");
+        }
+
+        holder.img.setImageBitmap(bmp);
+
+        // ImageViewTask task = new ImageViewTask(holder.img);
+        // task.execute(item.getThumb_img());
 
         holder.img.setTag(item);
         holder.del_btn.setTag(item);

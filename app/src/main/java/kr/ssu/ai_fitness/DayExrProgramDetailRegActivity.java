@@ -36,6 +36,7 @@ import kr.ssu.ai_fitness.adapter.DayVideoRegAdapter;
 import kr.ssu.ai_fitness.dto.DayProgram;
 import kr.ssu.ai_fitness.dto.DayProgramVideo;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -74,7 +75,7 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
         }
         dayProgram = intent.getParcelableExtra("dayProgram");
 
-     //    dayProgram = new DayProgram(0, "테스트", 1, "설명~");
+        //dayProgram = new DayProgram(0, "테스트", 1, "설명~");
 
         String exr_title = intent.getStringExtra("exr_title");
 
@@ -260,7 +261,8 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버에 요청할때 보내는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                params.put("trainer_id", "99"); //로그인 유저 처리
+                int id = SharedPrefManager.getInstance(DayExrProgramDetailRegActivity.this).getUser().getId();
+                params.put("trainer_id", "" + id);
 
                 return params;
             }

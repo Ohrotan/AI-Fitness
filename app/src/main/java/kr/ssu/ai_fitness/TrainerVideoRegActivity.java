@@ -24,15 +24,17 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.TrainerVideoDownload;
 import kr.ssu.ai_fitness.util.VideoUpload;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -49,6 +51,7 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
     InputStream thumbImgInputStream;
 
     TrainerVideo info;
+    int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,6 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
         tr_video_reg_btn = findViewById(R.id.tr_video_reg_btn);
 
 
-        //로그인한 계정 정보 처리
     }
 
     public void onClick(View v) {
@@ -103,6 +105,10 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
         Bitmap bitmap = mMMR.getFrameAtTime();
         video_choose_btn.setImageBitmap(bitmap);
 
+        Intent intent = new Intent();
+        intent.putExtra("bitmap", bitmap);
+        setResult(100, intent);
+
         int origWidth = bitmap.getWidth();
         int origHeight = bitmap.getHeight();
 
@@ -122,12 +128,11 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
 
     public InputStream getVideoInputStream(Uri uri) {
         InputStream is = null;
+        OutputStream outputStream = null;
         try {
             is = getContentResolver().openInputStream(uri);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            return null;
         }
         return is;
     }
@@ -158,6 +163,9 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
                 super.onPostExecute(s);
                 uploading.dismiss();
                 setTitleKorean();
+                //shared Pref에 저장
+                TrainerVideoDownload tvd = new TrainerVideoDownload(TrainerVideoRegActivity.this);
+                tvd.downloadTrainerVideos(userId);
                 //  Toast.makeText(TrainerVideoRegActivity.this,"complete",Toast.LENGTH_SHORT).show();
             }
 
@@ -165,16 +173,16 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             protected String doInBackground(Uri... params) {
                 VideoUpload u = new VideoUpload();
 
-                String msg = u.uploadVideo(getVideoInputStream(params[0]), thumbImgInputStream, info);
+                InputStream videoIs = getVideoInputStream(params[0]);
+                String msg = u.uploadVideo(videoIs, thumbImgInputStream, info);
                 return msg;
             }
         }
 
 
         //예시 데이터
-        SharedPrefManager.getInstance(getApplicationContext()).userLogin(new Member(99));
-        int userId = SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();
-
+        // SharedPrefManager.getInstance(getApplicationContext()).userLogin(new Member(99));
+        userId = SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();
 
         info = new TrainerVideo(userId, UUID.randomUUID() + ".jpg", UUID.randomUUID() + ".mp4", video_title_etv.getText().toString());
         Log.i("Huzza", "Member : " + info.toString());
@@ -193,8 +201,6 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
-                        Intent intent = getIntent();
-                        setResult(100, intent);
                         finish();
                     }
                 },
