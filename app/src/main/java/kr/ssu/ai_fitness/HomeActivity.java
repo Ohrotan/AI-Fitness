@@ -15,6 +15,8 @@ import kr.ssu.ai_fitness.fragment.ChattingListFragment;
 import kr.ssu.ai_fitness.fragment.HomeFragment;
 import kr.ssu.ai_fitness.fragment.MemberExrProgramListFragment;
 import kr.ssu.ai_fitness.fragment.ProfileFragment;
+import kr.ssu.ai_fitness.fragment.TrainerExrProgramFragment;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -23,13 +25,18 @@ public class HomeActivity extends AppCompatActivity {
     private FragmentTransaction ft;
     private HomeFragment homeFragment;
     private MemberExrProgramListFragment memberExrProgramListFragment; //*****일반 회원인 경우랑 트레이너인 경우 다른 프레그먼트 띄우도록 수정해야함
+    private TrainerExrProgramFragment trainerExrProgramFragment;
     private ChattingListFragment chattingListFragment;
-    private ProfileFragment profileFragment;
+    private ProfileFragment profileFragment;//관리자인 경우는
+
+    int isTrainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        isTrainer = SharedPrefManager.getInstance(this).getUser().getTrainer();
 
         Intent intent = getIntent();
         String email = intent.getStringExtra("email"); //날아온 string형태 데이터를 여기에 받는다.
@@ -50,7 +57,12 @@ public class HomeActivity extends AppCompatActivity {
                         break;
 
                     case R.id.action_exercise:
-                        setFrag(1);
+                        if (isTrainer==1) {//트레이너인 경우
+                            setFrag(4);
+                        }
+                        else {//일반회원인 경우
+                            setFrag(1);
+                        }
                         break;
 
                     case R.id.action_chatting:
@@ -69,6 +81,7 @@ public class HomeActivity extends AppCompatActivity {
         //*****사용자(회원, 트레이너, 관리자)마다 연결된 프레그먼트가 달라야함
         homeFragment = new HomeFragment();
         memberExrProgramListFragment = new MemberExrProgramListFragment();
+        trainerExrProgramFragment = new TrainerExrProgramFragment();
         chattingListFragment = new ChattingListFragment();
         profileFragment = new ProfileFragment();
 
@@ -104,6 +117,10 @@ public class HomeActivity extends AppCompatActivity {
                 ft.commit();
                 break;
 
+            case 4:
+                ft.replace(R.id.main_frame, trainerExrProgramFragment);
+                ft.commit();
+                break;
         }
     }
 }
