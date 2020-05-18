@@ -6,9 +6,11 @@ public class AllTrainer {
     private String image;
     private double rating;
 
-    public AllTrainer( String name, double rating) {
+    public AllTrainer(int id, String name, double rating, String image) {
+        this.id = id;
         this.name = name;
         this.rating = rating;
+        this.image = image;
     }
 
     public AllTrainer(int id, String name, String image) {

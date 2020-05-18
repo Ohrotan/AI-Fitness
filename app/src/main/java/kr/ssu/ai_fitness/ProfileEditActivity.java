@@ -1,9 +1,15 @@
 package kr.ssu.ai_fitness;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,18 +30,28 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.ImageViewTask;
+import kr.ssu.ai_fitness.util.ProfileEdit;
+import kr.ssu.ai_fitness.util.ProfileUpload;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class ProfileEditActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private static final int REQUEST_CODE = 2;
 
     private ImageView profilePic;
     private TextView name;
@@ -53,6 +69,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
     private TextInputEditText fatEdit;
     private EditText selfIntro;
     private Switch isTrainer;
+    private Button changePicButton;
     private Button saveButton;
     //private Switch a;
     final Context context = this;
@@ -60,16 +77,19 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
     AlertDialog.Builder isTrainerFalseDialog;
     AlertDialog.Builder reEnterDialog;
 
+    private int id;
     private String height;
     private String weight;
     private String muscle;
     private String fat;
     private String intro;
     private int trainer;
+    private String imagePath;
 
     private Member user;
 
-
+    InputStream imgInputStream;
+    Uri selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +109,11 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
         muscleEdit = findViewById(R.id.muscleEditTextProfileEdit);
         fatEdit = findViewById(R.id.fatEditTextProfileEdit);
         selfIntro = findViewById(R.id.selfInstructionProfileEdit);
+        changePicButton = findViewById(R.id.editDetailButtonProfileEdit);
         saveButton = findViewById(R.id.saveButtonProfileEdit);
 
         saveButton.setOnClickListener(this);
+        changePicButton.setOnClickListener(this);
 
         //height = heightLayout.getEditText().getText().toString();
         //weight = weightLayout.getEditText().getText().toString();
@@ -105,6 +127,16 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
 
         //SharedPrefManager에 저장된 user 데이터 가져오기
         user = SharedPrefManager.getInstance(ProfileEditActivity.this).getUser();
+
+        id = user.getId();
+
+        //프로필 이미지 설정
+        ImageViewTask task = new ImageViewTask(profilePic);
+        task.execute(user.getImage());
+        Log.d("ORI_IMAGE_PATH", "original image path = " + user.getImage());
+
+        imagePath = user.getImage();
+        Log.d("ORI_IMAGE_PATH", "original image path = " + imagePath);
 
         //이름설정
         name.setText(user.getName() + "님");
@@ -159,6 +191,170 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
 
         Log.d("INFO_TRAINER", "Trainer = " + user.getTrainer());
         Log.d("INFO_BODY", "height = " + user.getHeight() + " weight = " + user.getWeight() + " muscle = " + user.getMuscle() + " fat = " + user.getFat());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE) {
+
+                selectedImageUri = data.getData();
+                try {
+
+                    profilePic.setImageURI(selectedImageUri);
+
+                    Log.d("upLoad_image_path", "image path = " + selectedImageUri);
+
+                    //선택한 사진 경로를 버튼 옆 텍스트뷰에 보여줌
+                    //textViewImage.setText(selectedImageUri.getPath());
+
+                    imgInputStream = getFileInputStream(selectedImageUri);
+                    Log.d("upLoad_image_stream", "image input stream = " + imgInputStream);
+
+                } catch (Exception e) {
+                    Toast.makeText(this, "사진 선택 에러", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        else if (requestCode == RESULT_CANCELED) {
+            Toast.makeText(this,"사진 선택 취소", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public InputStream getFileInputStream(Uri uri) throws IOException {
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+
+        int origWidth = bitmap.getWidth();
+        int origHeight = bitmap.getHeight();
+
+        final int destWidth = 100;//or the width you need
+
+        if (origWidth > destWidth) {
+            int destHeight = origHeight / (origWidth / destWidth);
+            bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false);
+        }
+
+        int byteSize = bitmap.getRowBytes() * bitmap.getHeight();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(byteSize);
+        bitmap.copyPixelsToBuffer(byteBuffer);
+
+        byte[] byteArray = byteBuffer.array();
+
+        return new ByteArrayInputStream(byteArray);
+    }
+
+    private void registerUser(Uri selectedImageUri){
+        height = heightEdit.getText().toString();
+        weight = weightEdit.getText().toString();
+        muscle = muscleEdit.getText().toString();
+        fat = fatEdit.getText().toString();
+        intro = selfIntro.getText().toString();
+        String trainerString = Integer.toString(trainer);
+
+        //Member user = SharedPrefManager.getInstance(ProfileEditActivity.this).getUser();;
+
+        Log.d("INFO_INPUT", "height = " + height + " weight = " + weight + " muscle = " + muscle + " fat = " + fat + " isTrainer = " + trainer);
+        Log.d("INFO_INPUT", "Intro = " + intro);
+
+        if(height.length() == 0 || weight.length() == 0 || muscle.length() == 0 || fat.length() == 0){
+            reEnterDialog = new AlertDialog.Builder(context);
+            reEnterDialog.setTitle("경고");
+            // AlertDialog 셋팅
+            reEnterDialog
+                    .setMessage("신체 정보란을 비워 두지 마세요!")
+                    .setCancelable(true)
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //ProfileEditActivity.this.finish();
+                            dialog.cancel();
+                            //Toast.makeText(getApplicationContext(), "트레이너로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            reEnterDialog.show();
+        }
+        else{
+            SharedPrefManager.getInstance(getApplicationContext()).setProfile(height, weight, muscle, fat, intro, trainerString);
+
+            Log.d("INFO_AFTER_CHANGE", "height = " + user.getHeight() + " weight = " + user.getWeight() + " muscle = " + user.getMuscle() + " fat = " + user.getFat() + " isTrainer = " + user.getTrainer());
+            Log.d("INFO_AFTER_CHANGE", "Intro = " + user.getIntro());
+
+            //setProfile(user.getName(), height, weight, muscle, fat, intro, trainerString);
+
+            Member edit = new Member(
+                    id,
+                    user.getEmail(),
+                    user.getPwd(),
+                    user.getName(),
+                    Double.parseDouble(height),         //여기서 저장
+                    Double.parseDouble(weight),         //여기서 저장
+                    user.getGender(),
+                    user.getBirth(),
+                    Double.parseDouble(muscle),         //여기서 저장
+                    Double.parseDouble(fat),            //여기서 저장
+                    intro,                              //여기서 저장
+                    UUID.randomUUID()+".jpg",    //여기서 저장
+                    (byte)trainer,                      //여기서 저장
+                    user.getAdmin(),
+                    user.getAlarm()
+            );
+
+            ProfileEditActivity.UploadMemberInfoTask uploadMemberInfoTask = new ProfileEditActivity.UploadMemberInfoTask(this, edit, imgInputStream);
+            uploadMemberInfoTask.execute();//AsyncTask 실행
+
+            //finish();
+            //startActivity(new Intent(ProfileEditActivity.this, ProfileActivity.class));
+        }
+    }
+
+    class UploadMemberInfoTask extends AsyncTask<Void, Void, String> {
+
+        ProgressDialog uploading;
+        Context context;
+        InputStream imgInputStream;
+
+        Member info;
+
+        UploadMemberInfoTask(Context context, Member info, InputStream imgInputStream) {
+            this.info = info;
+            this.context = context;
+            this.imgInputStream = imgInputStream;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            uploading = ProgressDialog.show(ProfileEditActivity.this, "수정중", "잠시만 기다려주세요...", false, false);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            uploading.dismiss();
+            // if(s.length()>100) s= s.substring(0,99);
+            //video_path_tv.setText(Html.fromHtml(s));
+            // video_path_tv.setMovementMethod(LinkMovementMethod.getInstance());
+            Toast.makeText(ProfileEditActivity.this,"수정완료",Toast.LENGTH_SHORT).show();
+
+            SharedPrefManager.getInstance(context).userLogin(info);
+
+            ((Activity)context).finish();
+            context.startActivity(new Intent(context, ProfileActivity.class));
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            ProfileEdit u = new ProfileEdit();
+
+            //실제 HttpURLConnection 이용해서 서버에 요청하고 응답받는다.
+            String msg = u.upload(imgInputStream,info);
+
+            Log.d("doInBackground", "msg = " + msg + " imgInputStream = " + imgInputStream);
+
+            return msg;
+        }
     }
 
     /*@Override
@@ -266,7 +462,8 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.saveButtonProfileEdit:
-                height = heightEdit.getText().toString();
+                registerUser(selectedImageUri);
+                /*height = heightEdit.getText().toString();
                 weight = weightEdit.getText().toString();
                 muscle = muscleEdit.getText().toString();
                 fat = fatEdit.getText().toString();
@@ -304,7 +501,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
 
                     finish();
                     startActivity(new Intent(ProfileEditActivity.this, ProfileActivity.class));
-                }
+                }*/
                 break;
             case R.id.isTrainerSwitch:
                 if(isTrainer.isChecked()){
@@ -371,6 +568,14 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                     //Toast.makeText(getApplicationContext(), "알림 수신 거부", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.editDetailButtonProfileEdit:
+                //사진 선택할 수 있게 해줘야함.
+                //Intent intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_CODE);
+
         }
     }
 }

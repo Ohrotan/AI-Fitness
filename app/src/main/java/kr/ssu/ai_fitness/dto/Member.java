@@ -26,6 +26,16 @@ public class Member {
         this.id=id;
     }
 
+    public Member(int id, double height, double weight, double muscle, double fat, String intro, String image){
+        this.id = id;
+        this.height = height;
+        this.weight = weight;
+        this.muscle = muscle;
+        this.fat = fat;
+        this.intro = intro;
+        this.image = image;
+    }
+
     public Member(int id, String email, String pwd, String name, double height, double weight, byte gender, String birth, double muscle, double fat, String intro, String image, byte trainer, byte admin, byte alarm) {
         this.id = id;
         this.email = email;

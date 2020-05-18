@@ -37,6 +37,7 @@ import kr.ssu.ai_fitness.adapter.RegMemberDetailAdapter;
 import kr.ssu.ai_fitness.adapter.TrainerProfileAdapter;
 import kr.ssu.ai_fitness.dto.ExrProgram;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.vo.AllTrainer;
 import kr.ssu.ai_fitness.vo.TrainerProgram;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
@@ -54,6 +55,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
     private int trainerID;
     private TextView name;
     private String trainerName;
+    private String imagePath;
     private TextView genderAge;
     private int gender;
     private String mGender;
@@ -116,6 +118,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
         gender = intent.getExtras().getInt("gender");
         birthValue = intent.getExtras().getString("birth");
         memberNum = intent.getExtras().getInt("memberNum");
+        imagePath = intent.getExtras().getString("imagePath");
 
         String[] array = trainerName.split(" ");
         trainerName = array[0];
@@ -128,6 +131,10 @@ public class TrainerProfileActivity extends AppCompatActivity {
         //queue.add(stringRequest);
 
         Log.d("READ_TR_DATA_received", String.format(trainerID + " / " + trainerName + " / " +  avgRating + " / " + heightValue + " / " + weightValue + " / " + muscleValue + " / " + fatValue + " / " + introValue + " / " + birthValue + " / " + gender));
+
+        //프로필 이미지 설정
+        ImageViewTask task = new ImageViewTask(profilePic);
+        task.execute(imagePath);
 
         //이름설정
         name.setText(trainerName + " 트레이너");

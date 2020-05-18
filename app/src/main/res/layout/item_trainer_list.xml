@@ -15,10 +15,11 @@
         >
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
             android:id="@+id/trainerListImageItem_trainerPic"
-            android:src="@drawable/ic_account_box_black_24dp">
+            android:src="@drawable/profile_thumbnail">
 
         </ImageView>
 
