@@ -4,7 +4,7 @@ public class DayProgram {
     private int id;
     private String title;
 
-    public DayProgram(int id, String Title){
+    public DayProgram(int id, String title){
         this.id = id;
         this.title = title;
     }
