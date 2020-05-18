@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import kr.ssu.ai_fitness.ExrProgramRegActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.TrainerVideoListActivity;
 import kr.ssu.ai_fitness.dto.Member_reg_program;
@@ -23,6 +24,7 @@ public class TrainerExrProgramFragment extends Fragment {
 
     private ListView mListview;
 
+    Button buttonExrProgram;
     Button buttonMotion;
 
     @Override
@@ -33,6 +35,7 @@ public class TrainerExrProgramFragment extends Fragment {
 
         ListView listView = (ListView)view.findViewById(R.id.fragment_trainer_exr_program_listview);
         buttonMotion = view.findViewById(R.id.fragment_trainer_exr_program_button_motion);
+        buttonExrProgram = view.findViewById(R.id.fragment_trainer_exr_program_button_exrprogram);
 
         TrainerExrProgramFragment.ListAdapter adapter = new TrainerExrProgramFragment.ListAdapter();
         //adapter에 data값
@@ -51,6 +54,16 @@ public class TrainerExrProgramFragment extends Fragment {
             public void onClick(View view) {
                 //*****트레이너의 동작 동영상 목록 화면으로 넘어가는데, 인텐트로 넘겨줄 값이 있을 수도 있음
                 Intent intent = new Intent(getActivity(), TrainerVideoListActivity.class);
+
+                startActivity(intent);
+            }
+        });
+
+        buttonExrProgram.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //*****프로그램 틍록 화면으로 넘어가는데, 인텐트로 넘겨줄 값이 있을 수도 있음
+                Intent intent = new Intent(getActivity(), ExrProgramRegActivity.class);
 
                 startActivity(intent);
             }
