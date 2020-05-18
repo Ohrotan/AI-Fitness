@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import kr.ssu.ai_fitness.fragment.TrainerExrProgramFragment;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 
 //메모장
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn4) {
             intent = new Intent(getApplicationContext(), MemberAllExrProgramListActivity.class);
         } else if (v == btn5) {
+             intent = new Intent(getApplicationContext(), TrainerExrProgramFragment.class);
         } else if (v == btn6) {
             intent = new Intent(getApplicationContext(), AdminProgramManageActivity.class);
         } else if (v == btn7) {
