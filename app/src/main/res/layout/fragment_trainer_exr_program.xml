@@ -25,6 +25,7 @@
             android:textSize="15dp"
             android:backgroundTint="@color/accent"/>
         <Button
+            android:id="@+id/fragment_trainer_exr_program_button_motion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
