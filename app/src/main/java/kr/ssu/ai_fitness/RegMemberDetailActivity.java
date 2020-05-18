@@ -103,11 +103,11 @@ public class RegMemberDetailActivity extends AppCompatActivity {
         //기본정보 받아오기
         getData();
 
-        Handler handler0 = new Handler();
+        /*Handler handler0 = new Handler();
         handler0.postDelayed(new Runnable() {
             @Override
             public void run() {
-                /*Log.d("REG_MEM_DETAIL", "After getData()");
+                Log.d("REG_MEM_DETAIL", "After getData()");
 
                 //이름설정
                 name.setText(mName);
@@ -166,9 +166,9 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                     regPeriod.setText(mStDate + " ~ " + mEdDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
-        }, 300);
+        }, 300);*/
 
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
         final RecyclerView recyclerViewRegMemberDetail = findViewById(R.id.regMemberDetailRecyclerView);
@@ -208,7 +208,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                             }
                             rView.setAdapter(adapter);
 
-                            Log.d("REG_MEM_DETAIL", "After getData()");
+                            //Log.d("REG_MEM_DETAIL", "After getData()");
 
                             //이름설정
                             name.setText(mName);
