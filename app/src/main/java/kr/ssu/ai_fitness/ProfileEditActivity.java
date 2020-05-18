@@ -300,11 +300,21 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                     Double.parseDouble(muscle),         //여기서 저장
                     Double.parseDouble(fat),            //여기서 저장
                     intro,                              //여기서 저장
-                    UUID.randomUUID()+".jpg",    //여기서 저장
+                    "ai-fitness/profile_img/" + UUID.randomUUID()+".jpg",    //여기서 저장
                     (byte)trainer,                      //여기서 저장
                     user.getAdmin(),
                     user.getAlarm()
             );
+
+            setProfile(
+                    edit.getId(),
+                    Double.toString(edit.getHeight()),
+                    Double.toString(edit.getWeight()),
+                    Double.toString(edit.getMuscle()),
+                    Double.toString(edit.getFat()),
+                    edit.getIntro(),
+                    Integer.toString(edit.getTrainer()),
+                    edit.getImage());
 
             ProfileEditActivity.UploadMemberInfoTask uploadMemberInfoTask = new ProfileEditActivity.UploadMemberInfoTask(this, edit, imgInputStream);
             uploadMemberInfoTask.execute();//AsyncTask 실행
@@ -355,6 +365,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
 
             //실제 HttpURLConnection 이용해서 서버에 요청하고 응답받는다.
             String msg = u.upload(imgInputStream,info, getApplicationContext());
+
 
             Log.d("doInBackground", "msg = " + msg + " imgInputStream = " + imgInputStream);
 
@@ -428,7 +439,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
             //Toast.makeText(getApplicationContext(), "알림 수신 거부", Toast.LENGTH_SHORT).show();
         }
     }*/
-    public void setProfile(final String name, final String height, final String weight, final String muscle, final String fat, final String intro, final String trainer){
+    public void setProfile(final int id, final String height, final String weight, final String muscle, final String fat, final String intro, final String trainer, final String imagePath){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_SETPROFILE,
                 new Response.Listener<String>() {
                     @Override
@@ -446,15 +457,16 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
-                Log.d("INFO_PROFILE_EDIT_MAP", "name = " + name + " height = " + height + " weight = " + weight + " muscle = " + muscle + " fat = " + fat + " intro = " + intro + " isTrainer = " + trainer);
+                Log.d("INFO_PROFILE_EDIT_MAP", "name = " + name + " height = " + height + " weight = " + weight + " muscle = " + muscle + " fat = " + fat + " intro = " + intro + " isTrainer = " + trainer + " imagePath = " + imagePath);
                 Map<String, String> params = new HashMap<>();
-                params.put("name", name);
+                params.put("id", Integer.toString(id));
                 params.put("height", height);
                 params.put("weight", weight);
                 params.put("muscle", muscle);
                 params.put("fat", fat);
                 params.put("trainer", trainer);
                 params.put("intro", intro);
+                params.put("image", imagePath);
                 return params;
             }
         };
