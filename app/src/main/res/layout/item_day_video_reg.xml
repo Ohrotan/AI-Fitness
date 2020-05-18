@@ -76,7 +76,7 @@ android:layout_gravity="center"
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView8"
+        android:id="@+id/day_video_delete_btn"
         android:layout_width="50dp"
         android:layout_height="80dp"
         android:layout_margin="0dp"

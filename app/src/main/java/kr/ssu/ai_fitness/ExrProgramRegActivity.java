@@ -93,6 +93,7 @@ public class ExrProgramRegActivity extends AppCompatActivity {
 
     void saveExrProgram(final ExrProgram exr) {
         //서버에서 받아오는 부분
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_EXR_CREATE,
                 new Response.Listener<String>() {
                     @Override
