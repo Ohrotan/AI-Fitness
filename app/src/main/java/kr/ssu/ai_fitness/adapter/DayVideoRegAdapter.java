@@ -1,6 +1,7 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,6 @@ public class DayVideoRegAdapter extends BaseAdapter {
     public DayVideoRegAdapter(Context context) {
         this.context = context;
         items = new ArrayList<>();
-        //  items.add(new DayProgramVideo("팔굽혀펴기"));
-        items.add(new DayProgramVideo("스쿼트"));
-        items.add(new DayProgramVideo("런지"));
-        items.add(new DayProgramVideo("윗몸일으키기"));
     }
 
     public DayVideoRegAdapter(Context context, ArrayList<DayProgramVideo> items) {
@@ -55,7 +52,7 @@ public class DayVideoRegAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final DayVideoRegAdapter.ViewHolder holder;
+        DayVideoRegAdapter.ViewHolder holder;
         //항목 레이아웃 초기화
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -66,7 +63,7 @@ public class DayVideoRegAdapter extends BaseAdapter {
 
             holder.tr_video_counts_etv = convertView.findViewById(R.id.tr_video_counts_etv);
             holder.tr_video_sets_etv = convertView.findViewById(R.id.tr_video_sets_etv);
-
+            holder.day_video_delete_btn = convertView.findViewById(R.id.day_video_delete_btn);
 
             convertView.setTag(holder);
         } else {
@@ -76,20 +73,65 @@ public class DayVideoRegAdapter extends BaseAdapter {
         item = items.get(position);
         holder.title.setText(item.getName());
         item.setSeq(position + 1);
+        Log.v("etv", item.getCounts() + "." + item.getSets());
+        holder.tr_video_counts_etv.setText(item.getCounts() + "");
+        holder.tr_video_sets_etv.setText(item.getSets() + "");
+        holder.tr_video_sets_etv.setTag(item);
+        holder.tr_video_counts_etv.setTag(item);
+        holder.day_video_delete_btn.setTag(item);
+
+/*
+        convertView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                String num = count_etv.getText().toString();
+                Log.v("view motion count", num);
+                if (num != null && !num.equals("")) {
+                    item.setCounts(Integer.parseInt(num));
+                    Log.v("motion item dto", item.toString());
+                }
+                num = set_etv.getText().toString();
+                Log.v("view motion set", num);
+                if (num != null && !num.equals("")) {
+                    item.setSets(Integer.parseInt(num));
+                    Log.v("motion item dto", item.toString());
+                }
+            }
+        });
+
+*/
         holder.tr_video_counts_etv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                String num = holder.tr_video_counts_etv.getText().toString();
-                if (num != null && num.matches("%d"))
+                String num = ((EditText)v).getText().toString();
+                item = (DayProgramVideo) v.getTag();
+                Log.v("motion count", num);
+                if (num != null && !num.equals(""))
                     item.setCounts(Integer.parseInt(num));
+                Log.v("motion item dto", item.toString());
             }
         });
+
         holder.tr_video_sets_etv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                String num = holder.tr_video_sets_etv.getText().toString();
-                if (num != null && num.matches("%d"))
+                String num = ((EditText)v).getText().toString();
+                item = (DayProgramVideo) v.getTag();
+                Log.v("motion set", num);
+                if (num != null && !num.equals(""))
                     item.setSets(Integer.parseInt(num));
+                Log.v("motion item dto", item.toString());
+            }
+        });
+
+        holder.day_video_delete_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Log.v("day video del","del btn clicked");
+                items.remove((DayProgramVideo) v.getTag());
+                notifyDataSetChanged();
+                //notify();
+                //  notifyAll();
             }
         });
 
@@ -101,5 +143,6 @@ public class DayVideoRegAdapter extends BaseAdapter {
         TextView title;
         EditText tr_video_counts_etv;
         EditText tr_video_sets_etv;
+        ImageView day_video_delete_btn;
     }
 }
