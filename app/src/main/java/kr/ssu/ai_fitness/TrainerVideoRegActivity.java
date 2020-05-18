@@ -193,7 +193,9 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
-
+                        Intent intent = getIntent();
+                        setResult(100, intent);
+                        finish();
                     }
                 },
                 new Response.ErrorListener() {
@@ -207,7 +209,7 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                params.put("video", "ai-fitness/tr_video/"+info.getVideo());
+                params.put("video", "ai-fitness/tr_video/" + info.getVideo());
                 params.put("title", info.getTitle());
 
                 return params;

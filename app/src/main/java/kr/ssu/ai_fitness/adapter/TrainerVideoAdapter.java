@@ -2,19 +2,31 @@ package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.VideoPlayActivity;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
+import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.util.ImageViewTask;
+import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class TrainerVideoAdapter extends BaseAdapter {
 
@@ -52,7 +64,7 @@ public class TrainerVideoAdapter extends BaseAdapter {
             holder = new TrainerVideoAdapter.ViewHolder();
             holder.img = (ImageView) convertView.findViewById(R.id.tr_video_thumb_img);
             holder.title = (TextView) convertView.findViewById(R.id.tr_video_title_tv);
-
+            holder.del_btn = convertView.findViewById(R.id.tr_video_del_btn);
             convertView.setTag(holder);
         } else {
             holder = (TrainerVideoAdapter.ViewHolder) convertView.getTag();
@@ -64,7 +76,10 @@ public class TrainerVideoAdapter extends BaseAdapter {
         task.execute(item.getThumb_img());
 
         holder.img.setTag(item);
+        holder.del_btn.setTag(item);
+        Log.v("video_tag", item.getId() + "");
         holder.title.setText(item.getTitle());
+
 
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +92,40 @@ public class TrainerVideoAdapter extends BaseAdapter {
             }
         });
 
+        holder.del_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final TrainerVideo dto = (TrainerVideo) v.getTag();
+                final int video_id = dto.getId();
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DELETE_VIDEO,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                //서버에서 요청을 받았을 때 수행되는 부분
+                                items.remove(dto);
+                                notifyDataSetChanged();
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
+                            }
+                        }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        //서버가 요청하는 파라미터를 담는 부분
+                        Map<String, String> params = new HashMap<>();
+                        params.put("id", video_id + "");
+                        return params;
+                    }
+                };
+
+                stringRequest.setShouldCache(false);
+                VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
+            }
+        });
+
 
         return convertView;
     }
@@ -84,5 +133,6 @@ public class TrainerVideoAdapter extends BaseAdapter {
     class ViewHolder {
         ImageView img;
         TextView title;
+        ImageView del_btn;
     }
 }

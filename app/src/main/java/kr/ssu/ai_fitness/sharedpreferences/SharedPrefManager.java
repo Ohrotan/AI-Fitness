@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import java.util.List;
+
 import kr.ssu.ai_fitness.LoginActivity;
 import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.dto.TrainerVideo;
 
 public class SharedPrefManager {
 
@@ -13,6 +16,8 @@ public class SharedPrefManager {
 
     //the constants
     private static final String SHARED_PREF_NAME = "shared_preferences_user_file";
+    private static final String SHARED_PREF_NAME_TR_VIDEO_PATH = "tr_video_path";
+    private static final String SHARED_PREF_NAME_TR_VIDEO_THUMB_PATH = "tr_video_thumb_path";
 
     private static final String id = "id";
     private static final String email = "email";
@@ -72,7 +77,7 @@ public class SharedPrefManager {
         editor.apply();
     }
 
-    public void setAlarm(int isAlarm){
+    public void setAlarm(int isAlarm) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -81,7 +86,7 @@ public class SharedPrefManager {
         editor.apply();
     }
 
-    public void setTrainer(int isTrainer){
+    public void setTrainer(int isTrainer) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -90,7 +95,7 @@ public class SharedPrefManager {
         editor.apply();
     }
 
-    public void setPwd(String newPwd){
+    public void setPwd(String newPwd) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -99,7 +104,7 @@ public class SharedPrefManager {
         editor.apply();
     }
 
-    public void setProfile(String heightInput, String weightInput, String muscleInput, String fatInput, String introInput, String trainerInput){
+    public void setProfile(String heightInput, String weightInput, String muscleInput, String fatInput, String introInput, String trainerInput) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -137,7 +142,7 @@ public class SharedPrefManager {
                 sharedPreferences.getString(image, null),
                 Byte.parseByte(sharedPreferences.getString(trainer, null)),
                 Byte.parseByte(sharedPreferences.getString(admin, null)),
-                Byte.parseByte(sharedPreferences.getString(alarm,null))
+                Byte.parseByte(sharedPreferences.getString(alarm, null))
         );
     }
 
@@ -149,4 +154,34 @@ public class SharedPrefManager {
         editor.apply(); //호출후 곧바로 리턴되어 스레드를 블록시키지 않는다. 따라서 commit보다 반응성 좋음.
         mCtx.startActivity(new Intent(mCtx, LoginActivity.class));  //로그인 액티비티로 돌아간다.
     }
+
+    public void setTrVideoAndThumbPath(List<TrainerVideo> list) {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_PATH, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        for (TrainerVideo dto : list) {
+            editor.putString(dto.getId() + "", dto.getVideo());
+        }
+        editor.apply();
+
+
+        sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_THUMB_PATH, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        for (TrainerVideo dto : list) {
+            editor.putString(dto.getId() + "", dto.getThumb_img());
+        }
+        editor.apply();
+    }
+
+    public String getTrVideoPath(String video_id) {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_PATH, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(video_id, null);
+    }
+
+    public String getTrVideoThumbPath(String video_id) {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_THUMB_PATH, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(video_id, null);
+    }
+
 }
