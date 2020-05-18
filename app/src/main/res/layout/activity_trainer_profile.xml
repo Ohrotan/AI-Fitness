@@ -52,7 +52,7 @@
                     android:id="@+id/trainerPicTrainerProfile"
                     android:background="@drawable/img_rounding"
                     android:scaleType="fitXY"
-                    android:src="@drawable/bonobono"/>
+                    android:src="@drawable/profile_thumbnail"/>
 
                 <TextView
                     android:id="@+id/trainerNameTrainerProfile"

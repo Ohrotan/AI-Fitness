@@ -33,6 +33,7 @@ import java.util.Map;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.TrainerProfileActivity;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.vo.AllTrainer;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -40,8 +41,10 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
 
     //private ArrayList<String> mData = new ArrayList<String>() ;
     ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
+    private ImageView profilePic;
     private Context mContext;
     private ImageView ratings;
+    private String imagePath;
     private int trainerID;
     private String trainerName;
     private double mAvgRating;
@@ -100,14 +103,14 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
                         String[] array = mName.split(" ");
                         trainerName = array[0];
                         mAvgRating = trainers.get(pos).getRating();
-                        getData(trainerName);
+                        getData(pos);
 
                         // 2초간 멈추게 하고싶다면
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             public void run() {
                                 Log.d("VIEWHOLDER_ONCLICK", String.format(trainerID + " / " + trainerName + " / " +  mAvgRating + " / " + heightValue + " / " + weightValue + " / " + muscleValue + " / " + fatValue + " / " + introValue + " / " + birthValue + " / " + gender));
-                                Log.d("VIEWHOLDER_ONCLICK", "memberNum = " + regMemberNum);
+                                Log.d("VIEWHOLDER_ONCLICK", "memberNum = " + regMemberNum + " image path = " + imagePath);
 
                                 Intent intent = new Intent(mContext, TrainerProfileActivity.class);
 
@@ -122,6 +125,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
                                 intent.putExtra("gender", gender);
                                 intent.putExtra("birth", birthValue);
                                 intent.putExtra("memberNum", regMemberNum);
+                                intent.putExtra("imagePath", imagePath);
 
                                 mContext.startActivity(intent);
                             }
@@ -142,7 +146,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
         }
     }
 
-    public void getData(final String Name){
+    public void getData(final int pos){
         //queue = Volley.newRequestQueue(mContext);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READTRAINERDATA,
@@ -164,6 +168,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
                             introValue = jObject.getString("intro");
                             birthValue = jObject.getString("birth");
                             gender = jObject.getInt("gender");
+                            imagePath = jObject.getString("image");
 
                             JSONObject jsonObject = jArray.getJSONObject(1);
                             regMemberNum = jsonObject.getInt("memberNum");
@@ -187,8 +192,8 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                Log.d("SEND_TR_NAME", "trainerName = " + Name);
-                params.put("name", Name);
+                Log.d("SEND_TR_NAME", "trainerId = " + trainers.get(pos).getId());
+                params.put("id", Integer.toString(trainers.get(pos).getId()));
                 return params;
             }
         };
@@ -230,6 +235,12 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
 
         holder.trainerListItem.setText(text) ;
 
+        String image = trainers.get(position).getImage();
+        ImageViewTask task = new ImageViewTask(holder.profilePic);
+        task.execute(image);
+
+        Log.d("BINDVIEWHOLDER", "image path = " + image);
+
         Double avgRating = trainers.get(position).getRating();
         //mAvgRating = avgRating;
 
@@ -270,8 +281,12 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
             int img = R.drawable.rating_4_5;
             holder.rating.setImageResource(img);
         }
-        else{
+        else if(avgRating > 4.5){
             int img = R.drawable.rating_5;
+            holder.rating.setImageResource(img);
+        }
+        else{
+            int img = R.drawable.rating_0;
             holder.rating.setImageResource(img);
         }
     }

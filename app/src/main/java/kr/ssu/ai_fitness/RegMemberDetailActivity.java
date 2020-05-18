@@ -35,6 +35,7 @@ import java.util.Map;
 import kr.ssu.ai_fitness.adapter.RegMemberDetailAdapter;
 import kr.ssu.ai_fitness.adapter.RegMemberListAdapter;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.vo.DayProgram;
 import kr.ssu.ai_fitness.vo.TrainerProgram;
 
@@ -56,6 +57,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
     private TextView progress;
 
     private String mName;
+    private String mImage;
     private int gender;
     private String mGender;
     private int age;
@@ -95,13 +97,20 @@ public class RegMemberDetailActivity extends AppCompatActivity {
         programTitle = intent.getExtras().getString("title");
         exrId = intent.getExtras().getInt("exrId");
 
+        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
+        final RecyclerView recyclerViewRegMemberDetail = findViewById(R.id.regMemberDetailRecyclerView);
+        recyclerViewRegMemberDetail.setLayoutManager(new LinearLayoutManager(this));
+
+        // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
+        final RegMemberDetailAdapter adapterMember = new RegMemberDetailAdapter(this);
+
         Log.d("MEMBER_ID_fromRegMem", "Member ID = " + memId + " title = " + programTitle + " exrId = " + exrId);
 
         //툴바 프로그램 제목 설정
         toolbar.setSubtitle(programTitle);
 
         //기본정보 받아오기
-        getData();
+        getData(recyclerViewRegMemberDetail, adapterMember);
 
         /*Handler handler0 = new Handler();
         handler0.postDelayed(new Runnable() {
@@ -170,14 +179,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
             }
         }, 300);*/
 
-        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-        final RecyclerView recyclerViewRegMemberDetail = findViewById(R.id.regMemberDetailRecyclerView);
-        recyclerViewRegMemberDetail.setLayoutManager(new LinearLayoutManager(this));
-
-        // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        final RegMemberDetailAdapter adapterMember = new RegMemberDetailAdapter(getApplication());
-
-        getDayTitle(recyclerViewRegMemberDetail, adapterMember);
+        //
     }
 
     private void getDayTitle(final RecyclerView rView, final RegMemberDetailAdapter adapter){
@@ -209,6 +211,10 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                             rView.setAdapter(adapter);
 
                             //Log.d("REG_MEM_DETAIL", "After getData()");
+
+                            //프로필 사진 설정
+                            ImageViewTask task = new ImageViewTask(memberPicRegMemberDetail);
+                            task.execute(mImage);
 
                             //이름설정
                             name.setText(mName);
@@ -293,7 +299,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    private void getData(){
+    private void getData(final RecyclerView recyclerViewRegMemberDetail, final RegMemberDetailAdapter adapterMember){
         queue = Volley.newRequestQueue(this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READREGMEMBERDETAIL,
@@ -310,6 +316,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                             //for(int i = 0; i < jArray.length(); i++){
                             JSONObject jObject = jArray.getJSONObject(0);
                             mName = jObject.getString("name");
+                            mImage = jObject.getString("image");
                             gender = jObject.getInt("gender");
                             birthValue = jObject.getString("birth");
                             mHeight = jObject.getDouble("height");
@@ -325,6 +332,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                             endDate = jObject1.getString("end_date");
                             //exrProgramIdList.add(programId);
                             //}
+                            getDayTitle(recyclerViewRegMemberDetail, adapterMember);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
