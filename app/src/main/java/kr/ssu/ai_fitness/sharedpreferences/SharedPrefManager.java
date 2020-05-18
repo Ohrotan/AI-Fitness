@@ -113,6 +113,21 @@ public class SharedPrefManager {
         editor.apply();
     }
 
+    public void editProfile(String heightInput, String weightInput, String muscleInput, String fatInput, String introInput, String trainerInput, String imageInput){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(height, String.valueOf(heightInput)); //double형은 string으로 저장하고 꺼낼 때 Double.parseDoubble()써야함.
+        editor.putString(weight, String.valueOf(weightInput));
+        editor.putString(muscle, String.valueOf(muscleInput));
+        editor.putString(fat, String.valueOf(fatInput));
+        editor.putString(intro, introInput);
+        editor.putString(trainer, trainerInput);
+        editor.putString(image, imageInput);
+
+        editor.apply();
+    }
+
     //isLoggedIn()는 사용자가 이미 로그인했는지 여부를 검사합니다.
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
