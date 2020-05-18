@@ -24,10 +24,6 @@ public class DayVideoChooseAdapter extends BaseAdapter {
     public DayVideoChooseAdapter(Context context) {
         this.context = context;
         items = new ArrayList<>();
-        //  items.add(new DayProgramVideo("팔굽혀펴기"));
-        items.add(new DayProgramVideo("스쿼트"));
-        items.add(new DayProgramVideo("런지"));
-        items.add(new DayProgramVideo("윗몸일으키기"));
     }
 
     public DayVideoChooseAdapter(Context context, ArrayList<DayProgramVideo> items) {
@@ -86,6 +82,9 @@ public class DayVideoChooseAdapter extends BaseAdapter {
 
         item = items.get(position);
         holder.title.setText(item.getName());
+
+    //    ImageViewTask task = new ImageViewTask(holder.img);
+
 
         return convertView;
     }
