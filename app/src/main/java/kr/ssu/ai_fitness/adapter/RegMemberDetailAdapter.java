@@ -44,6 +44,7 @@ public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetail
 
             // 뷰 객체에 대한 참조. (hold strong reference)
             regMemberDetailItem = itemView.findViewById(R.id.regMemberDetailTextItem);
+            alarmDot = itemView.findViewById(R.id.regMemberDetailAlarm);
 
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -97,4 +98,5 @@ public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetail
 
         return mData.size() ;
     }
+
 }

@@ -106,7 +106,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
                         getData(pos);
 
                         // 2초간 멈추게 하고싶다면
-                        Handler handler = new Handler();
+                        /*Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             public void run() {
                                 Log.d("VIEWHOLDER_ONCLICK", String.format(trainerID + " / " + trainerName + " / " +  mAvgRating + " / " + heightValue + " / " + weightValue + " / " + muscleValue + " / " + fatValue + " / " + introValue + " / " + birthValue + " / " + gender));
@@ -129,14 +129,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
 
                                 mContext.startActivity(intent);
                             }
-                        }, 500);  // 2000은 2초를 의미합니다.
-
-
-
-                        //Log.d("VIEWHOLDER", "name = " + mName + " Average Rating = " + mAvgRating);
-                        //mContext.startActivity(intent);
-
-                        //notifyItemChanged(pos);
+                        }, 500);  // 2000은 2초를 의미합니다.*/
                     }
                     else{
 
@@ -175,6 +168,23 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
 
                             Log.d("ONRESPONSE_RESULT", String.format(trainerID + " / " + trainerName + " / " +  mAvgRating + " / " + heightValue + " / " + weightValue + " / " + muscleValue + " / " + fatValue + " / " + introValue + " / " + birthValue + " / " + gender));
                             Log.d("ONRESPONSE_RESULT", "memberNum = " + regMemberNum);
+
+                            Intent intent = new Intent(mContext, TrainerProfileActivity.class);
+
+                            intent.putExtra("id", trainerID);
+                            intent.putExtra("trainerName", trainerName);
+                            intent.putExtra("rating", mAvgRating);
+                            intent.putExtra("height", heightValue);
+                            intent.putExtra("weight", weightValue);
+                            intent.putExtra("muscle", muscleValue);
+                            intent.putExtra("fat", fatValue);
+                            intent.putExtra("intro", introValue);
+                            intent.putExtra("gender", gender);
+                            intent.putExtra("birth", birthValue);
+                            intent.putExtra("memberNum", regMemberNum);
+                            intent.putExtra("imagePath", imagePath);
+
+                            mContext.startActivity(intent);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
