@@ -225,7 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/programProgress"
-                    android:text="2 / 30"
+
                     android:textSize="17sp"
                     android:textColor="@color/accent"
                     />
