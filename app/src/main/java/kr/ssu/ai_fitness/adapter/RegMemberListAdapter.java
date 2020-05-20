@@ -92,6 +92,13 @@ public class RegMemberListAdapter extends RecyclerView.Adapter<RegMemberListAdap
         RegMember member = mData.get(position) ;
         holder.regMemberListItem.setText(member.getName()) ;
         //holder.regMemberListNextIcon.getAccessibilityClassName();
+
+        if(mData.get(position).getFeedback() == 0){
+            holder.alarmDot.setVisibility(View.INVISIBLE);
+        }
+        else{
+            holder.alarmDot.setVisibility(View.VISIBLE);
+        }
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

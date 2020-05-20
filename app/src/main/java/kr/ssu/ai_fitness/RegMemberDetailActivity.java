@@ -70,7 +70,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
     private String startDate;
     private String endDate;
     private int totalProgramNum;
-    private int curProgramNum = 0;
+    private int curProgramNum;
 
     private static final String TAG = "MAIN";
     private RequestQueue queue;
@@ -130,7 +130,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                             JSONArray jArray = new JSONArray(response);
                             DayProgram dayProgram;
                             totalProgramNum = jArray.length();
-                            progress.setText(curProgramNum + " / " + totalProgramNum);
+                            ArrayList<String> feedbackList = new ArrayList<>();
                             //ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
                             //TrainerProgram trainerProgram;
 
@@ -138,12 +138,23 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                                 JSONObject jObject = jArray.getJSONObject(i);
                                 int dayId = jObject.getInt("id");
                                 String dayTitle = jObject.getString("title");
-                                Log.d("GET_DAY_TITLE_JSON", "id = " + dayId + " title = " + dayTitle);
+                                String feedback = jObject.getString("feedback");
+                                feedbackList.add(feedback);
+                                Log.d("GET_DAY_TITLE_JSON", "id = " + dayId + " title = " + dayTitle + " feedback = " + feedback);
                                 //mName = jObject.getString("name");
-                                dayProgram = new DayProgram(dayId, dayTitle);
+                                dayProgram = new DayProgram(dayId, dayTitle, feedback);
                                 adapter.addItem(dayProgram);
                             }
                             rView.setAdapter(adapter);
+
+                            curProgramNum = totalProgramNum;
+                            for(int i = 0; i < feedbackList.size(); i++){
+                                if(feedbackList.get(i).equals("null")){
+                                    curProgramNum--;
+                                }
+                            }
+                            progress.setText(curProgramNum + " / " + totalProgramNum);
+                            //curProgramNum = 0;
 
                             //Log.d("REG_MEM_DETAIL", "After getData()");
 
@@ -224,8 +235,11 @@ public class RegMemberDetailActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                Log.d("GET_DAT_TITLE_SEND", " exrId = " + exrId);
+                //exrId = 2;
+                //memId = 6;
+                Log.d("GET_DAT_TITLE_SEND", "exrId = " + exrId + " memId = " + memId);
                 params.put("exr_id", Integer.toString(exrId));
+                params.put("mem_id", Integer.toString(memId));
                 return params;
             }
         };

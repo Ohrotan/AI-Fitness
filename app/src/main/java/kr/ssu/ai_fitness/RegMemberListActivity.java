@@ -43,6 +43,7 @@ public class RegMemberListActivity  extends AppCompatActivity {
     private String toolbarTitle;
     private String exrId = "2";
     private Toolbar toolbar;
+    private int flag = 0;
     //private ArrayList<Member> members = new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +74,6 @@ public class RegMemberListActivity  extends AppCompatActivity {
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
         final RegMemberListAdapter adapterMember = new RegMemberListAdapter(this);
 
-        //queue = Volley.newRequestQueue(this);
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READREGMEMBER,
                 new Response.Listener<String>() {
                     @Override
@@ -103,16 +102,21 @@ public class RegMemberListActivity  extends AppCompatActivity {
                             int id = jObject.getInt("id");
                             String name = jObject.getString("name");
                             toolbarTitle = jObject.getString("title");
-                            member = new RegMember(id, name, toolbarTitle, Integer.parseInt(exrId));
 
                             Log.d("REG_MEM_LIST_parsedJSON", "name = " + String.format(name) + " toolbarTitle = " + toolbarTitle);
 
-                            //members.add(member);
                             toolbar.setSubtitle(toolbarTitle);
-                            adapterMember.addItem(member);
-                            //}
-                            Log.d("REG_MEM_LIST_setAdapter", "RegMemberListActivity setAdapter");
-                            recyclerViewRegMember.setAdapter(adapterMember);
+
+                            if(memberNum != 0) {
+                                isFeedback(recyclerViewRegMember, adapterMember, id, name, toolbarTitle, Integer.parseInt(exrId));
+                            }
+                            else {
+                                member = new RegMember(id, name, toolbarTitle, Integer.parseInt(exrId), 0);
+                                adapterMember.addItem(member);
+                                //}
+                                Log.d("REG_MEM_LIST_setAdapter", "RegMemberListActivity setAdapter");
+                                recyclerViewRegMember.setAdapter(adapterMember);
+                            }
 
 
                         } catch (JSONException e) {
@@ -131,6 +135,68 @@ public class RegMemberListActivity  extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 Log.d("SEND_EXR_ID", "exr_id = " + exrId);
                 params.put("exr_id", exrId);
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    //회원이 프로그램에 등록하면 member_exr_history에도 바로 반영이 되는건지?
+    private void isFeedback(final RecyclerView Rv, final RegMemberListAdapter adapter, final int id, final String name, final String toolbarTitle, final int exrId){
+        queue = Volley.newRequestQueue(this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READFEEDBACK,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(final String response) {
+                        try {
+                            Log.d("READ_FB_RESPONSE", response);
+
+                            JSONArray jArray = new JSONArray(response);
+                            //ArrayList<AllTrainer> trainers = new ArrayList<AllTrainer>();
+                            //AllTrainer trainer;
+                            //ArrayList<Member> members = new ArrayList<>();
+                            ArrayList<String> feedbackList = new ArrayList<>();
+                            RegMember member;
+
+                            for(int i = 0; i < jArray.length(); i++) {
+                                JSONObject jObject = jArray.getJSONObject(i);
+                                String feedback = jObject.getString("feedback");
+                                feedbackList.add(feedback);
+                            }
+
+                            for(int i = 0; i < feedbackList.size(); i++){
+                                if(feedbackList.get(i).equals("null")){
+                                    flag++;
+                                }
+                            }
+
+                            member = new RegMember(id, name, toolbarTitle, exrId, flag);
+                            adapter.addItem(member);
+                            //}
+                            Log.d("REG_MEM_LIST_setAdapter", "RegMemberListActivity setAdapter");
+                            Rv.setAdapter(adapter);
+
+                            flag = 0;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                Map<String, String> params = new HashMap<>();
+                Log.d("SEND_EXR,MEM_ID", "exr_id = " + exrId + " mem_id = " + id);
+                params.put("exr_id", Integer.toString(exrId));
+                params.put("mem_id", Integer.toString(id));
                 return params;
             }
         };
