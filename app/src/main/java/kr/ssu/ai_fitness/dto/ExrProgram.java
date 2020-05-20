@@ -1,8 +1,8 @@
 package kr.ssu.ai_fitness.dto;
 
 public class ExrProgram {
-    private String id;
-    private String trainer_id;
+    private int id;
+    private int trainer_id;
     private String title;
     private int period;
     private String equip;
@@ -38,7 +38,7 @@ public class ExrProgram {
         this.intro = intro;
     }
 
-    public ExrProgram(String trainer_id, String title, int period, String equip, char gender, int level, int max, String intro) {
+    public ExrProgram(int trainer_id, String title, int period, String equip, char gender, int level, int max, String intro) {
         this.trainer_id = trainer_id;
         this.title = title;
         this.period = period;
@@ -49,19 +49,19 @@ public class ExrProgram {
         this.intro = intro;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getTrainer_id() {
+    public int getTrainer_id() {
         return trainer_id;
     }
 
-    public void setTrainer_id(String trainer_id) {
+    public void setTrainer_id(int trainer_id) {
         this.trainer_id = trainer_id;
     }
 
