@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -116,6 +117,7 @@ public class HomeActivity extends AppCompatActivity {
 
             case 1:
                 ft.replace(R.id.main_frame, memberExrProgramListFragment);
+                Log.d("abcd","실행");
                 ft.commit();
                 break;
 

@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MemberExrProgramListActivity">
+    android:orientation="vertical">
 
     <Button
         android:layout_width="match_parent"
@@ -16,13 +15,8 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/fragment_member_exr_program_list_listview"
+        android:id="@+id/listView"
         android:layout_weight="5"
         />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="60dp"/>
 
 </LinearLayout>

@@ -76,8 +76,8 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                 String title = "";
                                 title = c.getString(TAG_TITLE);
                                 int level = c.getInt(TAG_LEVEL);
-                                int mem_cnt = c.getInt(TAG_MEMCNT);
-                                int rating = c.getInt(TAG_RATING);
+                                //int mem_cnt = c.getInt(TAG_MEMCNT);
+                                //int rating = c.getInt(TAG_RATING);
 
                                 String level_star = "";
                                 String rating_star = "";
@@ -92,12 +92,12 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                     level_star += "★";
                                 }
                                 persons.put(TAG_LEVEL,level_star);
-                                for(int k=0; k<rating; k++)
-                                {
-                                    rating_star += "★";
-                                }
+                                //for(int k=0; k<rating; k++)
+                                //{
+                                //    rating_star += "★";
+                               // }
                                 persons.put(TAG_RATING,rating_star);
-                                persons.put(TAG_MEMCNT,mem_cnt+" 명");
+                                //persons.put(TAG_MEMCNT,mem_cnt+" 명");
                                 personList.add(persons);
                             }
 

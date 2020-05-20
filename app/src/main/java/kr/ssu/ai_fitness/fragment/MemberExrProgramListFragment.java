@@ -1,15 +1,19 @@
 package kr.ssu.ai_fitness.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -27,12 +31,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.TrainerVideoListActivity;
+import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class MemberExrProgramListFragment extends Fragment {
 
     private ListView mListview;
     private static final String TAG_RESULTS = "result";
+    private static final String TAG_EXRID = "exr_id";
     private static final String TAG_NAME = "name";
     private static final String TAG_TITLE = "title";
     //private static final String TAG_PROGRESS = "progress";
@@ -51,10 +59,14 @@ public class MemberExrProgramListFragment extends Fragment {
         // Inflate the layout for this fragment
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_member_exr_program_list, container, false);
 
-        list = (ListView) view.findViewById(R.id.fragment_member_exr_program_list_listview);
+        list = (ListView) view.findViewById(R.id.listView);
         personList = new ArrayList<HashMap<String, String>>();
-
-        getData("2");
+        final Member user;
+        //SharedPrefManager에 저장된 user 데이터 가져오기
+        user = SharedPrefManager.getInstance(getActivity()).getUser();
+        int id = user.getId();
+        Log.d("2222", id+"");
+        getData(id+"");
 
         return view;
     }
@@ -62,7 +74,7 @@ public class MemberExrProgramListFragment extends Fragment {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200514t205712-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200520t232505-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -74,7 +86,9 @@ public class MemberExrProgramListFragment extends Fragment {
 
                             for (int i = 0; i < peoples.length(); i++) {
                                 JSONObject c = peoples.getJSONObject(i);
+                                String exr_id = c.getString(TAG_EXRID);
                                 String name = c.getString(TAG_NAME);
+
                                 String title = c.getString(TAG_TITLE);
                                 //int progress = c.getInt(TAG_PROGRESS);
                                 String start = c.getString(TAG_START);
@@ -96,8 +110,10 @@ public class MemberExrProgramListFragment extends Fragment {
                             ListAdapter adapter = new SimpleAdapter(
                                     getActivity(), personList, R.layout.member_exr_program_listview,
                                     new String[]{TAG_NAME,TAG_TITLE,TAG_START}, //
-                                    new int[]{R.id.name, R.id.title,R.id.period_date}
+                                    new int[]{R.id.name,R.id.title,R.id.period_date}
                             );
+
+
                             list.setAdapter(adapter);
 
 

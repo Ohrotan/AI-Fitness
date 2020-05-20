@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent();
 
          if (v == btn2) {
-
+             intent = new Intent(getApplicationContext(), MemberExrProgramListActivity.class);
         } else if (v == btn3) {
             intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class);
         } else if (v == btn4) {

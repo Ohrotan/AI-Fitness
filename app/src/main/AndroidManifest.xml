@@ -28,6 +28,7 @@
         <activity android:name=".SignupActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".DayExrProgramRegActivity" />
+        <activity android:name=".MemberExrProgramListActivity" />
         <activity android:name=".ExrProgramRegActivity" />
         <activity android:name=".RegMemberListActivity" />
         <activity android:name=".AdminUserManageActivity" />
