@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.adapter.TrainerVideoAdapter;
+import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.dto.TrainerVideo;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
@@ -34,11 +37,14 @@ import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class TrainerVideoListActivity extends AppCompatActivity {
 
+    public static int REQUEST_FOR_REG_TR_VIDEO = 100;
+
     Button tr_video_reg_btn;
     GridView tr_video_list_view;
     TrainerVideoAdapter trainerVideoAdapter;
     ProgressDialog progressDialog;
 
+    Member user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +57,15 @@ public class TrainerVideoListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TrainerVideoListActivity.this, TrainerVideoRegActivity.class);
-                startActivityForResult(intent, 100);
+                startActivityForResult(intent, REQUEST_FOR_REG_TR_VIDEO);
             }
         });
 
-        getData();
+        user = SharedPrefManager.getInstance(this).getUser();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setSubtitle(user.getName() + " 트레이너님의 운동 동작");
 
+        getData(); //비디오 썸네일 출력
 
     }
 
@@ -64,13 +73,13 @@ public class TrainerVideoListActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = data.getParcelableExtra("bitmap");
-        trainerVideoAdapter.notifyDataSetChanged();
+        trainerVideoAdapter.setImgOfLastView(bitmap);
         getData();
     }
 
     private void getData() {
 
-        progressDialog = ProgressDialog.show(this, "비디오 받는 중", "Please wait...", false, false);
+        progressDialog = ProgressDialog.show(this, "비디오 받는 중", "영상을 받고 있습니다.", false, false);
 
         //서버에서 받아오는 부분
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_VIDEO,
@@ -117,8 +126,8 @@ public class TrainerVideoListActivity extends AppCompatActivity {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
                 //params.put("id", "1");
-                int id = SharedPrefManager.getInstance(TrainerVideoListActivity.this).getUser().getId();
-                params.put("trainer_id", "" + id);
+
+                params.put("trainer_id", "" + user.getId());
                 return params;
             }
         };

@@ -34,11 +34,20 @@ public class TrainerVideoAdapter extends BaseAdapter {
 
     private ArrayList<TrainerVideo> items;
     private Context context;
-    TrainerVideo item;
+    private TrainerVideo item;
+    Bitmap tmpBitmap;
 
     public TrainerVideoAdapter(Context context, ArrayList<TrainerVideo> items) {
         this.context = context;
         this.items = items;
+    }
+
+    public void setImgOfLastView(Bitmap bitmap) {
+        //  View lastView = getView(getCount() - 1, null, null);
+        //TrainerVideoAdapter.ViewHolder holder = (TrainerVideoAdapter.ViewHolder) lastView.getTag();
+        //holder.img.setImageBitmap(bitmap);
+        tmpBitmap = bitmap;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -76,8 +85,9 @@ public class TrainerVideoAdapter extends BaseAdapter {
         String[] tmp = item.getThumb_img().split("/");
 
         Bitmap bmp = BitmapFactory.decodeFile(context.getFilesDir() + "/" + tmp[tmp.length - 1]);
-        while (!new File(context.getFilesDir() + "/" + tmp[tmp.length - 1]).exists()) {
-           // Log.v("tr_preload", "thumb null");
+        if (!new File(context.getFilesDir() + "/" + tmp[tmp.length - 1]).exists()) {
+            Log.v("tr_preload", "thumb null");
+            bmp = tmpBitmap;
         }
 
         holder.img.setImageBitmap(bmp);
