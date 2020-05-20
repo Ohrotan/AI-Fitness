@@ -38,6 +38,8 @@ import kr.ssu.ai_fitness.util.TrainerVideoDownload;
 import kr.ssu.ai_fitness.util.VideoUpload;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
+import static kr.ssu.ai_fitness.TrainerVideoListActivity.REQUEST_FOR_REG_TR_VIDEO;
+
 public class TrainerVideoRegActivity extends AppCompatActivity {
 
     ImageButton video_choose_btn;
@@ -105,9 +107,6 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
         Bitmap bitmap = mMMR.getFrameAtTime();
         video_choose_btn.setImageBitmap(bitmap);
 
-        Intent intent = new Intent();
-        intent.putExtra("bitmap", bitmap);
-        setResult(100, intent);
 
         int origWidth = bitmap.getWidth();
         int origHeight = bitmap.getHeight();
@@ -118,6 +117,10 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             int destHeight = origHeight / (origWidth / destWidth);
             bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false);
         }
+
+        Intent intent = new Intent();
+        intent.putExtra("bitmap", bitmap);
+        setResult(REQUEST_FOR_REG_TR_VIDEO, intent);
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
