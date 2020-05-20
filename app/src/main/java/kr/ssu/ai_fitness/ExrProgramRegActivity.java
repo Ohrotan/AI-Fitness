@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.dto.ExrProgram;
+import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -41,10 +43,14 @@ public class ExrProgramRegActivity extends AppCompatActivity {
 
     Button exr_pro_next_btn;
 
+    Member user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exr_program_reg);
+
+
         exr_title_etv = findViewById(R.id.exr_title_etv);
         period_etv = findViewById(R.id.period_etv);
         max_etv = findViewById(R.id.max_etv);
@@ -54,14 +60,27 @@ public class ExrProgramRegActivity extends AppCompatActivity {
         gender_m = findViewById(R.id.gender_m);
         gender_f = findViewById(R.id.gender_f);
 
-        //로그인 사용자 처리
+        user = SharedPrefManager.getInstance(this).getUser();
+
+        Intent intent = getIntent();
+
+        if (true || "edit".equals(intent.getStringExtra("mode"))) {
+            ExrProgram dto = intent.getParcelableExtra("exrProgramDto");
+            if (dto == null) { //test dto
+                dto = new ExrProgram(user.getId(), "test title", 99, "test equip", 'F', 3, 100, "test intro");
+            }
+            setField(dto);
+
+        }
+
+
         exr_pro_next_btn = findViewById(R.id.exr_pro_next_btn);
         exr_pro_next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ExrProgram exr = new ExrProgram();
 
-                exr.setTrainer_id("99"); //로그인 사용자
+                exr.setTrainer_id(user.getId()); //로그인 사용자
                 exr.setTitle(exr_title_etv.getText().toString());
                 exr.setPeriod(Integer.parseInt(period_etv.getText().toString()));
                 exr.setLevel(level_rating_bar.getNumStars());
@@ -82,12 +101,34 @@ public class ExrProgramRegActivity extends AppCompatActivity {
 
                 exr.setEquip(equip_etv.getText().toString());
                 exr.setIntro(exr_intro_etv.getText().toString());
-              //  Toast.makeText(getApplicationContext(), exr.toString(), Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getApplicationContext(), exr.toString(), Toast.LENGTH_SHORT).show();
 
                 saveExrProgram(exr);
 
             }
         });
+
+    }
+
+    void setField(ExrProgram dto) {
+        exr_title_etv.setText(dto.getTitle());
+        period_etv.setText(dto.getPeriod() + "");
+        max_etv.setText(dto.getMax() + "");
+        equip_etv.setText(dto.getEquip());
+        exr_intro_etv.setText(dto.getIntro());
+        level_rating_bar.setNumStars(dto.getLevel());
+        switch (dto.getGender()) {
+            case 'M':
+                gender_m.setChecked(true);
+                break;
+            case 'A':
+                gender_m.setChecked(true);
+            case 'F':
+                gender_f.setChecked(true);
+            default:
+                break;
+        }
+
 
     }
 
@@ -125,7 +166,7 @@ public class ExrProgramRegActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                params.put("trainer_id", exr.getTrainer_id());
+                params.put("trainer_id", exr.getTrainer_id() + "");
                 params.put("title", exr.getTitle());
                 params.put("period", exr.getPeriod() + "");
                 params.put("equip", exr.getEquip());
