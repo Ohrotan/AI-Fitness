@@ -22,6 +22,7 @@ public class URLs {
     public static final String URL_READREGMEMBERDETAIL = ROOT_URL + "/member/read_member_detail";
     public static final String URL_READDAYPROGRAMTITLE = ROOT_URL + "/member/read_day_program_title";
     public static final String URL_EDITPROFILE = ROOT_URL + "/member/edit_profile";
+    public static final String URL_READFEEDBACK = ROOT_URL + "/member/read_feedback";
 
     public static final String URL_EXR_CREATE = ROOT_URL + "/exr/create";
 
