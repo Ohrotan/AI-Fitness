@@ -67,6 +67,7 @@
             android:text="70%"
             android:textSize="20dp"
             android:textColor="#3498db"
+            android:id="@+id/time"
             android:gravity="center"/>
         <ImageButton
             android:layout_width="wrap_content"
@@ -123,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/period_title"
             android:layout_toRightOf="@+id/today_program_title"
-            android:id="@+id/numOfPeople"
+            android:id="@+id/mem_cnt"
             android:gravity="right"
             android:text="31명"
             android:textSize="15dp"
@@ -155,7 +156,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/run_icn"
-            android:id="@+id/today_program"
+            android:id="@+id/day_title"
             android:gravity="left"
             android:text="3일차 허벅지 뽀개기"
             android:textSize="25dp"
@@ -165,8 +166,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/today_program"
-            android:id="@+id/today_program_description"
+            android:layout_below="@id/day_title"
+            android:id="@+id/day_intro"
             android:gravity="right"
             android:text="- 오늘은 허벅지를 박살내겠습니다."
             android:textSize="16dp"
@@ -179,8 +180,8 @@
             android:background="@drawable/arrow_right"
             android:layout_marginTop="5dp"
             android:id="@+id/button"
-            android:layout_below="@id/today_program"
-            android:layout_toRightOf="@+id/today_program_description"/>
+            android:layout_below="@id/day_title"
+            android:layout_toRightOf="@+id/day_intro"/>
 
 
 

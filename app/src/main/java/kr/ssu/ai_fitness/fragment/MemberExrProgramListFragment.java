@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,8 +29,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 
+import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.TrainerVideoListActivity;
 import kr.ssu.ai_fitness.dto.Member;
@@ -43,10 +47,13 @@ public class MemberExrProgramListFragment extends Fragment {
     private static final String TAG_EXRID = "exr_id";
     private static final String TAG_NAME = "name";
     private static final String TAG_TITLE = "title";
+    private static final String TAG_TIME = "time";
+    private static final String TAG_DAY_TITLE = "day_title";
+    private static final String TAG_DAY_INTRO = "day_intro";
     //private static final String TAG_PROGRESS = "progress";
     private static final String TAG_START = "start_date";
     private static final String TAG_END = "end_date";
-    private static final String TAG_MEMBER = "max";
+    private static final String TAG_MEMCNT= "mem_cnt";
 
     JSONArray peoples = null;
     ListView list;
@@ -57,7 +64,7 @@ public class MemberExrProgramListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_member_exr_program_list, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_member_exr_program_list, container, false);
 
         list = (ListView) view.findViewById(R.id.listView);
         personList = new ArrayList<HashMap<String, String>>();
@@ -65,8 +72,7 @@ public class MemberExrProgramListFragment extends Fragment {
         //SharedPrefManager에 저장된 user 데이터 가져오기
         user = SharedPrefManager.getInstance(getActivity()).getUser();
         int id = user.getId();
-        Log.d("2222", id+"");
-        getData(id+"");
+        getData(id + "");
 
         return view;
     }
@@ -74,7 +80,7 @@ public class MemberExrProgramListFragment extends Fragment {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200520t232505-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200521t085909-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -83,25 +89,55 @@ public class MemberExrProgramListFragment extends Fragment {
                         try {
                             JSONObject jsonObj = new JSONObject(response);
                             peoples = jsonObj.getJSONArray(TAG_RESULTS);
+                            /*
 
-                            for (int i = 0; i < peoples.length(); i++) {
+                            String exr_id = "";
+                            String name = "";
+                            String title = "";
+                            String day_title = "";
+                            String day_intro = "";
+                            String start = "";
+                            String end = "";
+                            String time = "";
+                            String identifier = "";*/
+                            int last_of_len = peoples.length();
+                            String arr[][] = new String[last_of_len][9];//name title start_date end_date time mem_cnt day_title day_intro
+
+                            for (int i = 0; i < last_of_len; i++) {
                                 JSONObject c = peoples.getJSONObject(i);
-                                String exr_id = c.getString(TAG_EXRID);
-                                String name = c.getString(TAG_NAME);
-
-                                String title = c.getString(TAG_TITLE);
+                                arr[i][0] = c.getString(TAG_EXRID);
+                                arr[i][1] = c.getString(TAG_NAME);
+                                arr[i][2] = c.getString(TAG_TITLE);
                                 //int progress = c.getInt(TAG_PROGRESS);
-                                String start = c.getString(TAG_START);
-                                String end = c.getString(TAG_END);
+                                arr[i][3] = c.getString(TAG_START);
+                                arr[i][4] = c.getString(TAG_END);
+                                arr[i][5] = c.getString(TAG_TIME);
+                                arr[i][6] = c.getString(TAG_MEMCNT);
+                                arr[i][7] = c.getString(TAG_DAY_TITLE);
+                                arr[i][8] = c.getString(TAG_DAY_INTRO);
                                 //int membernumber = c.getInt(TAG_MEMBER);
                                 String date = "";
-                                HashMap<String, String> persons = new HashMap<String, String>();
 
-                                name = name + " - ";
-                                persons.put(TAG_NAME, name);
-                                persons.put(TAG_TITLE, title);
-                                date = start + " - " + end;
-                                persons.put(TAG_START, date);
+                            }
+
+
+                            int [] check_last_idx = check_same_idx(arr,last_of_len);//중복된 exr_id중 하나만 추출
+
+                            for (int j = 0; j < 3; j+=2) {
+
+                                int i = check_last_idx[j];
+                                int time = check_last_idx[j+1];
+                                Log.d("index",i+"");
+                                HashMap<String, String> persons = new HashMap<String, String>();
+                                arr[i][1] = arr[i][1] + " - ";
+                                persons.put(TAG_NAME, arr[i][1]);
+                                persons.put(TAG_TITLE, arr[i][2]);
+                                arr[i][3] = arr[i][3] + " - " + arr[i][4];
+                                persons.put(TAG_START, arr[i][3]);
+                                persons.put(TAG_TIME, time+"");
+                                persons.put(TAG_MEMCNT, arr[i][6]);
+                                persons.put(TAG_DAY_TITLE, arr[i][7]);
+                                persons.put(TAG_DAY_INTRO, arr[i][8]);
                                 personList.add(persons);
                             }
 
@@ -109,10 +145,9 @@ public class MemberExrProgramListFragment extends Fragment {
                             //adapter.addItem(new Member_reg_program(ddd[0], "★★★★☆","★★★★☆","30 명","","","",""));
                             ListAdapter adapter = new SimpleAdapter(
                                     getActivity(), personList, R.layout.member_exr_program_listview,
-                                    new String[]{TAG_NAME,TAG_TITLE,TAG_START}, //
-                                    new int[]{R.id.name,R.id.title,R.id.period_date}
+                                    new String[]{TAG_NAME, TAG_TITLE, TAG_START,TAG_TIME,TAG_MEMCNT,TAG_DAY_TITLE,TAG_DAY_INTRO}, //
+                                    new int[]{R.id.name, R.id.title, R.id.period_date,R.id.time,R.id.mem_cnt,R.id.day_title,R.id.day_intro}
                             );
-
 
                             list.setAdapter(adapter);
 
@@ -144,5 +179,45 @@ public class MemberExrProgramListFragment extends Fragment {
         stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
+
+    int [] check_same_idx(String[][] arr, int last_of_len) {//중복된 exr_id중 하나만 추출
+        int [] check_last_idx = new int[99];
+        int idx = 0;
+        int idx_ = 0;
+        int time_hour = 0;
+        int arr_idx = 0;
+        for (int i = 0; i < last_of_len; i++) {
+            if (arr[idx_][0].equals(arr[i][0])) {
+                //time갱신
+                time_hour += time_hour_func(arr[i][5]);
+                idx++;
+            }
+            else
+            {
+                check_last_idx[arr_idx++] = i-1;
+                check_last_idx[arr_idx++] = time_hour;
+                idx_ = i;
+                if(idx_ == last_of_len-1)
+                {
+                    check_last_idx[arr_idx] = idx_;
+                }
+            }
+        }
+        return check_last_idx;
+
+    }
+
+    int time_hour_func(String time)
+    {
+        int[] time_arr = new int[3]; //0-hour, 1-min, 2-sec
+        int idx = 0;
+        StringTokenizer st = new StringTokenizer(time,":");
+        while(st.hasMoreTokens())
+        {
+            time_arr[idx++] = Integer.parseInt(st.nextToken());
+        }
+        return (time_arr[0]*60 + time_arr[1] + time_arr[2]/60);
+    }
+
 
 }
