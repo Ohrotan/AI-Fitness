@@ -10,6 +10,7 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,7 +31,8 @@ import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class ExrProgramRegActivity extends AppCompatActivity {
-
+    boolean EDIT_MODE = false;
+    Toolbar toolbar;
 
     EditText exr_title_etv;
     EditText period_etv;
@@ -63,18 +65,25 @@ public class ExrProgramRegActivity extends AppCompatActivity {
         user = SharedPrefManager.getInstance(this).getUser();
 
         Intent intent = getIntent();
+        //수정모드인지 확인
+        if (intent.getBooleanExtra("edit_mode", false)) {
+            EDIT_MODE = true;
+        }
 
-        if (true || "edit".equals(intent.getStringExtra("mode"))) {
+        if (EDIT_MODE) { //수정 모드일 때
+            toolbar = findViewById(R.id.toolbar);
+            toolbar.setSubtitle("운동 프로그램 수정");
+
             ExrProgram dto = intent.getParcelableExtra("exrProgramDto");
             if (dto == null) { //test dto
                 dto = new ExrProgram(user.getId(), "test title", 99, "test equip", 'F', 3, 100, "test intro");
             }
-            setField(dto);
-
+            setFields(dto); //화면의 에딧텍스트에 기존 프로그램 데이터 띄우기
         }
 
-
         exr_pro_next_btn = findViewById(R.id.exr_pro_next_btn);
+
+        //저장버튼 눌렀을 때 화면의 데이터 모으기
         exr_pro_next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,13 +119,13 @@ public class ExrProgramRegActivity extends AppCompatActivity {
 
     }
 
-    void setField(ExrProgram dto) {
+    void setFields(ExrProgram dto) {
         exr_title_etv.setText(dto.getTitle());
         period_etv.setText(dto.getPeriod() + "");
         max_etv.setText(dto.getMax() + "");
         equip_etv.setText(dto.getEquip());
         exr_intro_etv.setText(dto.getIntro());
-        level_rating_bar.setNumStars(dto.getLevel());
+        level_rating_bar.setRating(dto.getLevel());
         switch (dto.getGender()) {
             case 'M':
                 gender_m.setChecked(true);
@@ -146,6 +155,13 @@ public class ExrProgramRegActivity extends AppCompatActivity {
                             JSONObject obj = new JSONObject(response);
 
                             Intent intent = new Intent(ExrProgramRegActivity.this, DayExrProgramRegActivity.class);
+                            if (EDIT_MODE) {
+                                intent.putExtra("edit_mode", true);//DB에 저장된 아이디 받아옴
+
+                                //업데이트 후 해당 운동의 일별 프로그램 데이터 받아서 스트링 형태로 바로 보내줌
+                                intent.putExtra("day_exr_list", response);
+
+                            }
                             intent.putExtra("exr_id", obj.getInt("id"));//DB에 저장된 아이디 받아옴
                             intent.putExtra("period", exr.getPeriod());
                             intent.putExtra("title", exr.getTitle());
@@ -166,6 +182,9 @@ public class ExrProgramRegActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
+                if (exr.getId() != 0) {
+                    params.put("id", exr.getId() + ""); //update case
+                }
                 params.put("trainer_id", exr.getTrainer_id() + "");
                 params.put("title", exr.getTitle());
                 params.put("period", exr.getPeriod() + "");

@@ -3,6 +3,8 @@ package kr.ssu.ai_fitness.dto;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONObject;
+
 public class DayProgram implements Parcelable {
     private int id;
     private int exr_id;
@@ -32,6 +34,18 @@ public class DayProgram implements Parcelable {
         this.title = title;
         this.seq = seq;
         this.intro = intro;
+    }
+
+    public DayProgram(JSONObject obj) {
+        try {
+            this.id = obj.getInt("id");
+            this.exr_id = obj.getInt("exr_id");
+            this.title = obj.getString("title");
+            this.seq = obj.getInt("seq");
+            this.intro = obj.getString("intro");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected DayProgram(Parcel in) {

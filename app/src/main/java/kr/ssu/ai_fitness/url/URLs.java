@@ -31,7 +31,8 @@ public class URLs {
     public static final String URL_DAYPROGRAMAFTER = ROOT_URL + "/day_exr/read_day_program_after";
     public static final String URL_UPDATEMEMBERHISTORYFEEDBACK = ROOT_URL + "/day_exr/update_member_history_feedback";
 
-    public static final String URL_DAY_VIDEO_CREATE = ROOT_URL + "/day_video/create";
+    public static final String URL_CREATE_DAY_VIDEO = ROOT_URL + "/day_video/create";
+    public static final String URL_READ_DAY_VIDEO = ROOT_URL + "/day_video/read";
 
     public static final String URL_VIDEO = ROOT_URL + "/video/read_tr_video";
     public static final String URL_DELETE_VIDEO = ROOT_URL + "/video/delete_tr_video";
