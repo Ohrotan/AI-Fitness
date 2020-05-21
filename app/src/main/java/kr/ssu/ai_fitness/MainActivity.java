@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn29;
     Button btn30;
 
+    Button btn100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
         btn28 = findViewById(R.id.button28);
         btn29 = findViewById(R.id.button29);
         btn30 = findViewById(R.id.button30);
+
+        btn100 = findViewById(R.id.button100);
 
     }
 
@@ -168,6 +171,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (v == btn30) {
             intent = new Intent(this, VideoPlayActivity.class);
         }
+
+        else if (v == btn100) {
+             intent = new Intent(this, ExercisingActivity.class);
+         }
         startActivity(intent);
     }
 }
