@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,15 +30,19 @@ import kr.ssu.ai_fitness.volley.VolleySingleton;
 public class ExrProgramDetailActivity extends AppCompatActivity {
 
     private static final String TAG_RESULTS = "result";
-    private static final String TAG_NAME = "name";
+    private static final String TAG_ID = "id";
+    private static final String TAG_TRAINERID = "trainer_id";
+    private static final String TAG_DAYID = "day_id";
     private static final String TAG_TITLE = "title";
     private static final String TAG_LEVEL = "level";
     private static final String TAG_GENDER = "gender";
     private static final String TAG_PERIOD = "period";
     private static final String TAG_EQUIP= "equip";
-    private static final String TAG_MAX = "max";
+    private static final String TAG_MAX= "max";
+    private static final String TAG_MEMCNT = "mem_cnt";
     private static final String TAG_INTRO = "intro";
-    private static final String TAG_RATING = "rating";
+    private static final String TAG_DAYTITLE = "day_title";
+    private static final String TAG_DAYINTRO = "day_intro";
 
     JSONArray peoples = null;
     ListView list;
@@ -98,7 +103,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     private void getData(final String id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200514t205712-dot-ai-fitness-369.an.r.appspot.com/exr/read_exr_program",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t001823-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -106,27 +111,66 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
 
                         try {
                             //response를 json object로 변환함.
-                            JSONArray obj = new JSONArray(response);
-                            JSONObject userJson = obj.getJSONObject(0);
-                            int level = userJson.getInt("level");
-                            String gender = userJson.getString("gender");
-                            int period = userJson.getInt("period");
-                            int max = userJson.getInt("max");
-                            String equip = userJson.getString("equip");
-                            String intro = userJson.getString("intro");
+                            JSONObject jsonObj = new JSONObject(response);
+                            peoples = jsonObj.getJSONArray(TAG_RESULTS);
+                            String id = "";
+                            String t_id = "";
+                            String day_id = "";
+                            String title = "";
+                            String period = "";
+                            String equip = "";
+                            String gender = "";
+                            int level = 0;
+                            String level_star = "";
+                            String max = "";
+                            String mem_cnt = "";
+                            String intro = "";
+                            String daytitle = "";
+                            String dayintro = "";
+                            String daily = "";
+
+                            for (int i = 0; i < peoples.length(); i++) {
+                                JSONObject c = peoples.getJSONObject(i);
+                                id = c.getString(TAG_ID);
+                                t_id = c.getString(TAG_TRAINERID);
+                                title = c.getString(TAG_TITLE);
+                                period = c.getString(TAG_PERIOD);
+                                equip = c.getString(TAG_EQUIP);
+                                gender = c.getString(TAG_GENDER);
+                                level = c.getInt(TAG_LEVEL);
+                                max = c.getString(TAG_MAX);
+                                mem_cnt = c.getString(TAG_MEMCNT);
+                                intro = c.getString(TAG_INTRO);
+                                day_id = c.getString(TAG_DAYID);
+                                daytitle = c.getString(TAG_DAYTITLE);
+                                dayintro = c.getString(TAG_DAYINTRO);
+                                daily +=  daytitle +"\n\t\t" + dayintro + "\n";
+                            }
+
+
                             TextView txt;
                             txt = (TextView)findViewById(R.id.level);
                             txt.setText("LV. "+level);
                             txt = (TextView)findViewById(R.id.gender);
-                            if(gender.equals("2")){ txt.setText("모 두");}
+                            if(gender.equals("A")){ txt.setText("모 두");}
+                            if(gender.equals("F")){ txt.setText("여 성");}
+                            if(gender.equals("M")){ txt.setText("남 성");}
                             txt = (TextView)findViewById(R.id.period);
                             txt.setText(period + " 일");
+                            txt = (TextView)findViewById(R.id.mem_cnt);
+                            txt.setText(mem_cnt + "명");
                             txt = (TextView)findViewById(R.id.max);
                             txt.setText(max + "명");
                             txt = (TextView)findViewById(R.id.equip);
                             txt.setText(equip);
                             txt = (TextView)findViewById(R.id.intro);
                             txt.setText(intro);
+                            txt = (TextView)findViewById(R.id.daily_list);
+                            txt.setText(daily);
+                            if(!(day_id.equals("NULL"))) {
+                                Button b = findViewById(R.id.apply_btn);
+                                b.setVisibility(Button.GONE);
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();

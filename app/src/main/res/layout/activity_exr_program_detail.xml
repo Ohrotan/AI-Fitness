@@ -40,10 +40,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="30dp"
                 android:id="@+id/name"
                 android:layout_toRightOf="@+id/pic"
-                android:layout_below="@+id/apply_btn"
+
                 android:text="보노본 - "
                 android:textSize="22dp"
                 android:textColor="#3498db"
@@ -51,10 +51,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="30dp"
                 android:id="@+id/title"
                 android:layout_toRightOf="@+id/name"
-                android:layout_below="@+id/apply_btn"
                 android:text="다이어트 30일"
                 android:textSize="22dp"
                 android:textColor="#3498db"
@@ -151,6 +150,7 @@
                     android:text="31명"
                     android:textColor="#3498DB"
                     android:layout_gravity="center"
+                    android:id="@+id/mem_cnt"
                     android:textSize="15dp"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -275,5 +275,12 @@
     </ScrollView>
     <Button
         android:layout_width="match_parent"
-        android:layout_height="60dp"/>
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginVertical="30dp"
+        android:id="@+id/changebtn"
+        android:text="수     정"
+        android:textColor="@color/white"
+        android:background="@color/accent"
+        android:layout_gravity="center"/>
 </LinearLayout>
