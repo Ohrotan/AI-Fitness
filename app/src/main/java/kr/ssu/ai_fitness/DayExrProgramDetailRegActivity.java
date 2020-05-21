@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -41,6 +42,9 @@ import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class DayExrProgramDetailRegActivity extends AppCompatActivity {
+    boolean EDIT_MODE = false;
+    Toolbar toolbar;
+
     ListView day_video_list;
     TextView exr_program_title_tv;
     EditText day_exr_program_title_etv;
@@ -70,8 +74,16 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
         day_exr_save_btn = findViewById(R.id.day_exr_save_btn);
 
         Intent intent = getIntent();
-        if ("edit".equals(intent.getStringExtra("mode"))) {
+        //수정모드인지 확인
+        if (intent.getBooleanExtra("edit_mode", false)) {
+            EDIT_MODE = true;
+        }
 
+        if (EDIT_MODE) { //수정 모드일 때
+            toolbar = findViewById(R.id.toolbar);
+            toolbar.setSubtitle("운동 프로그램 수정 - 일별 프로그램");
+
+            setFields();//화면의 에딧 텍스트에 기존 프로그램 데이터로 채우기
         }
         dayProgram = intent.getParcelableExtra("dayProgram");
 
@@ -134,10 +146,59 @@ public class DayExrProgramDetailRegActivity extends AppCompatActivity {
         });
     }
 
+    private void setFields() {
+        exr_program_title_tv.setText(dayProgram.getTitle());
+        day_exr_program_intro_etv.setText(dayProgram.getIntro());
+        getDayExrVideo();//요기 수정!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    }
+
+    void getDayExrVideo() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READ_DAY_VIDEO,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //서버에서 요청을 받았을 때 수행되는 부분
+
+                        try {
+                            //response를 json object로 변환함.
+                            JSONObject obj = new JSONObject(response);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                //  Log.v("save_motion", video.toString());
+                Map<String, String> params = new HashMap<>();
+                //   params.put("video_id", video.getVideo_id() + "");
+                params.put("day_id", day_id + "");
+                //   params.put("seq", video.getSeq() + "");
+                //  params.put("sets", video.getSets() + "");
+                //  params.put("counts", video.getCounts() + "");
+
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
     void saveDayExrVideo(final int day_id, final DayProgramVideo video) {
         Log.v("save_motion_fun_start", video.toString());
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DAY_VIDEO_CREATE,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_CREATE_DAY_VIDEO,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
