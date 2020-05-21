@@ -102,9 +102,9 @@ public class TrainerProfileActivity extends AppCompatActivity {
         final RecyclerView recyclerViewTrainerProfile = findViewById(R.id.trainerProfileRecyclerView);
 
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
-        final TrainerProfileAdapter adapter = new TrainerProfileAdapter(getApplicationContext());
+        final TrainerProfileAdapter adapter = new TrainerProfileAdapter(this);
 
-        recyclerViewTrainerProfile.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerViewTrainerProfile.setLayoutManager(new LinearLayoutManager(this));
 
         Intent intent = getIntent();
         trainerID = intent.getExtras().getInt("id");
