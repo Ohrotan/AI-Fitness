@@ -79,9 +79,9 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
                         Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(mContext, ExrProgramDetailActivity.class);
 
-                        //intent.putExtra("id", mData.get(pos).getId());
-                        //intent.putExtra("title", mData.get(pos).getTitle());
-                        intent.putExtra("id", tData.get(pos).getExrId());
+                        intent.putExtra("name", tData.get(pos).getName());
+                        intent.putExtra("title", tData.get(pos).getTitle());
+                        intent.putExtra("id", Integer.toString(tData.get(pos).getExrId()));
 
                         mContext.startActivity(intent);
 
