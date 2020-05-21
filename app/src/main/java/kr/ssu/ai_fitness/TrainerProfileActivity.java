@@ -402,7 +402,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
 
                             Log.d("parseJSON_PR_INFO_1", "avgRating = " + avgRating);
 
-                            trainerProgram = new TrainerProgram(exrId, title, period, curMemberNum, max, totalMemberNum, avgRating, level, equip, gender);
+                            trainerProgram = new TrainerProgram(exrId, title, period, curMemberNum, max, totalMemberNum, avgRating, level, equip, gender, trainerName);
 
                             adapter.addItem(trainerProgram);
                             Log.d("ADD_ITEM", "trainerProgram_title = " + trainerProgram.getTitle());

@@ -12,8 +12,9 @@ public class TrainerProgram {
     private int totalNum;
     private double rating;
     private String equip;
+    private String name;
 
-    public TrainerProgram(int exrId, String title, int period, int curNum, int max, int totalNum, double rating, double level, String equip, String gender){
+    public TrainerProgram(int exrId, String title, int period, int curNum, int max, int totalNum, double rating, double level, String equip, String gender, String name){
         this.exrId = exrId;
         this.title = title;
         this.period = period;
@@ -24,6 +25,7 @@ public class TrainerProgram {
         this.level = level;
         this.equip = equip;
         this.gender = gender;
+        this.name = name;
     }
 
     public int getExrId(){
@@ -104,5 +106,13 @@ public class TrainerProgram {
 
     public void setEquip(String equip) {
         this.equip = equip;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
