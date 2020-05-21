@@ -11,8 +11,32 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="60dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:text="프로그램 등록"
+            android:background="@color/accent"
+            android:textColor="@color/white"/>
 
-    <ListView
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:text="동작 관리"
+            android:background="@color/accent"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
