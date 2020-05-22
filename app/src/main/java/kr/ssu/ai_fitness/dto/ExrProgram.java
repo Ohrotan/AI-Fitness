@@ -1,6 +1,9 @@
 package kr.ssu.ai_fitness.dto;
 
-public class ExrProgram {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ExrProgram implements Parcelable {
     private int id;
     private int trainer_id;
     private String title;
@@ -48,6 +51,30 @@ public class ExrProgram {
         this.max = max;
         this.intro = intro;
     }
+
+    protected ExrProgram(Parcel in) {
+        id = in.readInt();
+        trainer_id = in.readInt();
+        title = in.readString();
+        period = in.readInt();
+        equip = in.readString();
+        gender = (char) in.readInt();
+        level = in.readInt();
+        max = in.readInt();
+        intro = in.readString();
+    }
+
+    public static final Creator<ExrProgram> CREATOR = new Creator<ExrProgram>() {
+        @Override
+        public ExrProgram createFromParcel(Parcel in) {
+            return new ExrProgram(in);
+        }
+
+        @Override
+        public ExrProgram[] newArray(int size) {
+            return new ExrProgram[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -134,5 +161,23 @@ public class ExrProgram {
                 ", max=" + max +
                 ", intro='" + intro + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeInt(trainer_id);
+        parcel.writeString(title);
+        parcel.writeInt(period);
+        parcel.writeString(equip);
+        parcel.writeInt((int) gender);
+        parcel.writeInt(level);
+        parcel.writeInt(max);
+        parcel.writeString(intro);
     }
 }

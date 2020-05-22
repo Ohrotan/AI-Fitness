@@ -278,7 +278,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="40dp"
         android:layout_marginVertical="30dp"
-        android:id="@+id/changebtn"
+        android:id="@+id/change_btn"
         android:text="수     정"
         android:textColor="@color/white"
         android:background="@color/accent"

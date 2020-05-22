@@ -57,10 +57,10 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200518t161719-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t144315-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram",
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(final String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
 
                         try {
@@ -75,9 +75,9 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                 name = c.getString(TAG_NAME);
                                 String title = "";
                                 title = c.getString(TAG_TITLE);
-                                int level = c.getInt(TAG_LEVEL);
-                                //int mem_cnt = c.getInt(TAG_MEMCNT);
-                                //int rating = c.getInt(TAG_RATING);
+                                String level = c.getString(TAG_LEVEL);
+                                String mem_cnt = c.getString(TAG_MEMCNT);
+                                String rating = c.getString(TAG_RATING);
 
                                 String level_star = "";
                                 String rating_star = "";
@@ -87,17 +87,11 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                 name = name + " - ";
                                 persons.put(TAG_NAME, name);
                                 persons.put(TAG_TITLE, title);
-                                for(int j=0; j<level; j++)
-                                {
-                                    level_star += "★";
-                                }
-                                persons.put(TAG_LEVEL,level_star);
-                                //for(int k=0; k<rating; k++)
-                                //{
-                                //    rating_star += "★";
-                               // }
-                                persons.put(TAG_RATING,rating_star);
-                                //persons.put(TAG_MEMCNT,mem_cnt+" 명");
+                                level = makeStarString(level);
+                                persons.put(TAG_LEVEL,level);
+                                if(!rating.equals("null")){rating = makeStarString(rating);}
+                                persons.put(TAG_RATING,rating);
+                                persons.put(TAG_MEMCNT,mem_cnt+" 명");
                                 personList.add(persons);
                             }
 
@@ -106,24 +100,34 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                             ListAdapter adapter = new SimpleAdapter(
                                     MemberAllExrProgramListActivity.this, personList, R.layout.member_all_exr_program_listview,
                                     new String[]{TAG_ID,TAG_NAME,TAG_TITLE,TAG_LEVEL,TAG_RATING,TAG_MEMCNT}, //
-                                    new int[]{R.id.id, R.id.name, R.id.title,R.id.level_star,R.id.rating_star,R.id.numOfProg}
+                                    new int[]{R.id.exr_id, R.id.name, R.id.title,R.id.level_star,R.id.rating_star,R.id.numOfProg}
                             );
 
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    view = list.getChildAt(i);// 얘 안쓰면 해당 리스트뷰의 값을 못 읽음.
-                                    TextView txt = view.findViewById(R.id.id);
-                                    String id = txt.getText().toString();
-                                    txt = view.findViewById(R.id.name);
-                                    String name = txt.getText().toString();
-                                    txt = view.findViewById(R.id.title);
-                                    String title = txt.getText().toString();
+
+                                    String lst_txt = adapterView.getItemAtPosition(i).toString();
+                                    lst_txt = lst_txt.substring(1, lst_txt.length()-1 );
+                                    Log.d("정보", lst_txt);
+                                    String[] array = lst_txt.split(",");
+
+                                    Log.d("이름", array[2].substring(6));
+                                    Log.d("평점", array[3].substring(8));
+                                    Log.d("아이디", array[4].substring(4));
+                                    Log.d("제목", array[5].substring(7));
+
+
+                                    String id = array[4].substring(4);
+                                    String name = array[2].substring(6);
+                                    String title = array[5].substring(7);
+                                    String rating_star = array[3].substring(8);
                                     Intent intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class); // 다음 넘어갈 클래스 지정
                                     intent.putExtra("id", id);
                                     intent.putExtra("name", name);
                                     intent.putExtra("title", title);
-                                    startActivity(intent); // 다음 화면으로 넘어간다
+                                    intent.putExtra("rating_star", rating_star);
+                                    startActivity(intent); // 다음 화면으로 넘어간다*/
                                 }
                             });
                             list.setAdapter(adapter);
@@ -155,6 +159,24 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
         //결과적으로 이전 결과가 있어도 새로 요청한 응답을 보여줌
         stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    String makeStarString(String num)
+    {
+        String star = "";
+        double rate = Double.parseDouble(num);
+        int rateint = (int)rate;
+        double remainder = 0;
+        remainder = rate - rateint;
+        for(int i = 0; i<rateint; i++)
+        {
+            star += "★";
+        }
+        if (remainder>0)
+        {
+            star+="☆";
+        }
+        return star;
     }
 
 }

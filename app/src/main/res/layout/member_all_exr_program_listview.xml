@@ -80,7 +80,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/id"
+        android:id="@+id/exr_id"
         android:text=""
         android:textColor="@color/white"
         />

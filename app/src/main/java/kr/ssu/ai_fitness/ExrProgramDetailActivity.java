@@ -6,6 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +28,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.ssu.ai_fitness.dto.ExrProgram;
+import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class ExrProgramDetailActivity extends AppCompatActivity {
@@ -43,6 +49,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     private static final String TAG_INTRO = "intro";
     private static final String TAG_DAYTITLE = "day_title";
     private static final String TAG_DAYINTRO = "day_intro";
+    private static final String TAG_EID = "e_id"; // 이 사용자가 신청한 건지 아닌지 판별할때 사용
 
     JSONArray peoples = null;
     ListView list;
@@ -50,6 +57,10 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     String id = "";
     String title="";
     String name = "";
+    String rating_star = "";
+    private Button applybtn;
+    private Button changebtn;
+    ExrProgram exrProgram;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +69,55 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
 
         TextView title_ = (TextView) findViewById(R.id.title);
         TextView name_ = (TextView) findViewById(R.id.name);
-        Intent intent = getIntent();
+        TextView rating_star_ = (TextView)findViewById(R.id.star);
+        final Intent intent = getIntent();
         id = intent.getStringExtra("id");
         title = intent.getStringExtra("title"); //"title"문자 받아옴
         name = intent.getStringExtra("name");
+        rating_star = intent.getStringExtra("rating_star");
+        final Member user;
+        //SharedPrefManager에 저장된 user 데이터 가져오기
+        user = SharedPrefManager.getInstance(this).getUser();
+        final int mem_id = user.getId();
+        byte isTrainer = user.getTrainer();
         title_.setText(title);
         name_.setText(name);
-        getData(id);
+        rating_star_.setText(rating_star);
+        getData(id,mem_id+"");
+        if(isTrainer == 0) {
+            Button b = findViewById(R.id.change_btn);
+            b.setVisibility(Button.GONE);
+        }
+        if(isTrainer == 1) {
+            Button b = findViewById(R.id.apply_btn);
+            b.setVisibility(Button.GONE);
+        }
+
+        applybtn = (Button)findViewById(R.id.apply_btn);
+        changebtn = (Button)findViewById(R.id.change_btn);
+
+        applybtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getApplicationContext(),"신청버튼 눌러짐",Toast.LENGTH_SHORT).show();
+                int period = exrProgram.getPeriod();
+                int rating = 0;
+                putData(id, mem_id+"", rating+"", period+"");
+                Button b = findViewById(R.id.apply_btn);
+                b.setVisibility(Button.GONE);
+            }
+        });
+        changebtn.setOnClickListener(new View.OnClickListener() {//수정버튼 눌렀을때
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ExrProgramRegActivity.class);
+                //Log.d("데이터 잘 있나 확인", exrProgram.getEquip());
+                intent.putExtra("exrProgramDto", exrProgram);//ExrProgramRegActivity로 넘어가는 부분., dto.ExrProgram Parcel implement함.
+                startActivity(intent);
+                //Toast.makeText(getApplicationContext(),"수정버튼 눌러짐",Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 /*
     private class CheckTypesTask extends AsyncTask<Void, Void, Void>
@@ -100,10 +153,10 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     }*/
 
 
-    private void getData(final String id) {
+    private void getData(final String exr_id, final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t001823-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t144315-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -120,7 +173,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             String period = "";
                             String equip = "";
                             String gender = "";
-                            int level = 0;
+                            String level = "";
                             String level_star = "";
                             String max = "";
                             String mem_cnt = "";
@@ -128,6 +181,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             String daytitle = "";
                             String dayintro = "";
                             String daily = "";
+                            String isRegister = "";
 
                             for (int i = 0; i < peoples.length(); i++) {
                                 JSONObject c = peoples.getJSONObject(i);
@@ -137,7 +191,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 period = c.getString(TAG_PERIOD);
                                 equip = c.getString(TAG_EQUIP);
                                 gender = c.getString(TAG_GENDER);
-                                level = c.getInt(TAG_LEVEL);
+                                level = c.getString(TAG_LEVEL);
                                 max = c.getString(TAG_MAX);
                                 mem_cnt = c.getString(TAG_MEMCNT);
                                 intro = c.getString(TAG_INTRO);
@@ -145,6 +199,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 daytitle = c.getString(TAG_DAYTITLE);
                                 dayintro = c.getString(TAG_DAYINTRO);
                                 daily +=  daytitle +"\n\t\t" + dayintro + "\n";
+                                if(isRegister.equals("")){ isRegister += c.getString(TAG_EID);}
                             }
 
 
@@ -167,10 +222,20 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             txt.setText(intro);
                             txt = (TextView)findViewById(R.id.daily_list);
                             txt.setText(daily);
-                            if(!(day_id.equals("NULL"))) {
+                            Log.d("등록됬는지 확인", isRegister);
+                            if(!(isRegister.equals("null"))) {
                                 Button b = findViewById(R.id.apply_btn);
                                 b.setVisibility(Button.GONE);
                             }
+                            //String으로 받았던 변수들 형변환
+                            int exr_id = Integer.parseInt(id);
+                            int trainer_id = Integer.parseInt(t_id);
+                            int periodint = Integer.parseInt(period);
+                            char genderchar = gender.charAt(0);
+                            int levelint = Integer.parseInt(level);
+                            int maxint = Integer.parseInt(max);
+
+                            exrProgram = new ExrProgram(trainer_id,title,periodint,equip,genderchar,levelint,maxint,intro);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -187,7 +252,52 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
-                params.put("id", id);
+                params.put("exr_id", exr_id);
+                params.put("mem_id", mem_id);
+                return params;
+            }
+        };
+
+        //아래 큐에 add 할 때 Volley라고 하는 게 내부에서 캐싱을 해준다, 즉, 한번 보내고 받은 응답결과가 있으면
+        //그 다음에 보냈을 떄 이전 게 있으면 그냥 이전거를 보여줄수도  있다.
+        //따라서 이렇게 하지말고 매번 받은 결과를 그대로 보여주기 위해 다음과같이 setShouldCache를 false로한다.
+        //결과적으로 이전 결과가 있어도 새로 요청한 응답을 보여줌
+        stringRequest.setShouldCache(false);
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    private void putData(final String exr_id, final String mem_id, final String rating, final String period) {
+
+        //서버에서 받아오는 부분
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t212511-dot-ai-fitness-369.an.r.appspot.com/member/insertmemreg",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //서버에서 요청을 받았을 때 수행되는 부분
+
+                        try {
+                            Log.d("완료", "완료");
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //서버가 요청하는 파라미터를 담는 부분
+                Map<String, String> params = new HashMap<>();
+                params.put("exr_id", exr_id);
+                params.put("mem_id", mem_id);
+                params.put("rating", rating);
+                params.put("period", period);
                 return params;
             }
         };
