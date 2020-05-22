@@ -22,6 +22,7 @@
             android:layout_weight="1"
             android:layout_marginHorizontal="5dp"
             android:text="프로그램 등록"
+            android:id="@+id/reg_btn"
             android:background="@color/accent"
             android:textColor="@color/white"/>
 
@@ -31,6 +32,7 @@
             android:layout_weight="1"
             android:layout_marginHorizontal="5dp"
             android:text="동작 관리"
+            android:id="@+id/manage_btn"
             android:background="@color/accent"
             android:textColor="@color/white"/>
 

@@ -5,10 +5,12 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -30,14 +32,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
+import kr.ssu.ai_fitness.ExrProgramRegActivity;
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.RegMemberListActivity;
 import kr.ssu.ai_fitness.TrainerVideoListActivity;
+import kr.ssu.ai_fitness.vo.RegMember;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class TrainerExrProgramFragment extends Fragment {
 
     private ListView mListview;
     private static final String TAG_RESULTS = "result";
+    private static final String TAG_ID = "id";
     private static final String TAG_NAME = "name";
     private static final String TAG_TITLE = "title";
     private static final String TAG_PERIOD = "period"; //period
@@ -53,6 +59,9 @@ public class TrainerExrProgramFragment extends Fragment {
     ListView list;
     ArrayList<HashMap<String, String>> personList;
     String myJSON;
+    Button regbtn;
+    Button managebtn;
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +73,25 @@ public class TrainerExrProgramFragment extends Fragment {
         personList = new ArrayList<HashMap<String, String>>();
 
         getData("2");
+        regbtn = view.findViewById(R.id.reg_btn);
+        managebtn = view.findViewById(R.id.manage_btn);
+
+        regbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getApplicationContext(),"신청버튼 눌러짐",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), ExrProgramRegActivity.class);
+                startActivity(intent);
+            }
+        });
+        managebtn.setOnClickListener(new View.OnClickListener() {//수정버튼 눌렀을때
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), TrainerVideoListActivity.class);
+                startActivity(intent);
+                //Toast.makeText(getApplicationContext(),"수정버튼 눌러짐",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
@@ -71,7 +99,7 @@ public class TrainerExrProgramFragment extends Fragment {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200518t193540-dot-ai-fitness-369.an.r.appspot.com/member/readtrainerexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t235812-dot-ai-fitness-369.an.r.appspot.com/member/readtrainerexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -84,8 +112,8 @@ public class TrainerExrProgramFragment extends Fragment {
 
                             for (int i = 0; i < peoples.length(); i++) {
                                 JSONObject c = peoples.getJSONObject(i);
-                                String id = c.getString("trainer_id");
-                                String name = c.getString(TAG_NAME);
+                                String id = c.getString(TAG_ID);
+                                String t_id = c.getString("trainer_id");
                                 String title = c.getString(TAG_TITLE);
                                 String period = c.getString(TAG_PERIOD);
                                 String mem_cnt = c.getString(TAG_MEM_CNT);
@@ -98,10 +126,26 @@ public class TrainerExrProgramFragment extends Fragment {
                                 String anyfeedback = "";
                                 HashMap<String, String> persons = new HashMap<String, String>();
 
-                                persons.put("trainer_id", id);
-                                name = name + " - ";
-                                persons.put(TAG_NAME, name);
-                                if(title.equals(copied_string)){continue;}
+                                persons.put("trainer_id", t_id);
+                                for(int j = i; j<peoples.length();j++)
+                                {
+                                    JSONObject c2 = peoples.getJSONObject(j);
+                                    String id_ = c2.getString(TAG_ID);
+                                    if(id_.equals(id))//현재 ID와 같으면 피드백이 null여부 판단
+                                    {
+                                        String isnull = c2.getString(TAG_FEEDBACK);
+                                        if(isnull.equals("null"))//null이면 텍스트 교체
+                                        {
+                                            anyfeedback += "피드백이 필요합니다!";
+                                            break;//피드백이 없다는 걸 확인했으면 더이상 볼 필요 없음 탈출!
+                                        }
+                                    }
+                                    else// 다르면 for문 탈출
+                                    {
+                                        break;
+                                    }
+                                }
+                                if(id.equals(copied_string)){continue;}
                                 persons.put(TAG_TITLE, title);
                                 period += "일 프로그램";
                                 persons.put(TAG_PERIOD, period);
@@ -111,13 +155,9 @@ public class TrainerExrProgramFragment extends Fragment {
                                 persons.put(TAG_EQUIP, equip);
                                 persons.put(TAG_RATING, rating);
                                 persons.put(TAG_GENDER, gender);
-                                if(feedback.equals("null"))
-                                {
-                                    anyfeedback += "피드백이 필요합니다!";
-                                }
                                 persons.put(TAG_FEEDBACK, anyfeedback);
                                 personList.add(persons);
-                                copied_string = new String(title);
+                                copied_string = new String(id);
                             }
 
                             //adapter에 data값
@@ -131,12 +171,17 @@ public class TrainerExrProgramFragment extends Fragment {
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    view = list.getChildAt(i);// 얘 안쓰면 해당 리스트뷰의 값을 못 읽음.
-                                    TextView txt = view.findViewById(R.id.id);
-                                    String id = txt.getText().toString();
-                                    Intent intent = new Intent(getActivity(), TrainerVideoListActivity.class); // 다음 넘어갈 클래스 지정
-                                    intent.putExtra("trainer_id", id);
-                                    startActivity(intent); // 다음 화면으로 넘어간다
+                                    String lst_txt = adapterView.getItemAtPosition(i).toString();
+                                    lst_txt = lst_txt.substring(1, lst_txt.length()-1 );
+                                    Log.d("정보", lst_txt);
+                                    String[] array = lst_txt.split(",");
+                                    Log.d("피드백", array[0].substring(9));
+                                    if(array[0].substring(9).equals("피드백이 필요합니다!"))
+                                    {
+                                        Toast.makeText(getContext(),"피드백 화면 전환",Toast.LENGTH_SHORT).show();
+                                    }
+                                    //Intent intent = new Intent(getActivity(), RegMemberListActivity.class); // 다음 넘어갈 클래스 지정
+                                    //startActivity(intent); // 다음 화면으로 넘어간다
                                 }
                             });
 
