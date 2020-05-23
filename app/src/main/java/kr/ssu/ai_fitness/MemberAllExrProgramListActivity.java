@@ -108,6 +108,7 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                                     String lst_txt = adapterView.getItemAtPosition(i).toString();
+                                    Log.d("위치", i+"");
                                     lst_txt = lst_txt.substring(1, lst_txt.length()-1 );
                                     Log.d("정보", lst_txt);
                                     String[] array = lst_txt.split(",");

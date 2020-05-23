@@ -3,6 +3,7 @@ package kr.ssu.ai_fitness.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -74,6 +75,10 @@ public class MemberExrProgramListFragment extends Fragment {
         int id = user.getId();
         getData(id + "");
 
+        View v = list.getChildAt(0);
+        ProgressBar p = v.findViewById(R.id.ProgBar);
+        p.setProgress(10);
+
         return view;
     }
 
@@ -117,13 +122,13 @@ public class MemberExrProgramListFragment extends Fragment {
                                 arr[i][8] = c.getString(TAG_DAY_INTRO);
                                 //int membernumber = c.getInt(TAG_MEMBER);
                                 String date = "";
-
                             }
 
 
                             int [] check_last_idx = check_same_idx(arr,last_of_len);//중복된 exr_id중 하나만 추출
+                            int cnt_idx = cnt_idx(arr,last_of_len);
 
-                            for (int j = 0; j < 3; j+=2) {
+                            for (int j = 0; j < cnt_idx*2; j+=2) {
 
                                 int i = check_last_idx[j];
                                 int time = check_last_idx[j+1];
@@ -134,8 +139,8 @@ public class MemberExrProgramListFragment extends Fragment {
                                 persons.put(TAG_TITLE, arr[i][2]);
                                 arr[i][3] = arr[i][3] + " - " + arr[i][4];
                                 persons.put(TAG_START, arr[i][3]);
-                                persons.put(TAG_TIME, time+"");
-                                persons.put(TAG_MEMCNT, arr[i][6]);
+                                persons.put(TAG_TIME, time+"%");
+                                persons.put(TAG_MEMCNT, arr[i][6]+" 명");
                                 persons.put(TAG_DAY_TITLE, arr[i][7]);
                                 persons.put(TAG_DAY_INTRO, arr[i][8]);
                                 personList.add(persons);
@@ -149,6 +154,7 @@ public class MemberExrProgramListFragment extends Fragment {
                                     new int[]{R.id.name, R.id.title, R.id.period_date,R.id.time,R.id.mem_cnt,R.id.day_title,R.id.day_intro}
                             );
 
+                            Log.d("getcount",adapter.getCount()+"");
                             list.setAdapter(adapter);
 
 
@@ -180,6 +186,8 @@ public class MemberExrProgramListFragment extends Fragment {
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
+
+
     int [] check_same_idx(String[][] arr, int last_of_len) {//중복된 exr_id중 하나만 추출
         int [] check_last_idx = new int[99];
         int idx = 0;
@@ -189,13 +197,15 @@ public class MemberExrProgramListFragment extends Fragment {
         for (int i = 0; i < last_of_len; i++) {
             if (arr[idx_][0].equals(arr[i][0])) {
                 //time갱신
-                time_hour += time_hour_func(arr[i][5]);
+                if(arr[i][5].equals("null")){ time_hour = 0;}
+                else{ time_hour += time_hour_func(arr[i][5]);}
                 idx++;
             }
             else
             {
                 check_last_idx[arr_idx++] = i-1;
                 check_last_idx[arr_idx++] = time_hour;
+                time_hour=0;
                 idx_ = i;
                 if(idx_ == last_of_len-1)
                 {
@@ -217,6 +227,23 @@ public class MemberExrProgramListFragment extends Fragment {
             time_arr[idx++] = Integer.parseInt(st.nextToken());
         }
         return (time_arr[0]*60 + time_arr[1] + time_arr[2]/60);
+    }
+    int cnt_idx(String [][] arr,int last_of_len)
+    {
+        int cnt_idx = 0;
+        int idx = 0;
+        for(int i = 0 ; i < last_of_len; i++)
+        {
+            if(idx != Integer.parseInt(arr[i][0]))
+            {//인덱스가 달라지면
+                idx = Integer.parseInt(arr[i][0]);
+                cnt_idx++;
+            }
+            else
+            {//같으면
+            }
+        }
+        return cnt_idx;
     }
 
 
