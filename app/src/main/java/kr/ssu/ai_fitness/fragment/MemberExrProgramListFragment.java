@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +39,7 @@ import java.util.StringTokenizer;
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.TrainerVideoListActivity;
+import kr.ssu.ai_fitness.adapter.MemberExrprogramListAdapter;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
@@ -75,9 +78,6 @@ public class MemberExrProgramListFragment extends Fragment {
         int id = user.getId();
         getData(id + "");
 
-        View v = list.getChildAt(0);
-        ProgressBar p = v.findViewById(R.id.ProgBar);
-        p.setProgress(10);
 
         return view;
     }
@@ -105,6 +105,7 @@ public class MemberExrProgramListFragment extends Fragment {
                             String end = "";
                             String time = "";
                             String identifier = "";*/
+                            HashMap<String, String> persons = null;
                             int last_of_len = peoples.length();
                             String arr[][] = new String[last_of_len][9];//name title start_date end_date time mem_cnt day_title day_intro
 
@@ -133,29 +134,30 @@ public class MemberExrProgramListFragment extends Fragment {
                                 int i = check_last_idx[j];
                                 int time = check_last_idx[j+1];
                                 Log.d("index",i+"");
-                                HashMap<String, String> persons = new HashMap<String, String>();
+                                persons = new HashMap<String, String>();
                                 arr[i][1] = arr[i][1] + " - ";
                                 persons.put(TAG_NAME, arr[i][1]);
                                 persons.put(TAG_TITLE, arr[i][2]);
                                 arr[i][3] = arr[i][3] + " - " + arr[i][4];
                                 persons.put(TAG_START, arr[i][3]);
-                                persons.put(TAG_TIME, time+"%");
+                                persons.put(TAG_TIME, time+"");
                                 persons.put(TAG_MEMCNT, arr[i][6]+" 명");
                                 persons.put(TAG_DAY_TITLE, arr[i][7]);
                                 persons.put(TAG_DAY_INTRO, arr[i][8]);
                                 personList.add(persons);
                             }
 
+                            MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons);
+                            list.setAdapter(adapter);
+
                             //adapter에 data값
                             //adapter.addItem(new Member_reg_program(ddd[0], "★★★★☆","★★★★☆","30 명","","","",""));
-                            ListAdapter adapter = new SimpleAdapter(
+                            /*ListAdapter adapter = new SimpleAdapter(
                                     getActivity(), personList, R.layout.member_exr_program_listview,
                                     new String[]{TAG_NAME, TAG_TITLE, TAG_START,TAG_TIME,TAG_MEMCNT,TAG_DAY_TITLE,TAG_DAY_INTRO}, //
                                     new int[]{R.id.name, R.id.title, R.id.period_date,R.id.time,R.id.mem_cnt,R.id.day_title,R.id.day_intro}
                             );
-
-                            Log.d("getcount",adapter.getCount()+"");
-                            list.setAdapter(adapter);
+                            list.setAdapter(adapter);*/
 
 
                         } catch (JSONException e) {
@@ -185,6 +187,7 @@ public class MemberExrProgramListFragment extends Fragment {
         stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
+
 
 
 

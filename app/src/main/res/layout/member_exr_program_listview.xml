@@ -64,10 +64,21 @@
             android:layout_toRightOf="@+id/ProgBar"
             android:layout_below="@+id/Prog"
             android:layout_marginLeft="0dp"
-            android:text="70"
+            android:text="0"
             android:textSize="20dp"
             android:textColor="#3498db"
             android:id="@+id/time"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_toRightOf="@+id/time"
+            android:layout_below="@+id/Prog"
+            android:layout_marginLeft="0dp"
+            android:text=" %"
+            android:textSize="20dp"
+            android:textColor="#3498db"
             android:gravity="center"/>
         <ImageButton
             android:layout_width="wrap_content"
@@ -126,12 +137,13 @@
             android:layout_toRightOf="@+id/today_program_title"
             android:id="@+id/mem_cnt"
             android:gravity="right"
-            android:text="31명"
+            android:text="0 명"
             android:textSize="15dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
             android:layout_alignParentRight="true"
-            android:textColor="#000000"/>
+            android:textColor="@color/accent"/>
+
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
