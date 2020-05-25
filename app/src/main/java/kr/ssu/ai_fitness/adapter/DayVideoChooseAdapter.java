@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,27 +14,26 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kr.ssu.ai_fitness.R;
-import kr.ssu.ai_fitness.dto.DayProgramVideo;
-import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+import kr.ssu.ai_fitness.vo.DayProgramVideoModel;
 
 public class DayVideoChooseAdapter extends BaseAdapter {
 
-    private ArrayList<DayProgramVideo> items;
+    private ArrayList<DayProgramVideoModel> items;
     private Context context;
     private int selectedPosition = -1;
-    DayProgramVideo item;
+    DayProgramVideoModel item;
 
     public DayVideoChooseAdapter(Context context) {
         this.context = context;
         items = new ArrayList<>();
     }
 
-    public DayVideoChooseAdapter(Context context, ArrayList<DayProgramVideo> items) {
+    public DayVideoChooseAdapter(Context context, ArrayList<DayProgramVideoModel> items) {
         this.context = context;
         this.items = items;
     }
 
-    public DayProgramVideo getSelectedItem() {
+    public DayProgramVideoModel getSelectedItem() {
         return getItem(selectedPosition);
     }
 
@@ -54,7 +52,7 @@ public class DayVideoChooseAdapter extends BaseAdapter {
     }
 
     @Override
-    public DayProgramVideo getItem(int position) {
+    public DayProgramVideoModel getItem(int position) {
         return items.get(position);
     }
 
@@ -85,12 +83,9 @@ public class DayVideoChooseAdapter extends BaseAdapter {
         }
 
         item = items.get(position);
-        holder.title.setText(item.getName());
+        holder.title.setText(item.getTitle());
 
-        String path = SharedPrefManager.getInstance(context).getTrVideoThumbPath(item.getVideo_id() + "");
-        Log.v("get_pref","videoId:"+item.getVideo_id());
-
-        Bitmap bmp = BitmapFactory.decodeFile(context.getFilesDir() + "/" + path);
+        Bitmap bmp = BitmapFactory.decodeFile(context.getFilesDir() + "/" + item.getThumb_img());
         holder.img.setImageBitmap(bmp);
 
 

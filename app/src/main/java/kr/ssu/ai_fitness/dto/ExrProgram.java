@@ -52,6 +52,18 @@ public class ExrProgram implements Parcelable {
         this.intro = intro;
     }
 
+    public ExrProgram(int id, int trainer_id, String title, int period, String equip, char gender, int level, int max, String intro) {
+        this.id = id;
+        this.trainer_id = trainer_id;
+        this.title = title;
+        this.period = period;
+        this.equip = equip;
+        this.gender = gender;
+        this.level = level;
+        this.max = max;
+        this.intro = intro;
+    }
+
     protected ExrProgram(Parcel in) {
         id = in.readInt();
         trainer_id = in.readInt();

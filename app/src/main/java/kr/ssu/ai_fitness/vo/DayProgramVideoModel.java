@@ -1,11 +1,27 @@
 package kr.ssu.ai_fitness.vo;
 
 public class DayProgramVideoModel {
+    int id;
     int counts;
     int sets;
     String thumb_img;
     String video;
     String title;//비디오의 동작 명칭.
+
+    public DayProgramVideoModel(int id, String thumb_img, String title) {
+        this.id = id;
+        this.thumb_img = thumb_img;
+        this.title = title;
+    }
+
+    public DayProgramVideoModel(int id, int counts, int sets, String thumb_img, String video, String title) {
+        this.id = id;
+        this.counts = counts;
+        this.sets = sets;
+        this.thumb_img = thumb_img;
+        this.video = video;
+        this.title = title;
+    }
 
     public DayProgramVideoModel(int counts, int sets, String thumb_img, String video, String title) {
         this.counts = counts;
@@ -13,6 +29,14 @@ public class DayProgramVideoModel {
         this.thumb_img = thumb_img;
         this.video = video;
         this.title = title;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getCounts() {

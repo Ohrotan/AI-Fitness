@@ -32,7 +32,7 @@ public class DayProgramVideo {
             this.id = obj.getInt("id");
             this.day_id = Integer.parseInt(obj.getString("day_id"));
             this.video_id = Integer.parseInt(obj.getString("video_id"));
-            this.name = obj.getString("name");
+            this.name = obj.getString("title");
             this.counts = Integer.parseInt(obj.getString("counts"));
             this.sets = Integer.parseInt(obj.getString("sets"));
             this.seq = Integer.parseInt(obj.getString("seq"));

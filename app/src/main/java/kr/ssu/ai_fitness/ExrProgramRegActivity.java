@@ -2,7 +2,6 @@ package kr.ssu.ai_fitness;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,7 +18,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -47,6 +45,8 @@ public class ExrProgramRegActivity extends AppCompatActivity {
     Button exr_pro_next_btn;
 
     Member user;
+    ExrProgram exr;
+    int origin_period;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +71,19 @@ public class ExrProgramRegActivity extends AppCompatActivity {
             EDIT_MODE = true;
         }
 
+
+        EDIT_MODE = true;//테스트용 지우기!!
+
         if (EDIT_MODE) { //수정 모드일 때
             toolbar = findViewById(R.id.toolbar);
             toolbar.setSubtitle("운동 프로그램 수정");
 
-            ExrProgram dto = intent.getParcelableExtra("exrProgramDto");
-            if (dto == null) { //test dto
-                dto = new ExrProgram(user.getId(), "test title", 99, "test equip", 'F', 3, 100, "test intro");
+            exr = intent.getParcelableExtra("exrProgramDto");
+            if (exr == null) { //test dto
+                exr = new ExrProgram(33, user.getId(), "99의 헬스", 3, "", 'F', 5, 10, "어서와요");
             }
-            setFields(dto); //화면의 에딧텍스트에 기존 프로그램 데이터 띄우기
+            origin_period = exr.getPeriod();
+            setFields(exr); //화면의 에딧텍스트에 기존 프로그램 데이터 띄우기
         }
 
         exr_pro_next_btn = findViewById(R.id.exr_pro_next_btn);
@@ -88,8 +92,9 @@ public class ExrProgramRegActivity extends AppCompatActivity {
         exr_pro_next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExrProgram exr = new ExrProgram();
 
+                if (!EDIT_MODE)
+                    exr = new ExrProgram();
                 exr.setTrainer_id(user.getId()); //로그인 사용자
                 exr.setTitle(exr_title_etv.getText().toString());
                 exr.setPeriod(Integer.parseInt(period_etv.getText().toString()));
@@ -111,7 +116,7 @@ public class ExrProgramRegActivity extends AppCompatActivity {
 
                 exr.setEquip(equip_etv.getText().toString());
                 exr.setIntro(exr_intro_etv.getText().toString());
-                //  Toast.makeText(getApplicationContext(), exr.toString(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), exr.toString(), Toast.LENGTH_SHORT).show();
 
                 saveExrProgram(exr);
 
@@ -143,34 +148,38 @@ public class ExrProgramRegActivity extends AppCompatActivity {
     }
 
     void saveExrProgram(final ExrProgram exr) {
-        //서버에서 받아오는 부분
 
+        if (EDIT_MODE) {
+            if (origin_period > exr.getPeriod()) {
+                Toast.makeText(getApplicationContext(), "기존 기간보다 짧아서 뒤의 일별 프로그램이 삭제되었습니다.", Toast.LENGTH_LONG).show();
+            }
+        }
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_EXR_CREATE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
 
-                        try {
-                            //response를 json object로 변환함.
-                            JSONObject obj = new JSONObject(response);
+                        Intent intent = new Intent(ExrProgramRegActivity.this, DayExrProgramRegActivity.class);
 
-                            Intent intent = new Intent(ExrProgramRegActivity.this, DayExrProgramRegActivity.class);
-                            if (EDIT_MODE) {
-                                intent.putExtra("edit_mode", true);//DB에 저장된 아이디 받아옴
+                        if (EDIT_MODE) {//업데이트할때
+                            intent.putExtra("edit_mode", true);
 
-                                //업데이트 후 해당 운동의 일별 프로그램 데이터 받아서 스트링 형태로 바로 보내줌
-                                intent.putExtra("day_exr_list", response);
-
+                            //업데이트 후 해당 운동의 일별 프로그램 데이터 받아서 스트링 형태로 바로 보내줌
+                            intent.putExtra("day_exr_list", response);
+                            intent.putExtra("exr_id", exr.getId());
+                        } else {//새로 만들때
+                            try {
+                                JSONObject obj = new JSONObject(response);
+                                intent.putExtra("exr_id", obj.getInt("id"));//DB에 저장된 아이디 받아옴
+                            } catch (Exception e) {
                             }
-                            intent.putExtra("exr_id", obj.getInt("id"));//DB에 저장된 아이디 받아옴
-                            intent.putExtra("period", exr.getPeriod());
-                            intent.putExtra("title", exr.getTitle());
-                            startActivity(intent);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
+
+                        intent.putExtra("period", exr.getPeriod());
+                        intent.putExtra("title", exr.getTitle());
+                        startActivity(intent);
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -204,6 +213,8 @@ public class ExrProgramRegActivity extends AppCompatActivity {
         //따라서 이렇게 하지말고 매번 받은 결과를 그대로 보여주기 위해 다음과같이 setShouldCache를 false로한다.
         //결과적으로 이전 결과가 있어도 새로 요청한 응답을 보여줌
         stringRequest.setShouldCache(false);
-        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+        VolleySingleton.getInstance(this).
+
+                addToRequestQueue(stringRequest);
     }
 }

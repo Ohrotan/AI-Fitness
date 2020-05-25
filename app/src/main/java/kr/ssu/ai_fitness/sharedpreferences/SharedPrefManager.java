@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.List;
+import java.util.Set;
 
 import kr.ssu.ai_fitness.LoginActivity;
 import kr.ssu.ai_fitness.dto.Member;
@@ -19,6 +20,7 @@ public class SharedPrefManager {
     private static final String SHARED_PREF_NAME = "shared_preferences_user_file";
     private static final String SHARED_PREF_NAME_TR_VIDEO_PATH = "tr_video_path";
     private static final String SHARED_PREF_NAME_TR_VIDEO_THUMB_PATH = "tr_video_thumb_path";
+    private static final String SHARED_PREF_NAME_TR_VIDEO_TITLE = "tr_video_title";
 
     private static final String id = "id";
     private static final String email = "email";
@@ -181,9 +183,9 @@ public class SharedPrefManager {
     }
 
     public void setTrVideoAndThumbPath(List<TrainerVideo> list) {
+
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_PATH, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
         for (TrainerVideo dto : list) {
             String[] tmp = dto.getVideo().split("/");
             editor.putString(dto.getId() + "", tmp[tmp.length - 1]);
@@ -193,19 +195,26 @@ public class SharedPrefManager {
 
         sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_THUMB_PATH, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-
-        int test_id = 0;
         for (TrainerVideo dto : list) {
-
             Log.v("tr_preload", dto.getId() + ": " + dto.getThumb_img());
             String[] tmp = dto.getThumb_img().split("/");
             editor.putString(dto.getId() + "", tmp[tmp.length - 1]);
-            test_id = dto.getId();
         }
         editor.apply();
 
-        String testRst = sharedPreferences.getString(test_id + "", "error");
-        Log.v("pref_test", test_id + "/" + testRst);
+
+        sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_TITLE, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        for (TrainerVideo dto : list) {
+            editor.putString(dto.getId() + "", dto.getTitle());
+        }
+        editor.apply();
+
+    }
+
+    public Set<String> getTrVideoId() {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_THUMB_PATH, Context.MODE_PRIVATE);
+        return sharedPreferences.getAll().keySet();
     }
 
     public String getTrVideoPath(String video_id) {
@@ -218,4 +227,8 @@ public class SharedPrefManager {
         return sharedPreferences.getString(video_id, null);
     }
 
+    public String getTrVideoTitle(String video_id) {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME_TR_VIDEO_TITLE, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(video_id, null);
+    }
 }
