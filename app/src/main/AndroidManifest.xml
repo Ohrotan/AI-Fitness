@@ -26,7 +26,14 @@
         <activity android:name=".DayExrProgramDetailRegActivity" />
         <activity android:name=".ExrResultActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".LoginActivity" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".DayExrProgramRegActivity" />
         <activity android:name=".MemberExrProgramListActivity" />
         <activity android:name=".ExrProgramRegActivity" />
@@ -38,11 +45,6 @@
         <activity android:name=".TrainerProfileActivity" />
         <activity android:name=".ProfileEditActivity" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
