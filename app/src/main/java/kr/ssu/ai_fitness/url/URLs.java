@@ -27,12 +27,14 @@ public class URLs {
     public static final String URL_EXR_CREATE = ROOT_URL + "/exr/create";
 
     public static final String URL_DAY_EXR_CREATE = ROOT_URL + "/day_exr/create";
+    public static final String URL_DELETE_DAY_EXR = ROOT_URL + "/day_exr/delete";
     public static final String URL_DAYPROGRAM = ROOT_URL + "/day_exr/read_day_program";
     public static final String URL_DAYPROGRAMAFTER = ROOT_URL + "/day_exr/read_day_program_after";
     public static final String URL_UPDATEMEMBERHISTORYFEEDBACK = ROOT_URL + "/day_exr/update_member_history_feedback";
 
     public static final String URL_CREATE_DAY_VIDEO = ROOT_URL + "/day_video/create";
     public static final String URL_READ_DAY_VIDEO = ROOT_URL + "/day_video/read";
+    public static final String URL_DELETE_DAY_VIDEO = ROOT_URL + "/day_video/delete";
 
     public static final String URL_VIDEO = ROOT_URL + "/video/read_tr_video";
     public static final String URL_DELETE_VIDEO = ROOT_URL + "/video/delete_tr_video";
