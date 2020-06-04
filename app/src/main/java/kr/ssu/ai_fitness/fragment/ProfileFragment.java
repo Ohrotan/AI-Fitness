@@ -143,7 +143,7 @@ public class ProfileFragment extends Fragment {
         }
 
         //이름설정
-        name.setText(user.getName() + "님");
+        name.setText(user.getName() + " 님");
 
         //성별 설정
         if(user.getGender() == 1){
