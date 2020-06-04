@@ -46,7 +46,13 @@ public class TrainerVideoAdapter extends BaseAdapter {
         //  View lastView = getView(getCount() - 1, null, null);
         //TrainerVideoAdapter.ViewHolder holder = (TrainerVideoAdapter.ViewHolder) lastView.getTag();
         //holder.img.setImageBitmap(bitmap);
+        Log.v("function","setImgOfLastView");
+        if (bitmap == null)
+            Log.v("motion video", "adapter lastview Bitmap null");
+
         tmpBitmap = bitmap;
+        if (tmpBitmap == null)
+            Log.v("motion video", "adapter lastview tmpBitmap null");
         notifyDataSetChanged();
     }
 
@@ -67,6 +73,7 @@ public class TrainerVideoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.v("function","getView");
         TrainerVideoAdapter.ViewHolder holder;
         //항목 레이아웃 초기화
         if (convertView == null) {
@@ -87,10 +94,12 @@ public class TrainerVideoAdapter extends BaseAdapter {
         Bitmap bmp = BitmapFactory.decodeFile(context.getFilesDir() + "/" + tmp[tmp.length - 1]);
         if (!new File(context.getFilesDir() + "/" + tmp[tmp.length - 1]).exists()) {
             Log.v("tr_preload", "thumb null");
+            if (tmpBitmap == null)
+                Log.v("tr_preload", "thumb tmp bitmap null");
             bmp = tmpBitmap;
         }
 
-        holder.img.setImageBitmap(bmp);
+        holder.img.setImageBitmap(tmpBitmap);
 
         // ImageViewTask task = new ImageViewTask(holder.img);
         // task.execute(item.getThumb_img());
