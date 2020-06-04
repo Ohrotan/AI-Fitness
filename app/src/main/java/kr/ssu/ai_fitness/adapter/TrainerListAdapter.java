@@ -256,7 +256,7 @@ public class TrainerListAdapter extends RecyclerView.Adapter<TrainerListAdapter.
 
         Log.d("BINDVIEWHOLDER", "Average Rating = " + avgRating + " / " + mAvgRating);
 
-        if(avgRating <= 0.5){
+        if(avgRating > 0.0 && avgRating <= 0.5){
             int img = R.drawable.rating_0_5;
             holder.rating.setImageResource(img);
         }
