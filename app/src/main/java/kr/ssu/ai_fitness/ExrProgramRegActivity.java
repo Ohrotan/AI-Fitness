@@ -72,7 +72,6 @@ public class ExrProgramRegActivity extends AppCompatActivity {
         }
 
 
-        EDIT_MODE = true;//테스트용 지우기!!
 
         if (EDIT_MODE) { //수정 모드일 때
             toolbar = findViewById(R.id.toolbar);
