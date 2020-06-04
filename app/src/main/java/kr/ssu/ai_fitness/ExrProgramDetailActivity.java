@@ -79,6 +79,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         //SharedPrefManager에 저장된 user 데이터 가져오기
         user = SharedPrefManager.getInstance(this).getUser();
         final int mem_id = user.getId();
+        Log.d("id", id + mem_id+"");
         byte isTrainer = user.getTrainer();
         title_.setText(title);
         name_.setText(name);
@@ -119,44 +120,11 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         });
 
     }
-/*
-    private class CheckTypesTask extends AsyncTask<Void, Void, Void>
-    {
-        ProgressDialog asyncDialog = new ProgressDialog(ExrProgramDetailActivity.this);
-
-        @Override
-        protected void onPreExecute() {
-            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            asyncDialog.setMessage("로딩 중 입니다...");
-            asyncDialog.show();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try{
-                for(int i = 0; i < 5; i++)
-                {
-                    Thread.sleep(500);
-                }
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            asyncDialog.dismiss();
-            super.onPostExecute(aVoid);
-        }
-    }*/
-
 
     private void getData(final String exr_id, final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t144315-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200604t165903-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -195,7 +163,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 max = c.getString(TAG_MAX);
                                 mem_cnt = c.getString(TAG_MEMCNT);
                                 intro = c.getString(TAG_INTRO);
-                                day_id = c.getString(TAG_DAYID);
+                                //day_id = c.getString(TAG_DAYID);
                                 daytitle = c.getString(TAG_DAYTITLE);
                                 dayintro = c.getString(TAG_DAYINTRO);
                                 daily +=  daytitle +"\n\t\t" + dayintro + "\n";
@@ -228,14 +196,14 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 b.setVisibility(Button.GONE);
                             }
                             //String으로 받았던 변수들 형변환
-                            int exr_id = Integer.parseInt(id);
+                            /*int exr_id = Integer.parseInt(id);
                             int trainer_id = Integer.parseInt(t_id);
                             int periodint = Integer.parseInt(period);
                             char genderchar = gender.charAt(0);
                             int levelint = Integer.parseInt(level);
                             int maxint = Integer.parseInt(max);
 
-                            exrProgram = new ExrProgram(trainer_id,title,periodint,equip,genderchar,levelint,maxint,intro);
+                            exrProgram = new ExrProgram(trainer_id,title,periodint,equip,genderchar,levelint,maxint,intro);*/
 
                         } catch (JSONException e) {
                             e.printStackTrace();
