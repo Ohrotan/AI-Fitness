@@ -1,12 +1,16 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -14,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.R;
 
 public class MemberExrprogramListAdapter extends BaseAdapter {
@@ -44,7 +49,7 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int i, View view, final ViewGroup viewGroup) {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.member_exr_program_listview, null);
         }
@@ -65,7 +70,6 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         day_intro.setText(items.get(i).get("day_intro"));
         int prog = Integer.parseInt(items.get(i).get("time"));
         p.setProgress(prog);
-
         return view;
     }
 }

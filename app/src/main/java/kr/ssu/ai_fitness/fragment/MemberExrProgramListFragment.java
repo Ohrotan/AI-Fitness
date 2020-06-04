@@ -36,9 +36,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import kr.ssu.ai_fitness.BeforeDayExrProgramActivity;
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.TrainerVideoListActivity;
+import kr.ssu.ai_fitness.adapter.AfterDayExrProgramAdapter;
 import kr.ssu.ai_fitness.adapter.MemberExrprogramListAdapter;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
@@ -76,8 +78,10 @@ public class MemberExrProgramListFragment extends Fragment {
         //SharedPrefManager에 저장된 user 데이터 가져오기
         user = SharedPrefManager.getInstance(getActivity()).getUser();
         int id = user.getId();
+        String name = user.getName();
+        TextView tv = (TextView)view.findViewById(R.id.name);
+        tv.setText(name);
         getData(id + "");
-
 
         return view;
     }
@@ -85,7 +89,7 @@ public class MemberExrProgramListFragment extends Fragment {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200521t085909-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200604t210231-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -107,7 +111,7 @@ public class MemberExrProgramListFragment extends Fragment {
                             String identifier = "";*/
                             HashMap<String, String> persons = null;
                             int last_of_len = peoples.length();
-                            String arr[][] = new String[last_of_len][9];//name title start_date end_date time mem_cnt day_title day_intro
+                            String arr[][] = new String[last_of_len][10];//name title start_date end_date time mem_cnt day_title day_intro
 
                             for (int i = 0; i < last_of_len; i++) {
                                 JSONObject c = peoples.getJSONObject(i);
@@ -121,6 +125,7 @@ public class MemberExrProgramListFragment extends Fragment {
                                 arr[i][6] = c.getString(TAG_MEMCNT);
                                 arr[i][7] = c.getString(TAG_DAY_TITLE);
                                 arr[i][8] = c.getString(TAG_DAY_INTRO);
+                                arr[i][9] = c.getString("day_id");
                                 //int membernumber = c.getInt(TAG_MEMBER);
                                 String date = "";
                             }
@@ -144,10 +149,41 @@ public class MemberExrProgramListFragment extends Fragment {
                                 persons.put(TAG_MEMCNT, arr[i][6]+" 명");
                                 persons.put(TAG_DAY_TITLE, arr[i][7]);
                                 persons.put(TAG_DAY_INTRO, arr[i][8]);
+                                persons.put("day_id", arr[i][9]);
                                 personList.add(persons);
                             }
 
                             MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons);
+                            //클릭 안됨....
+                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                                    String lst_txt = adapterView.getItemAtPosition(i).toString();
+                                    Log.d("위치", i+"");
+                                    lst_txt = lst_txt.substring(1, lst_txt.length()-1 );
+                                    Log.d("정보", lst_txt);
+                                    String[] array = lst_txt.split(",");
+
+                                    Log.d("이름", array[2].substring(6));
+                                    Log.d("평점", array[3].substring(8));
+                                    Log.d("아이디", array[4].substring(4));
+                                    Log.d("제목", array[5].substring(7));
+
+
+                                    String id = array[4].substring(4);
+                                    String name = array[2].substring(6);
+                                    String title = array[5].substring(7);
+                                    String rating_star = array[3].substring(8);
+                                    Intent intent = new Intent(getContext(), ExrProgramDetailActivity.class); // 다음 넘어갈 클래스 지정
+                                    intent.putExtra("id", id);
+                                    intent.putExtra("name", name);
+                                    intent.putExtra("title", title);
+                                    intent.putExtra("rating_star", rating_star);
+                                    startActivity(intent); // 다음 화면으로 넘어간다*/
+                                }
+                            });
+
                             list.setAdapter(adapter);
 
                             //adapter에 data값

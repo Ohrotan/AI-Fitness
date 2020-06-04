@@ -124,7 +124,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     private void getData(final String exr_id, final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200604t165903-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200604t225142-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -168,6 +168,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 dayintro = c.getString(TAG_DAYINTRO);
                                 daily +=  daytitle +"\n\t\t" + dayintro + "\n";
                                 if(isRegister.equals("")){ isRegister += c.getString(TAG_EID);}
+                                Log.d("결과",id+t_id+title+period);
                             }
 
 
@@ -181,6 +182,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             txt = (TextView)findViewById(R.id.period);
                             txt.setText(period + " 일");
                             txt = (TextView)findViewById(R.id.mem_cnt);
+                            if(mem_cnt.equals("null")){mem_cnt = "0";}
                             txt.setText(mem_cnt + "명");
                             txt = (TextView)findViewById(R.id.max);
                             txt.setText(max + "명");
@@ -196,14 +198,14 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 b.setVisibility(Button.GONE);
                             }
                             //String으로 받았던 변수들 형변환
-                            /*int exr_id = Integer.parseInt(id);
+                            int exr_id = Integer.parseInt(id);
                             int trainer_id = Integer.parseInt(t_id);
                             int periodint = Integer.parseInt(period);
                             char genderchar = gender.charAt(0);
                             int levelint = Integer.parseInt(level);
                             int maxint = Integer.parseInt(max);
 
-                            exrProgram = new ExrProgram(trainer_id,title,periodint,equip,genderchar,levelint,maxint,intro);*/
+                            exrProgram = new ExrProgram(trainer_id,title,periodint,equip,genderchar,levelint,maxint,intro);
 
                         } catch (JSONException e) {
                             e.printStackTrace();

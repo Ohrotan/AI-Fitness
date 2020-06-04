@@ -57,7 +57,7 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t144315-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200604t221859-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(final String response) {
@@ -78,6 +78,7 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                 String level = c.getString(TAG_LEVEL);
                                 String mem_cnt = c.getString(TAG_MEMCNT);
                                 String rating = c.getString(TAG_RATING);
+                                //String image = c.getString("image");
 
                                 String level_star = "";
                                 String rating_star = "";
@@ -92,6 +93,7 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                 if(!rating.equals("null")){rating = makeStarString(rating);}
                                 persons.put(TAG_RATING,rating);
                                 persons.put(TAG_MEMCNT,mem_cnt+" 명");
+                                //persons.put("image", image);
                                 personList.add(persons);
                             }
 

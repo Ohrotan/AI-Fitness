@@ -36,6 +36,8 @@ import kr.ssu.ai_fitness.ExrProgramRegActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.RegMemberListActivity;
 import kr.ssu.ai_fitness.TrainerVideoListActivity;
+import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.vo.RegMember;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -72,7 +74,14 @@ public class TrainerExrProgramFragment extends Fragment {
         list = (ListView) view.findViewById(R.id.listView);
         personList = new ArrayList<HashMap<String, String>>();
 
-        getData("2");
+        final Member user;
+        user = SharedPrefManager.getInstance(getActivity()).getUser();
+        int id = user.getId();
+        String name = user.getName();
+        TextView tv = (TextView)view.findViewById(R.id.name);
+        tv.setText(name);
+
+        getData(id+"");
         regbtn = view.findViewById(R.id.reg_btn);
         managebtn = view.findViewById(R.id.manage_btn);
 
@@ -134,7 +143,7 @@ public class TrainerExrProgramFragment extends Fragment {
                                     if(id_.equals(id))//현재 ID와 같으면 피드백이 null여부 판단
                                     {
                                         String isnull = c2.getString(TAG_FEEDBACK);
-                                        if(isnull.equals("null"))//null이면 텍스트 교체
+                                        if(isnull.equals("null") & !(mem_cnt.equals("null")))//null이면 텍스트 교체
                                         {
                                             anyfeedback += "피드백이 필요합니다!";
                                             break;//피드백이 없다는 걸 확인했으면 더이상 볼 필요 없음 탈출!
@@ -179,11 +188,9 @@ public class TrainerExrProgramFragment extends Fragment {
                                     if(array[0].substring(9).equals("피드백이 필요합니다!"))
                                     {
                                         Toast.makeText(getContext(),"피드백 화면 전환",Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getContext(), ExrProgramDetailActivity.class); // 다음 넘어갈 클래스 지정
+                                        Intent intent = new Intent(getContext(), RegMemberListActivity.class); // 다음 넘어갈 클래스 지정
                                         startActivity(intent); // 다음 화면으로 넘어간다*/
                                     }
-                                    //Intent intent = new Intent(getActivity(), RegMemberListActivity.class); // 다음 넘어갈 클래스 지정
-                                    //startActivity(intent); // 다음 화면으로 넘어간다
                                 }
                             });
 
