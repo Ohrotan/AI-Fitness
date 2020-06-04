@@ -81,6 +81,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         final Member user;
         //SharedPrefManager에 저장된 user 데이터 가져오기
         user = SharedPrefManager.getInstance(this).getUser();
+        String checkname = user.getName();
         final int mem_id = user.getId();
         Log.d("id", id + mem_id+"");
         byte isTrainer = user.getTrainer();
@@ -97,7 +98,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         name_.setText(name);
         rating_star_.setText(rating_star);
         getData(id,mem_id+"");
-        if(isTrainer == 0) {
+        if(isTrainer == 0 ||!checkname.equals(name) ) {// 트레이너가 아니거나 이름이 같지 않은 경우는 수정 할 수 없게 처리
             Button b = findViewById(R.id.change_btn);
             b.setVisibility(Button.GONE);
         }
