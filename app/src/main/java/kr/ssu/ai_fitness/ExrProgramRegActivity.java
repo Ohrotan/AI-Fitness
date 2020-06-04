@@ -178,7 +178,7 @@ public class ExrProgramRegActivity extends AppCompatActivity {
                         intent.putExtra("period", exr.getPeriod());
                         intent.putExtra("title", exr.getTitle());
                         startActivity(intent);
-
+                        finish();
                     }
                 },
                 new Response.ErrorListener() {

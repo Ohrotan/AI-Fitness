@@ -96,7 +96,12 @@ public class DayExrProgramRegActivity extends AppCompatActivity {
 
             dayProgramTitleAdapter = new DayProgramTitleAdapter(this, dayList);
         } else { //수정이 아닌 프로그램 새로 만들 때
-            dayProgramTitleAdapter = new DayProgramTitleAdapter(this, exr_id, period);
+
+            dayList = new ArrayList<>();
+            for (int i = 1; i <= period; i++) {
+                dayList.add(new DayProgram(exr_id, i + "일차 프로그램", i));
+            }
+            dayProgramTitleAdapter = new DayProgramTitleAdapter(this, dayList);
         }
 
         day_exr_list.setAdapter(dayProgramTitleAdapter);
@@ -143,7 +148,6 @@ public class DayExrProgramRegActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -166,5 +170,3 @@ public class DayExrProgramRegActivity extends AppCompatActivity {
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 }
-
-
