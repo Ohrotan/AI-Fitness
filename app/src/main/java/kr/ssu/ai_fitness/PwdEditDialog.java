@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -222,6 +223,8 @@ public class PwdEditDialog extends Dialog implements View.OnClickListener{
 
                     SharedPrefManager.getInstance(context).setPwd(newPwd);
                     setPwd(user.getName(), newPwd);
+
+                    Toast.makeText(context, "패스워드가 성공적으로 변경되었습니다", Toast.LENGTH_SHORT).show();
                 }
                 if(oldPwd == null){
                     Log.d("INFO_PASSWORD_CHECK", "oldPwd is null");
