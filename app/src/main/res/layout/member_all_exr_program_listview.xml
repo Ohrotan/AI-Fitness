@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/border_layout"
@@ -13,7 +14,7 @@
         android:id="@+id/pic"
         android:background="@drawable/img_rounding"
         android:scaleType="fitXY"
-        android:src="@drawable/bonobono" />
+        app:srcCompat="@drawable/person" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,17 +22,27 @@
         android:id="@+id/name"
         android:layout_toRightOf="@+id/pic"
         android:text="보노본"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textColor="#3498db"
         android:gravity="center"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:id="@+id/title"
+        android:id="@+id/q"
         android:layout_toRightOf="@+id/name"
+        android:text="-"
+        android:textSize="20dp"
+        android:textColor="#3498db"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/q"
+        android:id="@+id/title"
         android:text="다이어트 30일"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textColor="#3498db"
         android:gravity="center"/>
     <TextView
