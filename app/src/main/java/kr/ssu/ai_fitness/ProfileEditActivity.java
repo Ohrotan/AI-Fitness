@@ -140,7 +140,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
         Log.d("ORI_IMAGE_PATH", "original image path = " + imagePath);
 
         //이름설정
-        name.setText(user.getName() + "님");
+        name.setText(user.getName() + " 님");
         Log.d("INFO_NAME", "Name = " + user.getName());
 
         //성별 설정
