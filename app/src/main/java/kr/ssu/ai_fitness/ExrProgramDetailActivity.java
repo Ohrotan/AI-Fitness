@@ -23,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +71,8 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         TextView title_ = (TextView) findViewById(R.id.title);
         TextView name_ = (TextView) findViewById(R.id.name);
         TextView rating_star_ = (TextView)findViewById(R.id.star);
+        TextView membername = (TextView)findViewById(R.id.membername);
+        TextView memortrainer = (TextView)findViewById(R.id.memortrainer);
         final Intent intent = getIntent();
         id = intent.getStringExtra("id");
         title = intent.getStringExtra("title"); //"title"문자 받아옴
@@ -81,6 +84,15 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         final int mem_id = user.getId();
         Log.d("id", id + mem_id+"");
         byte isTrainer = user.getTrainer();
+        if(isTrainer == 0) { //트레이너 아닐때
+            String nameofmem = user.getName();
+            membername.setText(nameofmem);
+            memortrainer.setText(" 회원님 운동하세요!");
+        }
+        else{
+            membername.setVisibility(TextView.GONE);
+            memortrainer.setText(" 운동프로그램 상세정보");
+        }
         title_.setText(title);
         name_.setText(name);
         rating_star_.setText(rating_star);

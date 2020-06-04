@@ -2,6 +2,8 @@ package kr.ssu.ai_fitness;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 import android.content.Intent;
@@ -44,6 +46,8 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
     ListView list;
     ArrayList<HashMap<String, String>> personList;
     String myJSON;
+    //TextView membername = (TextView)findViewById(R.id.membername);
+    //TextView memortrainer = (TextView)findViewById(R.id.memortrainer);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,9 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_member_all_exr_program_list);
         list = (ListView) findViewById(R.id.listView);
         personList = new ArrayList<HashMap<String, String>>();
+        final Member user;
+        user = SharedPrefManager.getInstance(this).getUser();
+
         getData("4");
     }
 
@@ -85,7 +92,6 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                 HashMap<String, String> persons = new HashMap<String, String>();
 
                                 persons.put(TAG_ID, id);
-                                name = name + " - ";
                                 persons.put(TAG_NAME, name);
                                 persons.put(TAG_TITLE, title);
                                 level = makeStarString(level);
