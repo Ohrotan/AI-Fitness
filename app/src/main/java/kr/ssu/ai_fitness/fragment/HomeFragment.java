@@ -344,13 +344,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                             //Log.d("mypromgrams", String.valueOf(myPrograms.size()) + "-" + myPrograms.get(0).getProgram_title());
 
-                            Log.d("xxxxxxx", ""+ allTrainerCount);
+                            Log.d("myProgramCount", ""+ myProgramCount);
+                            Log.d("alltrinercount", ""+ allTrainerCount);
+                            Log.d("allProgramCount", ""+ allProgramCount);
+
+                            double temp_avg_rating = 0;
                             for (int i =0; i < allTrainerCount; ++i) {
+                                if (obj.getJSONObject(2 + myProgramCount + i).getDouble("avg_rating") != 0) {
+                                    temp_avg_rating = obj.getJSONObject(2 + myProgramCount + i).getDouble("avg_rating");
+                                }
+                                else {
+                                    temp_avg_rating = 0;
+                                }
+
                                 allTrainer.add(new AllTrainer(
                                         obj.getJSONObject(2 + myProgramCount + i).getInt("id"),
                                         obj.getJSONObject(2 + myProgramCount + i).getString("name"),
                                         obj.getJSONObject(2 + myProgramCount + i).getString("image"),
-                                        obj.getJSONObject(2 + myProgramCount + i).getDouble("avg_rating"),
+                                        temp_avg_rating,
                                         obj.getJSONObject(2 + myProgramCount + i).getDouble("height"),
                                         obj.getJSONObject(2 + myProgramCount + i).getDouble("weight"),
                                         obj.getJSONObject(2 + myProgramCount + i).getDouble("muscle"),
@@ -360,6 +371,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                         obj.getJSONObject(2 + myProgramCount + i).getString("intro"),
                                         obj.getJSONObject(2 + myProgramCount + i).getInt("memberNum")
                                 ));
+
 
                                 Log.d("xxxxxxx", obj.getJSONObject(2 + myProgramCount + i).toString());
                             }
