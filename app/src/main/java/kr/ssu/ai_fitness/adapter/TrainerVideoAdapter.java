@@ -46,7 +46,7 @@ public class TrainerVideoAdapter extends BaseAdapter {
         //  View lastView = getView(getCount() - 1, null, null);
         //TrainerVideoAdapter.ViewHolder holder = (TrainerVideoAdapter.ViewHolder) lastView.getTag();
         //holder.img.setImageBitmap(bitmap);
-        Log.v("function","setImgOfLastView");
+        Log.v("function", "setImgOfLastView");
         if (bitmap == null)
             Log.v("motion video", "adapter lastview Bitmap null");
 
@@ -55,6 +55,12 @@ public class TrainerVideoAdapter extends BaseAdapter {
             Log.v("motion video", "adapter lastview tmpBitmap null");
         notifyDataSetChanged();
     }
+
+    public void setItems(ArrayList<TrainerVideo> items) {
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getCount() {
@@ -73,7 +79,7 @@ public class TrainerVideoAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.v("function","getView");
+        Log.v("function", "getView");
         TrainerVideoAdapter.ViewHolder holder;
         //항목 레이아웃 초기화
         if (convertView == null) {
@@ -99,7 +105,7 @@ public class TrainerVideoAdapter extends BaseAdapter {
             bmp = tmpBitmap;
         }
 
-        holder.img.setImageBitmap(tmpBitmap);
+        holder.img.setImageBitmap(bmp);
 
         // ImageViewTask task = new ImageViewTask(holder.img);
         // task.execute(item.getThumb_img());
@@ -133,6 +139,9 @@ public class TrainerVideoAdapter extends BaseAdapter {
                                 //서버에서 요청을 받았을 때 수행되는 부분
                                 items.remove(dto);
                                 notifyDataSetChanged();
+                                new File(context.getFilesDir() + "/" + dto.getThumb_img()).delete();
+                                new File(context.getFilesDir() + "/" + dto.getVideo()).delete();
+
                             }
                         },
                         new Response.ErrorListener() {
