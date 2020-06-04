@@ -179,6 +179,8 @@ public class TrainerExrProgramFragment extends Fragment {
                                     if(array[0].substring(9).equals("피드백이 필요합니다!"))
                                     {
                                         Toast.makeText(getContext(),"피드백 화면 전환",Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getContext(), ExrProgramDetailActivity.class); // 다음 넘어갈 클래스 지정
+                                        startActivity(intent); // 다음 화면으로 넘어간다*/
                                     }
                                     //Intent intent = new Intent(getActivity(), RegMemberListActivity.class); // 다음 넘어갈 클래스 지정
                                     //startActivity(intent); // 다음 화면으로 넘어간다
