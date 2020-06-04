@@ -131,6 +131,8 @@ public class ProfileFragment extends Fragment {
         user = SharedPrefManager.getInstance(getActivity()).getUser();
 
         //프로필 이미지 설정
+        Log.d("PROFILE_PATH", user.getImage());
+
         ImageViewTask task = new ImageViewTask(profilePic);
         task.execute(user.getImage());
 
