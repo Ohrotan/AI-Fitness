@@ -65,7 +65,7 @@ public class TrainerVideoListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setSubtitle(user.getName() + " 트레이너님의 운동 동작");
 
-        getData(); //비디오 썸네일 출력
+        getData(null); //비디오 썸네일 출력
 
     }
 
@@ -73,13 +73,14 @@ public class TrainerVideoListActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = data.getParcelableExtra("bitmap");
-        if(bitmap!=null)
-            Log.v("motion video null?","no");
-        trainerVideoAdapter.setImgOfLastView(bitmap);
-        getData();
+        if (bitmap != null)
+            Log.v("motion video null?", "no");
+        getData(bitmap);
+
+
     }
 
-    private void getData() {
+    private void getData(final Bitmap bitmap) {
 
         progressDialog = ProgressDialog.show(this, "비디오 받는 중", "영상을 받고 있습니다.", false, false);
 
@@ -111,6 +112,8 @@ public class TrainerVideoListActivity extends AppCompatActivity {
 
                             trainerVideoAdapter = new TrainerVideoAdapter(TrainerVideoListActivity.this, videoLists);
                             tr_video_list_view.setAdapter(trainerVideoAdapter);
+                            if (bitmap != null)
+                                trainerVideoAdapter.setImgOfLastView(bitmap);
                             // Toast.makeText(TrainerVideoListActivity.this, videoDto.toString(), Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
