@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -41,7 +42,7 @@ public class RegMemberListActivity  extends AppCompatActivity {
     private RequestQueue queue;
 
     private String toolbarTitle;
-    private String exrId = "2";
+    private String exrId;
     private Toolbar toolbar;
     private int flag = 0;
     //private ArrayList<Member> members = new ArrayList<>();
@@ -60,6 +61,9 @@ public class RegMemberListActivity  extends AppCompatActivity {
         // 리사이클러뷰에 RegMemberListAdapter 객체 지정.
         //RegMemberListAdapter adapterTrainer = new RegMemberListAdapter(trainerList);
         //recyclerViewTrainer.setAdapter(adapterTrainer);
+
+        Intent intent = getIntent();
+        exrId = intent.getExtras().getString("exr_id");
 
         getData();
     }
