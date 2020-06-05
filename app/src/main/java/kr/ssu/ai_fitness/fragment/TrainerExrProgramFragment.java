@@ -158,11 +158,30 @@ public class TrainerExrProgramFragment extends Fragment {
                                 persons.put(TAG_TITLE, title);
                                 period += "일 프로그램";
                                 persons.put(TAG_PERIOD, period);
+                                if(mem_cnt.equals("null")){mem_cnt = "0";}
                                 String cnt_people = mem_cnt + "명 / " + max + "명";
                                 persons.put(TAG_MEM_CNT, cnt_people);
-                                persons.put(TAG_LEVEL, level);
+                                if(level.equals("null")){level = "0";}
+                                int num = Integer.parseInt(level);
+                                String level_star = "";
+                                for(int l = 0;  l< num; l++ )
+                                {
+                                    level_star += "★";
+                                }
+                                persons.put(TAG_LEVEL, level_star);
                                 persons.put(TAG_EQUIP, equip);
-                                persons.put(TAG_RATING, rating);
+                                if(rating.equals("null")){rating = "0";}
+                                num = Integer.parseInt(rating);
+                                String rating_star = "";
+                                for(int l = 0;  l< num; l++ )
+                                {
+                                    rating_star += "★";
+                                }
+                                persons.put(TAG_RATING, rating_star);
+                                if(gender.equals("M")){gender = "남성";}
+                                else if(gender.equals("F")){gender = "여성";}
+                                else if(gender.equals("A")){gender = "모두";}
+                                else{gender = "";}
                                 persons.put(TAG_GENDER, gender);
                                 persons.put(TAG_FEEDBACK, anyfeedback);
                                 personList.add(persons);
