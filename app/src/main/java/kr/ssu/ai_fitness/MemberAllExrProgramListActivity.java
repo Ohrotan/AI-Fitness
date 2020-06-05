@@ -97,7 +97,9 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                 level = makeStarString(level);
                                 persons.put(TAG_LEVEL,level);
                                 if(!rating.equals("null")){rating = makeStarString(rating);}
+                                else{rating = "";}
                                 persons.put(TAG_RATING,rating);
+                                if(mem_cnt.equals("null")){mem_cnt = "0";}
                                 persons.put(TAG_MEMCNT,mem_cnt+" 명");
                                 //persons.put("image", image);
                                 personList.add(persons);

@@ -93,6 +93,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/exr_id"
         android:text=""
+        android:textSize="0dp"
         android:textColor="@color/white"
         />
 </RelativeLayout>

@@ -61,7 +61,7 @@
                 android:id="@+id/pic"
                 android:background="@drawable/img_rounding"
                 android:scaleType="fitXY"
-                android:src="@drawable/bonobono" />
+                app:srcCompat="@drawable/person" />
             <Button
                 android:layout_width="60dp"
                 android:layout_height="30dp"
@@ -111,6 +111,16 @@
                 android:text="★★☆☆☆"
                 android:textSize="20dp"
                 android:textColor="#3498db"
+                android:gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/day_id"
+                android:layout_toRightOf="@+id/star"
+                android:layout_below="@+id/name"
+                android:text=""
+                android:textSize="0dp"
+                android:textColor="@color/white"
                 android:gravity="center"/>
             <GridLayout
                 android:layout_width="match_parent"
