@@ -1,6 +1,8 @@
 package kr.ssu.ai_fitness.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,6 +38,7 @@ public class TrainerVideoAdapter extends BaseAdapter {
     private Context context;
     private TrainerVideo item;
     Bitmap tmpBitmap;
+    AlertDialog.Builder deleteCheckDialog;
 
     public TrainerVideoAdapter(Context context, ArrayList<TrainerVideo> items) {
         this.context = context;
@@ -122,42 +125,65 @@ public class TrainerVideoAdapter extends BaseAdapter {
 
         holder.del_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                final TrainerVideo dto = (TrainerVideo) v.getTag();
-                final int video_id = dto.getId();
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DELETE_VIDEO,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                //서버에서 요청을 받았을 때 수행되는 부분
-                                items.remove(dto);
-                                notifyDataSetChanged();
-                                new File(context.getFilesDir() + "/" + dto.getThumb_img()).delete();
-                                new File(context.getFilesDir() + "/" + dto.getVideo()).delete();
+            public void onClick(final View v) {
 
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
-                            }
-                        }) {
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        //서버가 요청하는 파라미터를 담는 부분
-                        Map<String, String> params = new HashMap<>();
-                        params.put("id", video_id + "");
-                        return params;
-                    }
-                };
+                deleteCheckDialog = new AlertDialog.Builder(context);
+                deleteCheckDialog.setTitle("경고");
+                // AlertDialog 셋팅
+                deleteCheckDialog
+                        .setMessage("정말 삭제하시겠습니까?")
+                        .setCancelable(true)
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                final TrainerVideo dto = (TrainerVideo) v.getTag();
+                                final int video_id = dto.getId();
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_DELETE_VIDEO,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                //서버에서 요청을 받았을 때 수행되는 부분
+                                                items.remove(dto);
+                                                notifyDataSetChanged();
+                                                new File(context.getFilesDir() + "/" + dto.getThumb_img()).delete();
+                                                new File(context.getFilesDir() + "/" + dto.getVideo()).delete();
 
-                stringRequest.setShouldCache(false);
-                VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }) {
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        //서버가 요청하는 파라미터를 담는 부분
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("id", video_id + "");
+                                        return params;
+                                    }
+                                };
+
+                                stringRequest.setShouldCache(false);
+                                VolleySingleton.getInstance(context).addToRequestQueue(stringRequest);
+
+                                dialog.cancel();
+                                Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show();
+                            }
+
+                        })
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // 다이얼로그를 취소한다
+                                dialog.cancel();
+                            }
+                        });
+
+
+                deleteCheckDialog.show();
+
             }
         });
-
-
         return convertView;
     }
 
