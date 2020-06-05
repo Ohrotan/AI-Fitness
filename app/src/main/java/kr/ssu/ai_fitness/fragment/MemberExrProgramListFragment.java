@@ -89,7 +89,7 @@ public class MemberExrProgramListFragment extends Fragment {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200604t210231-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200605t132706-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -128,14 +128,16 @@ public class MemberExrProgramListFragment extends Fragment {
                                 arr[i][9] = c.getString("day_id");
                                 //int membernumber = c.getInt(TAG_MEMBER);
                                 String date = "";
+                                Log.d("이름", arr[i][1]);
                             }
+
+
 
 
                             int [] check_last_idx = check_same_idx(arr,last_of_len);//중복된 exr_id중 하나만 추출
                             int cnt_idx = cnt_idx(arr,last_of_len);
 
                             for (int j = 0; j < cnt_idx*2; j+=2) {
-
                                 int i = check_last_idx[j];
                                 int time = check_last_idx[j+1];
                                 Log.d("index",i+"");
@@ -155,34 +157,6 @@ public class MemberExrProgramListFragment extends Fragment {
 
                             MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons);
                             //클릭 안됨....
-                            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                                    String lst_txt = adapterView.getItemAtPosition(i).toString();
-                                    Log.d("위치", i+"");
-                                    lst_txt = lst_txt.substring(1, lst_txt.length()-1 );
-                                    Log.d("정보", lst_txt);
-                                    String[] array = lst_txt.split(",");
-
-                                    Log.d("이름", array[2].substring(6));
-                                    Log.d("평점", array[3].substring(8));
-                                    Log.d("아이디", array[4].substring(4));
-                                    Log.d("제목", array[5].substring(7));
-
-
-                                    String id = array[4].substring(4);
-                                    String name = array[2].substring(6);
-                                    String title = array[5].substring(7);
-                                    String rating_star = array[3].substring(8);
-                                    Intent intent = new Intent(getContext(), ExrProgramDetailActivity.class); // 다음 넘어갈 클래스 지정
-                                    intent.putExtra("id", id);
-                                    intent.putExtra("name", name);
-                                    intent.putExtra("title", title);
-                                    intent.putExtra("rating_star", rating_star);
-                                    startActivity(intent); // 다음 화면으로 넘어간다*/
-                                }
-                            });
 
                             list.setAdapter(adapter);
 
@@ -234,11 +208,15 @@ public class MemberExrProgramListFragment extends Fragment {
         int time_hour = 0;
         int arr_idx = 0;
         for (int i = 0; i < last_of_len; i++) {
-            if (arr[idx_][0].equals(arr[i][0])) {
+            if (arr[idx_][0].equals(arr[i][0])) {//exr_id가 중복될 경우
                 //time갱신
                 if(arr[i][5].equals("null")){ time_hour = 0;}
                 else{ time_hour += time_hour_func(arr[i][5]);}
                 idx++;
+                if(idx_ == i-1)
+                {
+                    check_last_idx[arr_idx] = idx_;
+                }
             }
             else
             {
