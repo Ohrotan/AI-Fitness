@@ -126,8 +126,7 @@
                 android:layout_height="70dp"
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_account_box_black_24dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/fragment_home_imageview_trainer2"
@@ -135,8 +134,7 @@
                 android:layout_height="70dp"
                 android:layout_marginStart="25dp"
                 app:layout_constraintStart_toEndOf="@+id/fragment_home_imageview_trainer1"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_account_box_black_24dp" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <ImageView
                 android:id="@+id/fragment_home_imageview_trainer3"
@@ -144,8 +142,7 @@
                 android:layout_height="70dp"
                 android:layout_marginStart="25dp"
                 app:layout_constraintStart_toEndOf="@+id/fragment_home_imageview_trainer2"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_account_box_black_24dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/fragment_home_imageview_trainer4"
@@ -153,8 +150,7 @@
                 android:layout_height="70dp"
                 android:layout_marginStart="25dp"
                 app:layout_constraintStart_toEndOf="@+id/fragment_home_imageview_trainer3"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_account_box_black_24dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/fragment_home_textview_trainer1"
@@ -163,7 +159,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="이름"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_home_imageview_trainer1" />
 
@@ -174,7 +169,6 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="이름"
                 app:layout_constraintStart_toEndOf="@+id/fragment_home_textview_trainer1"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_home_imageview_trainer2" />
 
@@ -185,7 +179,6 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="이름"
                 app:layout_constraintStart_toEndOf="@+id/fragment_home_textview_trainer2"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_home_imageview_trainer3" />
 
@@ -196,7 +189,6 @@
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="이름"
                 app:layout_constraintStart_toEndOf="@+id/fragment_home_textview_trainer3"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_home_imageview_trainer4" />
         </androidx.constraintlayout.widget.ConstraintLayout>

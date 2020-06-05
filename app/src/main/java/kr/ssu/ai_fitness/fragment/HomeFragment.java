@@ -1,6 +1,8 @@
 package kr.ssu.ai_fitness.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 
@@ -26,6 +28,11 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,15 +64,23 @@ import kr.ssu.ai_fitness.TrainerVideoListActivity;
 import kr.ssu.ai_fitness.TrainerVideoRegActivity;
 import kr.ssu.ai_fitness.VideoPlayActivity;
 import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.dto.TrainerVideo;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.FileDownloadService;
 import kr.ssu.ai_fitness.util.ImageViewTask;
+import kr.ssu.ai_fitness.util.ServiceGenerator;
 import kr.ssu.ai_fitness.vo.AllProgram;
 import kr.ssu.ai_fitness.vo.AllTrainer;
 import kr.ssu.ai_fitness.vo.MyProgram;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
+
+    String TAG = "tr_profile_img";
 
     Member user;
 
@@ -346,7 +361,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                             Log.d("myProgramCount", ""+ myProgramCount);
                             Log.d("alltrinercount", ""+ allTrainerCount);
-                            Log.d("allProgramCount", ""+ allProgramCount);
+//                            Log.d("allProgramCount", ""+ allProgramCount);
 
                             double temp_avg_rating = 0;
                             for (int i =0; i < allTrainerCount; ++i) {
@@ -401,17 +416,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 textView_myProgram3.setText(myPrograms.get(2).getTrainer_name() + "-" + myPrograms.get(2).getProgram_title());
                             }
 
-                            ImageViewTask imageViewTask;
                             //*****트레이너 목록을 표시한다. 이미지 수정하는 코드 추가해야 함
+
+                            ImageViewTask imageViewTask;
                             if (allTrainerCount >= 1) {
                                 textView_trainer1.setText(allTrainer.get(0).getName());
                                 imageViewTask = new ImageViewTask(imageView_trainer1);
                                 imageViewTask.execute(allTrainer.get(0).getImage());
+
                             }
                             if(allTrainerCount >= 2) {
                                 textView_trainer2.setText(allTrainer.get(1).getName());
                                 imageViewTask = new ImageViewTask(imageView_trainer2);
                                 imageViewTask.execute(allTrainer.get(1).getImage());
+
                             }
                             if (allTrainerCount >= 3) {
                                 textView_trainer3.setText(allTrainer.get(2).getName());
@@ -460,4 +478,87 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
+
+    public void downloadOneFile(String storagePath) {
+        Log.v("tr_preload","tr_video downloading:"+storagePath);
+        String[] tempName = storagePath.split("/");
+        final String fileName = tempName[tempName.length - 1];
+        if (new File(getContext().getFilesDir() + "/" + fileName).exists()) {
+            return;
+        }
+        FileDownloadService downloadService = ServiceGenerator.create(FileDownloadService.class);
+
+        Call<ResponseBody> call = downloadService.downloadFileWithDynamicUrlSync(storagePath);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "server contacted and has file");
+
+                    boolean writtenToDisk = writeResponseBodyToDisk(response.body(), fileName);
+
+                    Log.d(TAG, "file download was a success? " + writtenToDisk);
+                } else {
+                    Log.d(TAG, "server contact failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e(TAG, "error");
+            }
+        });
+    }
+
+    public boolean writeResponseBodyToDisk(ResponseBody body, String filename) {
+        try {
+
+            File futureStudioIconFile = new File(getContext().getFilesDir() + "/" + filename);
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[1024 * 1024 * 100];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(futureStudioIconFile);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        Log.d(TAG, futureStudioIconFile.getPath());
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    //  Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+    }
 }
