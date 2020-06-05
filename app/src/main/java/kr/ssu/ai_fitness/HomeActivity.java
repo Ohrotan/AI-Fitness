@@ -35,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
     int isTrainer;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,8 @@ public class HomeActivity extends AppCompatActivity {
             int trainer_id = SharedPrefManager.getInstance(this).getUser().getId();
             trainerVideoDownload.downloadTrainerVideos(trainer_id);
         }
+
+
         Intent intent = getIntent();
         int isChattingBack = intent.getIntExtra("isChattingBack", 0);
 
@@ -86,6 +89,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
         //*****사용자(회원, 트레이너, 관리자)마다 연결된 프레그먼트가 달라야함
         homeFragment = new HomeFragment();
         memberExrProgramListFragment = new MemberExrProgramListFragment();
@@ -102,7 +106,6 @@ public class HomeActivity extends AppCompatActivity {
         }
 
     }
-
 
     //*****프레그먼트 교환 메서드도 사용자(회원, 트레이너, 관리자)마다 다르게 만들어야 한다.
     // 프레그먼트 교체해주는 setFrag() 정의
