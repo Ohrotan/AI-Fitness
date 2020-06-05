@@ -47,12 +47,7 @@ public class TrainerVideoAdapter extends BaseAdapter {
         //TrainerVideoAdapter.ViewHolder holder = (TrainerVideoAdapter.ViewHolder) lastView.getTag();
         //holder.img.setImageBitmap(bitmap);
         Log.v("function", "setImgOfLastView");
-        if (bitmap == null)
-            Log.v("motion video", "adapter lastview Bitmap null");
-
         tmpBitmap = bitmap;
-        if (tmpBitmap == null)
-            Log.v("motion video", "adapter lastview tmpBitmap null");
         notifyDataSetChanged();
     }
 
@@ -100,8 +95,6 @@ public class TrainerVideoAdapter extends BaseAdapter {
         Bitmap bmp = BitmapFactory.decodeFile(context.getFilesDir() + "/" + tmp[tmp.length - 1]);
         if (!new File(context.getFilesDir() + "/" + tmp[tmp.length - 1]).exists()) {
             Log.v("tr_preload", "thumb null");
-            if (tmpBitmap == null)
-                Log.v("tr_preload", "thumb tmp bitmap null");
             bmp = tmpBitmap;
         }
 
