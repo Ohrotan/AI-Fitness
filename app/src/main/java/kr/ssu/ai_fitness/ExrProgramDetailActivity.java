@@ -113,10 +113,10 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         applybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(),"신청버튼 눌러짐",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"신청 완료!",Toast.LENGTH_SHORT).show();
                 int period = exrProgram.getPeriod();
                 int rating = 0;
-                putData(id, mem_id+"", rating+"", period+"");
+                putData(id, mem_id+"", rating+"", period+"");//DB에 정보 삽입
                 Button b = findViewById(R.id.apply_btn);
                 b.setVisibility(Button.GONE);
             }
@@ -137,7 +137,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     private void getData(final String exr_id, final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200604t225142-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200605t104418-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -176,10 +176,12 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 max = c.getString(TAG_MAX);
                                 mem_cnt = c.getString(TAG_MEMCNT);
                                 intro = c.getString(TAG_INTRO);
-                                //day_id = c.getString(TAG_DAYID);
+                                day_id = c.getString(TAG_DAYID);
                                 daytitle = c.getString(TAG_DAYTITLE);
                                 dayintro = c.getString(TAG_DAYINTRO);
-                                daily +=  daytitle +"\n\t\t" + dayintro + "\n";
+                                if(!daytitle.equals("null")||!dayintro.equals("null")) {
+                                    daily += daytitle + "\n\t\t" + dayintro + "\n";
+                                }
                                 if(isRegister.equals("")){ isRegister += c.getString(TAG_EID);}
                                 Log.d("결과",id+t_id+title+period);
                             }
@@ -205,6 +207,8 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             txt.setText(intro);
                             txt = (TextView)findViewById(R.id.daily_list);
                             txt.setText(daily);
+                            txt = (TextView)findViewById(R.id.day_id);
+                            txt.setText(day_id);
                             Log.d("등록됬는지 확인", isRegister);
                             if(!(isRegister.equals("null"))) {
                                 Button b = findViewById(R.id.apply_btn);
