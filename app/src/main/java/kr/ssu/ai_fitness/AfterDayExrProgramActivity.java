@@ -74,6 +74,8 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
         else {//일반회원은 자신의 uid를 얻어온다.
             mem_id = SharedPrefManager.getInstance(this).getUser().getId();
         }
+
+        Log.d("member_id", ""+mem_id);
         //*****db 검색을 위해 day_program_id를 이전 액티비티에서 넘겨줘야 한다.
         day_program_id = intent.getIntExtra("id", -1);
 
