@@ -139,6 +139,7 @@ public class TrainerExrProgramFragment extends Fragment {
                                 for (int j = i; j < peoples.length(); j++) {
                                     JSONObject c2 = peoples.getJSONObject(j);
                                     String id_ = c2.getString(TAG_ID);
+                                    persons.put(TAG_ID,id_);
                                     if (id_.equals(id))//현재 ID와 같으면 피드백이 null여부 판단
                                     {
                                         String isnull = c2.getString(TAG_FEEDBACK);
@@ -205,8 +206,9 @@ public class TrainerExrProgramFragment extends Fragment {
                                     String[] array = lst_txt.split(",");
                                     Log.d("피드백", array[0].substring(9));
                                     if (array[0].substring(9).equals("피드백이 필요합니다!")) {
-                                        Toast.makeText(getContext(), "피드백 화면 전환", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(),array[7].substring(4), Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getContext(), RegMemberListActivity.class); // 다음 넘어갈 클래스 지정
+                                        intent.putExtra("exr_id", array[7].substring(4));
                                         startActivity(intent); // 다음 화면으로 넘어간다*/
                                     }
                                 }
