@@ -2,9 +2,6 @@ package kr.ssu.ai_fitness.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +13,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,19 +30,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.ExrProgramRegActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.RegMemberListActivity;
 import kr.ssu.ai_fitness.TrainerVideoListActivity;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
-import kr.ssu.ai_fitness.vo.RegMember;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class TrainerExrProgramFragment extends Fragment {
 
     private ListView mListview;
+    public static final int REQUEST_EXR_REG = 200;
     private static final String TAG_RESULTS = "result";
     private static final String TAG_ID = "id";
     private static final String TAG_NAME = "name";
@@ -65,23 +63,25 @@ public class TrainerExrProgramFragment extends Fragment {
     Button managebtn;
     View view;
 
+    int user_id;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ViewGroup view = (ViewGroup)inflater.inflate(R.layout.activity_trainer_exr_program_list, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.activity_trainer_exr_program_list, container, false);
 
         list = (ListView) view.findViewById(R.id.listView);
         personList = new ArrayList<HashMap<String, String>>();
 
         final Member user;
         user = SharedPrefManager.getInstance(getActivity()).getUser();
-        int id = user.getId();
+        user_id = user.getId();
         String name = user.getName();
-        TextView tv = (TextView)view.findViewById(R.id.name);
+        TextView tv = (TextView) view.findViewById(R.id.name);
         tv.setText(name);
 
-        getData(id+"");
+        getData(user_id + "");
         regbtn = view.findViewById(R.id.reg_btn);
         managebtn = view.findViewById(R.id.manage_btn);
 
@@ -90,7 +90,7 @@ public class TrainerExrProgramFragment extends Fragment {
             public void onClick(View v) {
                 //Toast.makeText(getApplicationContext(),"신청버튼 눌러짐",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), ExrProgramRegActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_EXR_REG);
             }
         });
         managebtn.setOnClickListener(new View.OnClickListener() {//수정버튼 눌렀을때
@@ -118,7 +118,7 @@ public class TrainerExrProgramFragment extends Fragment {
                         try {
                             JSONObject jsonObj = new JSONObject(response);
                             peoples = jsonObj.getJSONArray(TAG_RESULTS);
-
+                            personList.clear();
                             for (int i = 0; i < peoples.length(); i++) {
                                 JSONObject c = peoples.getJSONObject(i);
                                 String id = c.getString(TAG_ID);
@@ -136,25 +136,25 @@ public class TrainerExrProgramFragment extends Fragment {
                                 HashMap<String, String> persons = new HashMap<String, String>();
 
                                 persons.put("trainer_id", t_id);
-                                for(int j = i; j<peoples.length();j++)
-                                {
+                                for (int j = i; j < peoples.length(); j++) {
                                     JSONObject c2 = peoples.getJSONObject(j);
                                     String id_ = c2.getString(TAG_ID);
-                                    if(id_.equals(id))//현재 ID와 같으면 피드백이 null여부 판단
+                                    if (id_.equals(id))//현재 ID와 같으면 피드백이 null여부 판단
                                     {
                                         String isnull = c2.getString(TAG_FEEDBACK);
-                                        if(isnull.equals("null") & !(mem_cnt.equals("null")))//null이면 텍스트 교체
+                                        if (isnull.equals("null") & !(mem_cnt.equals("null")))//null이면 텍스트 교체
                                         {
                                             anyfeedback += "피드백이 필요합니다!";
                                             break;//피드백이 없다는 걸 확인했으면 더이상 볼 필요 없음 탈출!
                                         }
-                                    }
-                                    else// 다르면 for문 탈출
+                                    } else// 다르면 for문 탈출
                                     {
                                         break;
                                     }
                                 }
-                                if(id.equals(copied_string)){continue;}
+                                if (id.equals(copied_string)) {
+                                    continue;
+                                }
                                 persons.put(TAG_TITLE, title);
                                 period += "일 프로그램";
                                 persons.put(TAG_PERIOD, period);
@@ -192,21 +192,20 @@ public class TrainerExrProgramFragment extends Fragment {
                             //adapter.addItem(new Member_reg_program(ddd[0], "★★★★☆","★★★★☆","30 명","","","",""));
                             ListAdapter adapter = new SimpleAdapter(
                                     getActivity(), personList, R.layout.trainer_exr_program_listview,
-                                    new String[]{"id",TAG_TITLE,TAG_PERIOD,TAG_MEM_CNT,TAG_LEVEL,TAG_EQUIP,TAG_RATING,TAG_GENDER,TAG_FEEDBACK}, //
-                                    new int[]{R.id.id, R.id.title,R.id.period,R.id.mem_cnt,R.id.level,R.id.equip, R.id.rating, R.id.gender,R.id.feedback}
+                                    new String[]{"id", TAG_TITLE, TAG_PERIOD, TAG_MEM_CNT, TAG_LEVEL, TAG_EQUIP, TAG_RATING, TAG_GENDER, TAG_FEEDBACK}, //
+                                    new int[]{R.id.id, R.id.title, R.id.period, R.id.mem_cnt, R.id.level, R.id.equip, R.id.rating, R.id.gender, R.id.feedback}
                             );
 
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                     String lst_txt = adapterView.getItemAtPosition(i).toString();
-                                    lst_txt = lst_txt.substring(1, lst_txt.length()-1 );
+                                    lst_txt = lst_txt.substring(1, lst_txt.length() - 1);
                                     Log.d("정보", lst_txt);
                                     String[] array = lst_txt.split(",");
                                     Log.d("피드백", array[0].substring(9));
-                                    if(array[0].substring(9).equals("피드백이 필요합니다!"))
-                                    {
-                                        Toast.makeText(getContext(),"피드백 화면 전환",Toast.LENGTH_SHORT).show();
+                                    if (array[0].substring(9).equals("피드백이 필요합니다!")) {
+                                        Toast.makeText(getContext(), "피드백 화면 전환", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getContext(), RegMemberListActivity.class); // 다음 넘어갈 클래스 지정
                                         startActivity(intent); // 다음 화면으로 넘어간다*/
                                     }
@@ -242,5 +241,13 @@ public class TrainerExrProgramFragment extends Fragment {
         //결과적으로 이전 결과가 있어도 새로 요청한 응답을 보여줌
         stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EXR_REG) {
+            getData(user_id + "");
+        }
     }
 }
