@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import java.util.Map;
 import kr.ssu.ai_fitness.dto.ExrProgram;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class ExrProgramDetailActivity extends AppCompatActivity {
@@ -51,6 +53,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     private static final String TAG_DAYTITLE = "day_title";
     private static final String TAG_DAYINTRO = "day_intro";
     private static final String TAG_EID = "e_id"; // 이 사용자가 신청한 건지 아닌지 판별할때 사용
+    private static final String TAG_IMAGE = "image";
 
     JSONArray peoples = null;
     ListView list;
@@ -137,7 +140,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     private void getData(final String exr_id, final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200605t104418-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200611t205746-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -163,6 +166,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             String dayintro = "";
                             String daily = "";
                             String isRegister = "";
+                            String image = "";
 
                             for (int i = 0; i < peoples.length(); i++) {
                                 JSONObject c = peoples.getJSONObject(i);
@@ -179,6 +183,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 day_id = c.getString(TAG_DAYID);
                                 daytitle = c.getString(TAG_DAYTITLE);
                                 dayintro = c.getString(TAG_DAYINTRO);
+                                image = c.getString(TAG_IMAGE);
                                 if(!daytitle.equals("null")||!dayintro.equals("null")) {
                                     daily += daytitle + "\n\t\t" + dayintro + "\n";
                                 }
@@ -209,6 +214,9 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             txt.setText(daily);
                             txt = (TextView)findViewById(R.id.day_id);
                             txt.setText(day_id);
+                            ImageView img = (ImageView)findViewById(R.id.pic);
+                            ImageViewTask task = new ImageViewTask(img);
+                            task.execute(image);
                             Log.d("등록됬는지 확인", isRegister);
                             if(!(isRegister.equals("null"))) {
                                 Button b = findViewById(R.id.apply_btn);
