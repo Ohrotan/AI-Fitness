@@ -89,7 +89,7 @@ public class MemberExrProgramListFragment extends Fragment {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200605t132706-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200611t202812-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -111,7 +111,7 @@ public class MemberExrProgramListFragment extends Fragment {
                             String identifier = "";*/
                             HashMap<String, String> persons = null;
                             int last_of_len = peoples.length();
-                            String arr[][] = new String[last_of_len][10];//name title start_date end_date time mem_cnt day_title day_intro
+                            String arr[][] = new String[last_of_len][11];//name title start_date end_date time mem_cnt day_title day_intro
 
                             for (int i = 0; i < last_of_len; i++) {
                                 JSONObject c = peoples.getJSONObject(i);
@@ -126,6 +126,7 @@ public class MemberExrProgramListFragment extends Fragment {
                                 arr[i][7] = c.getString(TAG_DAY_TITLE);
                                 arr[i][8] = c.getString(TAG_DAY_INTRO);
                                 arr[i][9] = c.getString("day_id");
+                                arr[i][10] = c.getString("image");
                                 //int membernumber = c.getInt(TAG_MEMBER);
                                 String date = "";
                                 Log.d("이름", arr[i][1]);
@@ -152,6 +153,7 @@ public class MemberExrProgramListFragment extends Fragment {
                                 persons.put(TAG_DAY_TITLE, arr[i][7]);
                                 persons.put(TAG_DAY_INTRO, arr[i][8]);
                                 persons.put("day_id", arr[i][9]);
+                                persons.put("image", arr[i][10]);
                                 personList.add(persons);
                             }
 
