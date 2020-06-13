@@ -119,11 +119,13 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
      * A reference to the opened [CameraDevice].
      */
     private var cameraDevice: CameraDevice? = null
+        
 
     /**
      * The [android.util.Size] of camera preview.
      */
     private var previewSize: Size? = null
+
 
     /**
      * [CameraDevice.StateCallback] is called when [CameraDevice] changes its state.
@@ -309,7 +311,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
 
             //showToast("아무거나")
 
-            classifier = ImageClassifierFloatInception.create(activity)
+           classifier = ImageClassifierFloatInception.create(activity, trainerVideoAnalysisManager!!)
             if (drawView != null)
                 drawView!!.setImgSize(classifier!!.imageSizeX, classifier!!.imageSizeY)
         } catch (e: IOException) {

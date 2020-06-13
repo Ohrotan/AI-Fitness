@@ -2,11 +2,13 @@ package kr.ssu.ai_fitness.vo;
 
 public class DayProgram {
     private int id;
+    private int mem_id;
     private String title;
     private String feedback;
 
-    public DayProgram(int id, String title, String feedback){
+    public DayProgram(int id, int mem_id, String title, String feedback){
         this.id = id;
+        this.mem_id = mem_id;
         this.title = title;
         this.feedback = feedback;
     }
@@ -33,5 +35,13 @@ public class DayProgram {
 
     public void setFeedback(String feedback) {
         this.feedback = feedback;
+    }
+
+    public int getMem_id() {
+        return mem_id;
+    }
+
+    public void setMem_id(int mem_id) {
+        this.mem_id = mem_id;
     }
 }

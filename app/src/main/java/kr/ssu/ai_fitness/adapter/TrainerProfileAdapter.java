@@ -239,7 +239,7 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
 
         }
 
-        if(item.getRating() <= 0.5){
+        if(item.getRating() > 0.0 && item.getRating() <= 0.5){
             int img = R.drawable.rating_0_5_b;
             holder.rating.setImageResource(img);
         }
@@ -281,10 +281,10 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
         }
         else {
             int img = R.drawable.rating_0_b;
-            holder.difficulty.setImageResource(img);
+            holder.rating.setImageResource(img);
         }
 
-        if(item.getLevel() <= 0.5){
+        if(item.getLevel() > 0.0 && item.getLevel() <= 0.5){
             int img = R.drawable.rating_0_5_b;
             holder.difficulty.setImageResource(img);
         }
@@ -318,6 +318,10 @@ public class TrainerProfileAdapter extends RecyclerView.Adapter<TrainerProfileAd
         }
         else if(item.getLevel() > 4.0 && item.getLevel() <= 4.5){
             int img = R.drawable.rating_4_5_b;
+            holder.difficulty.setImageResource(img);
+        }
+        else if(item.getLevel() > 4.5 && item.getLevel() <= 5.0){
+            int img = R.drawable.rating_5_b;
             holder.difficulty.setImageResource(img);
         }
         else{

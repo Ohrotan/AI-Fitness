@@ -72,7 +72,6 @@ public class ExrProgramRegActivity extends AppCompatActivity {
         }
 
 
-        EDIT_MODE = true;//테스트용 지우기!!
 
         if (EDIT_MODE) { //수정 모드일 때
             toolbar = findViewById(R.id.toolbar);
@@ -179,7 +178,7 @@ public class ExrProgramRegActivity extends AppCompatActivity {
                         intent.putExtra("period", exr.getPeriod());
                         intent.putExtra("title", exr.getTitle());
                         startActivity(intent);
-
+                        finish();
                     }
                 },
                 new Response.ErrorListener() {

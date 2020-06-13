@@ -53,6 +53,7 @@ import kr.ssu.ai_fitness.volley.VolleySingleton;
 public class ProfileEditActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final int REQUEST_CODE = 2;
+    private int imageSelectionFlag = 0;
 
     private ImageView profilePic;
     private TextView name;
@@ -140,7 +141,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
         Log.d("ORI_IMAGE_PATH", "original image path = " + imagePath);
 
         //이름설정
-        name.setText(user.getName() + "님");
+        name.setText(user.getName() + " 님");
         Log.d("INFO_NAME", "Name = " + user.getName());
 
         //성별 설정
@@ -192,6 +193,13 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
 
         Log.d("INFO_TRAINER", "Trainer = " + user.getTrainer());
         Log.d("INFO_BODY", "height = " + user.getHeight() + " weight = " + user.getWeight() + " muscle = " + user.getMuscle() + " fat = " + user.getFat());
+
+        //heightEdit.setText(Double.parseDouble(user.getHeight()));
+        heightEdit.setText(Double.toString(user.getHeight()));
+        weightEdit.setText(Double.toString(user.getWeight()));
+        muscleEdit.setText(Double.toString(user.getMuscle()));
+        fatEdit.setText(Double.toString(user.getFat()));
+        selfIntro.setText(user.getIntro());
     }
 
     @Override
@@ -216,11 +224,13 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                     Log.d("upLoad_image_stream", "image input stream = " + imgInputStream);
 
                 } catch (Exception e) {
+                    imageSelectionFlag = 0;
                     Toast.makeText(this, "사진 선택 에러", Toast.LENGTH_LONG).show();
                 }
             }
         }
         else if (requestCode == RESULT_CANCELED) {
+            imageSelectionFlag = 0;
             Toast.makeText(this,"사진 선택 취소", Toast.LENGTH_SHORT).show();
         }
     }
@@ -287,6 +297,13 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
             Log.d("INFO_AFTER_CHANGE", "Intro = " + user.getIntro());
 
             //setProfile(user.getName(), height, weight, muscle, fat, intro, trainerString);
+            String imagePathTemp;
+            if(imageSelectionFlag == 0){
+                imagePathTemp = user.getImage();
+            }
+            else{
+                imagePathTemp = "ai-fitness/profile_img/" + UUID.randomUUID()+".jpg";
+            }
 
             Member edit = new Member(
                     id,
@@ -300,7 +317,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                     Double.parseDouble(muscle),         //여기서 저장
                     Double.parseDouble(fat),            //여기서 저장
                     intro,                              //여기서 저장
-                    "ai-fitness/profile_img/" + UUID.randomUUID()+".jpg",    //여기서 저장
+                    imagePathTemp,                      //여기서 저장
                     (byte)trainer,                      //여기서 저장
                     user.getAdmin(),
                     user.getAlarm()
@@ -586,13 +603,13 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
                 }
                 break;
             case R.id.editDetailButtonProfileEdit:
+                imageSelectionFlag = 1;
                 //사진 선택할 수 있게 해줘야함.
                 //Intent intent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intent, REQUEST_CODE);
-
         }
     }
 }

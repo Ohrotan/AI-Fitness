@@ -36,9 +36,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import kr.ssu.ai_fitness.BeforeDayExrProgramActivity;
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.TrainerVideoListActivity;
+import kr.ssu.ai_fitness.adapter.AfterDayExrProgramAdapter;
 import kr.ssu.ai_fitness.adapter.MemberExrprogramListAdapter;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
@@ -76,8 +78,10 @@ public class MemberExrProgramListFragment extends Fragment {
         //SharedPrefManager에 저장된 user 데이터 가져오기
         user = SharedPrefManager.getInstance(getActivity()).getUser();
         int id = user.getId();
+        String name = user.getName();
+        TextView tv = (TextView)view.findViewById(R.id.name);
+        tv.setText(name);
         getData(id + "");
-
 
         return view;
     }
@@ -85,7 +89,7 @@ public class MemberExrProgramListFragment extends Fragment {
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200521t085909-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200611t202812-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -107,7 +111,7 @@ public class MemberExrProgramListFragment extends Fragment {
                             String identifier = "";*/
                             HashMap<String, String> persons = null;
                             int last_of_len = peoples.length();
-                            String arr[][] = new String[last_of_len][9];//name title start_date end_date time mem_cnt day_title day_intro
+                            String arr[][] = new String[last_of_len][11];//name title start_date end_date time mem_cnt day_title day_intro
 
                             for (int i = 0; i < last_of_len; i++) {
                                 JSONObject c = peoples.getJSONObject(i);
@@ -121,16 +125,20 @@ public class MemberExrProgramListFragment extends Fragment {
                                 arr[i][6] = c.getString(TAG_MEMCNT);
                                 arr[i][7] = c.getString(TAG_DAY_TITLE);
                                 arr[i][8] = c.getString(TAG_DAY_INTRO);
+                                arr[i][9] = c.getString("day_id");
+                                arr[i][10] = c.getString("image");
                                 //int membernumber = c.getInt(TAG_MEMBER);
                                 String date = "";
+                                Log.d("이름", arr[i][1]);
                             }
+
+
 
 
                             int [] check_last_idx = check_same_idx(arr,last_of_len);//중복된 exr_id중 하나만 추출
                             int cnt_idx = cnt_idx(arr,last_of_len);
 
                             for (int j = 0; j < cnt_idx*2; j+=2) {
-
                                 int i = check_last_idx[j];
                                 int time = check_last_idx[j+1];
                                 Log.d("index",i+"");
@@ -144,10 +152,14 @@ public class MemberExrProgramListFragment extends Fragment {
                                 persons.put(TAG_MEMCNT, arr[i][6]+" 명");
                                 persons.put(TAG_DAY_TITLE, arr[i][7]);
                                 persons.put(TAG_DAY_INTRO, arr[i][8]);
+                                persons.put("day_id", arr[i][9]);
+                                persons.put("image", arr[i][10]);
                                 personList.add(persons);
                             }
 
                             MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons);
+                            //클릭 안됨....
+
                             list.setAdapter(adapter);
 
                             //adapter에 data값
@@ -198,11 +210,15 @@ public class MemberExrProgramListFragment extends Fragment {
         int time_hour = 0;
         int arr_idx = 0;
         for (int i = 0; i < last_of_len; i++) {
-            if (arr[idx_][0].equals(arr[i][0])) {
+            if (arr[idx_][0].equals(arr[i][0])) {//exr_id가 중복될 경우
                 //time갱신
                 if(arr[i][5].equals("null")){ time_hour = 0;}
                 else{ time_hour += time_hour_func(arr[i][5]);}
                 idx++;
+                if(idx_ == i-1)
+                {
+                    check_last_idx[arr_idx] = idx_;
+                }
             }
             else
             {

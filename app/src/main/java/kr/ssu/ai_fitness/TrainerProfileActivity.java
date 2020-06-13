@@ -186,7 +186,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
         curNumMember.setText(memberNum + "명");
 
         //트레이너 평점 설정
-        if(avgRating <= 0.5){
+        if(avgRating > 0.0 && avgRating <= 0.5){
             int img = R.drawable.rating_0_5;
             trainerRating.setImageResource(img);
         }

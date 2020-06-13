@@ -8,10 +8,37 @@
     android:orientation="vertical"
     tools:context=".MemberAllExrProgramListActivity">
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"/>
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원님!"
+            android:textSize="15dp"
+            android:textColor="@color/accent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:id="@+id/memortrainer"
+                android:text="전체 운동프로그램 조회"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/darkGray"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="5dp"
+        android:background="@color/darkGray"/>
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"

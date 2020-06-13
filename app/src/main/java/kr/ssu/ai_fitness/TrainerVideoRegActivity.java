@@ -51,6 +51,7 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
     private String selectedPath;
     Uri selectedVideoImageUri;
     InputStream thumbImgInputStream;
+    Bitmap thumbImgBitmap;
 
     TrainerVideo info;
     int userId;
@@ -118,9 +119,8 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false);
         }
 
-        Intent intent = new Intent();
-        intent.putExtra("bitmap", bitmap);
-        setResult(REQUEST_FOR_REG_TR_VIDEO, intent);
+        thumbImgBitmap = bitmap;
+
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
@@ -204,6 +204,9 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
+                        Intent intent = getIntent();
+                        intent.putExtra("bitmap", thumbImgBitmap);
+                        setResult(REQUEST_FOR_REG_TR_VIDEO, intent);
                         finish();
                     }
                 },

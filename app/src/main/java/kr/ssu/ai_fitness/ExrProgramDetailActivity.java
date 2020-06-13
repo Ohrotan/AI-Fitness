@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +33,7 @@ import java.util.Map;
 import kr.ssu.ai_fitness.dto.ExrProgram;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 public class ExrProgramDetailActivity extends AppCompatActivity {
@@ -50,6 +53,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     private static final String TAG_DAYTITLE = "day_title";
     private static final String TAG_DAYINTRO = "day_intro";
     private static final String TAG_EID = "e_id"; // 이 사용자가 신청한 건지 아닌지 판별할때 사용
+    private static final String TAG_IMAGE = "image";
 
     JSONArray peoples = null;
     ListView list;
@@ -70,6 +74,8 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         TextView title_ = (TextView) findViewById(R.id.title);
         TextView name_ = (TextView) findViewById(R.id.name);
         TextView rating_star_ = (TextView)findViewById(R.id.star);
+        TextView membername = (TextView)findViewById(R.id.membername);
+        TextView memortrainer = (TextView)findViewById(R.id.memortrainer);
         final Intent intent = getIntent();
         id = intent.getStringExtra("id");
         title = intent.getStringExtra("title"); //"title"문자 받아옴
@@ -78,13 +84,24 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         final Member user;
         //SharedPrefManager에 저장된 user 데이터 가져오기
         user = SharedPrefManager.getInstance(this).getUser();
+        String checkname = user.getName();
         final int mem_id = user.getId();
+        Log.d("id", id + mem_id+"");
         byte isTrainer = user.getTrainer();
+        if(isTrainer == 0) { //트레이너 아닐때
+            String nameofmem = user.getName();
+            membername.setText(nameofmem);
+            memortrainer.setText(" 회원님 운동하세요!");
+        }
+        else{
+            membername.setVisibility(TextView.GONE);
+            memortrainer.setText(" 운동프로그램 상세정보");
+        }
         title_.setText(title);
         name_.setText(name);
         rating_star_.setText(rating_star);
         getData(id,mem_id+"");
-        if(isTrainer == 0) {
+        if(isTrainer == 0 ||!checkname.equals(name) ) {// 트레이너가 아니거나 이름이 같지 않은 경우는 수정 할 수 없게 처리
             Button b = findViewById(R.id.change_btn);
             b.setVisibility(Button.GONE);
         }
@@ -99,10 +116,10 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         applybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(),"신청버튼 눌러짐",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"신청 완료!",Toast.LENGTH_SHORT).show();
                 int period = exrProgram.getPeriod();
                 int rating = 0;
-                putData(id, mem_id+"", rating+"", period+"");
+                putData(id, mem_id+"", rating+"", period+"");//DB에 정보 삽입
                 Button b = findViewById(R.id.apply_btn);
                 b.setVisibility(Button.GONE);
             }
@@ -119,44 +136,11 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         });
 
     }
-/*
-    private class CheckTypesTask extends AsyncTask<Void, Void, Void>
-    {
-        ProgressDialog asyncDialog = new ProgressDialog(ExrProgramDetailActivity.this);
-
-        @Override
-        protected void onPreExecute() {
-            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            asyncDialog.setMessage("로딩 중 입니다...");
-            asyncDialog.show();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try{
-                for(int i = 0; i < 5; i++)
-                {
-                    Thread.sleep(500);
-                }
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            asyncDialog.dismiss();
-            super.onPostExecute(aVoid);
-        }
-    }*/
-
 
     private void getData(final String exr_id, final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t144315-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200611t205746-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -182,6 +166,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             String dayintro = "";
                             String daily = "";
                             String isRegister = "";
+                            String image = "";
 
                             for (int i = 0; i < peoples.length(); i++) {
                                 JSONObject c = peoples.getJSONObject(i);
@@ -198,8 +183,12 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 day_id = c.getString(TAG_DAYID);
                                 daytitle = c.getString(TAG_DAYTITLE);
                                 dayintro = c.getString(TAG_DAYINTRO);
-                                daily +=  daytitle +"\n\t\t" + dayintro + "\n";
+                                image = c.getString(TAG_IMAGE);
+                                if(!daytitle.equals("null")||!dayintro.equals("null")) {
+                                    daily += daytitle + "\n\t\t" + dayintro + "\n";
+                                }
                                 if(isRegister.equals("")){ isRegister += c.getString(TAG_EID);}
+                                Log.d("결과",id+t_id+title+period);
                             }
 
 
@@ -213,6 +202,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             txt = (TextView)findViewById(R.id.period);
                             txt.setText(period + " 일");
                             txt = (TextView)findViewById(R.id.mem_cnt);
+                            if(mem_cnt.equals("null")){mem_cnt = "0";}
                             txt.setText(mem_cnt + "명");
                             txt = (TextView)findViewById(R.id.max);
                             txt.setText(max + "명");
@@ -222,6 +212,11 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             txt.setText(intro);
                             txt = (TextView)findViewById(R.id.daily_list);
                             txt.setText(daily);
+                            txt = (TextView)findViewById(R.id.day_id);
+                            txt.setText(day_id);
+                            ImageView img = (ImageView)findViewById(R.id.pic);
+                            ImageViewTask task = new ImageViewTask(img);
+                            task.execute(image);
                             Log.d("등록됬는지 확인", isRegister);
                             if(!(isRegister.equals("null"))) {
                                 Button b = findViewById(R.id.apply_btn);
