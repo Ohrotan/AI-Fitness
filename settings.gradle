@@ -1,2 +1,4 @@
 rootProject.name='AI-Fitness'
 include ':app'
+include ':app', ':openCVLibrary341'
+include ':openCVLibrary300'
