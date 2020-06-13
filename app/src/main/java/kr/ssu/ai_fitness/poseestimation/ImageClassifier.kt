@@ -105,7 +105,8 @@ internal constructor(
             if (trainerVideoAnalysisManager!!.isCompleted)
                 this.frameList = trainerVideoAnalysisManager!!.trainerPointArraysInDayExr[0]
         } else {
-            this.trainerPointArray = this.frameList!![frameCnt++]
+            this.trainerPointArray = this.frameList!![frameCnt]
+            frameCnt++;
         }
         // Here's where the magic happens!!!
         val startTime = SystemClock.uptimeMillis()

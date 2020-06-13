@@ -116,6 +116,7 @@ class ImageClassifierFloatInception private constructor(
             }
 
             if (max == 0f) {
+                frameCnt = 0
                 mPrintPointArray = Array(2) { FloatArray(14) }
                 return
             }
@@ -152,10 +153,12 @@ if(trainerPointArray!=null)
 
             if (!similar()) { //트레이너와 동작이 일치하지 않았을 때
                 frameCnt = 0 //frame cnt 초기화, 다시 처음 자세부터 비교
-            } else if (frameCnt == frameList!!.size) { //프레임 끝까지 다 성공했으면 다시 루프 돌려야함
+            } else if (similar() && frameCnt == frameList!!.size) { //프레임 끝까지 다 성공했으면 다시 루프 돌려야함
                 frameCnt = 0
                 motionCnt++
 
+            }else{
+                Log.v("frameCnt?????!!!","pls")
             }
         }
     }
