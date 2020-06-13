@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness.poseestimation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import android.os.Handler;
 
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
@@ -60,8 +62,8 @@ public class TrainerVideoAnalysisManager {
         return completed;
     }
 
-    private void setCompleted(boolean completed) {
-        this.completed = completed;
+    private void setCompleted() {
+        this.completed = true;
     }
 
     public ArrayList<ArrayList<float[][]>> getTrainerPointArraysInDayExr() {
@@ -72,13 +74,14 @@ public class TrainerVideoAnalysisManager {
         this.trainerPointArraysInDayExr = trainerPointArraysInDayExr;
     }
 
-    public void getAnalysisFilePaths() {
+    public void getAnalysisFilePaths(Activity ac,TextView textView) {
         // queue = Volley.newRequestQueue(context);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READ_ANALYSIS,
                 new Response.Listener<String>() {
                     public void onResponse(final String response) {
                         try {
+
                             Log.d("GetANALYSIS_RESPONSE", response);
                             JSONArray jArray = new JSONArray(response);
 
@@ -168,7 +171,7 @@ public class TrainerVideoAnalysisManager {
                             trainerPointArraysInDayExr.add(frameList);
 
                             // textView.setText(dataList.get(0) + dataList.get(1));
-                            setCompleted(true);
+                            setCompleted();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

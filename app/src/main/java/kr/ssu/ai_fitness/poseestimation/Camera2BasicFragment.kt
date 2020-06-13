@@ -298,9 +298,15 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
       //      classifier = new ImageClassifierQuantizedMobileNet(getActivity());
 
       trainerVideoAnalysisManager = TrainerVideoAnalysisManager(context, 0);//dayid 수정 필요
-      trainerVideoAnalysisManager!!.getAnalysisFilePaths();
+      trainerVideoAnalysisManager!!.getAnalysisFilePaths(activity,textView);
+      //위에게 다 다운받아진 후에 다음 코드가 작동해야함
+      //동기화처리 필요!
 
-      classifier = ImageClassifierFloatInception.create(activity)
+      //타입 ArrayList<float[][]>
+       // var frameList = trainerVideoAnalysisManager!!.trainerPointArraysInDayExr[0]// 저장한 값 읽기, 첫번째 동작 영상 데이터
+        classifier = ImageClassifierFloatInception.create(activity, trainerVideoAnalysisManager!!)
+
+
       if (drawView != null)
         drawView!!.setImgSize(classifier!!.imageSizeX, classifier!!.imageSizeY)
     } catch (e: IOException) {
