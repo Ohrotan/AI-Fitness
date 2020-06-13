@@ -139,8 +139,11 @@ class ImageClassifierFloatInception private constructor(
             normalizedPointArray!![0][i] = (mPrintPointArray!![0][i] - startX) / sizeX
             normalizedPointArray!![1][i] = (mPrintPointArray!![1][i] - startY) / sizeY
             Log.i("TestOutPut", "member pic[$i] (" + normalizedPointArray!![0][i] + "," + normalizedPointArray!![1][i] +
-                    ") // tr pic[$i] (" + (trainerPointArray?.get(0)?.get(i)
-                    ?: -1) + "," + (trainerPointArray?.get(1)?.get(i) ?: -1) + ")")
+            ")")
+if(trainerPointArray!=null)
+            Log.i("TestOutPut", "tr pic[$i] (" + trainerPointArray!![0][i] + "," + trainerPointArray!![1][i] +
+                    ")")
+
 
         }
 

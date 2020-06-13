@@ -54,8 +54,8 @@ class CameraActivity : Activity() {
 
         //test
         Log.v("volley test", "start manager");
-        val manager = TrainerVideoAnalysisManager(this, 0)
-        manager.getDataFromFile("https://storage.googleapis.com/ai-fitness/tr_video_analysis/new_info.txt");
+        //val manager = TrainerVideoAnalysisManager(this, 0)
+        //manager.getDataFromFile("https://storage.googleapis.com/ai-fitness/tr_video_analysis/new_info.txt");
 
         if (null == savedInstanceState) {
             //Activity내의 프래그먼트와 상호작용을 하기 위한 인터페이스
