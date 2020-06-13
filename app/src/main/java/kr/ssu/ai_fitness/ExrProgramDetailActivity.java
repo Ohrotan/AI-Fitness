@@ -77,7 +77,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         TextView membername = (TextView)findViewById(R.id.membername);
         TextView memortrainer = (TextView)findViewById(R.id.memortrainer);
         final Intent intent = getIntent();
-        id = intent.getStringExtra("id");
+        id = intent.getStringExtra("exr_id");
         title = intent.getStringExtra("title"); //"title"문자 받아옴
         name = intent.getStringExtra("name");
         rating_star = intent.getStringExtra("rating_star");

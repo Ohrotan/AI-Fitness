@@ -69,6 +69,7 @@ public class TrainerVideoAnalysisManager {
 
     private void setCompleted() {
         this.completed = true;
+        Log.v("tr_data_download","complete");
     }
 
     public ArrayList<ArrayList<float[][]>> getTrainerPointArraysInDayExr() {
@@ -107,6 +108,7 @@ public class TrainerVideoAnalysisManager {
                                 getDataFromFile(url);
                                 //DownloadFileFromURL().execute(url)
                             }
+
 
                             /*ac.runOnUiThread(new Runnable() {
                                 @Override
@@ -150,14 +152,12 @@ public class TrainerVideoAnalysisManager {
                         try {
                             Log.d("GetDATA_RESPONSE", response);
                             JSONArray jArray = new JSONArray(response);
-                            ArrayList<float[][]> frameList = null;
-                            float[][] trainerPointArray = null;
+                            ArrayList<float[][]> frameList =new ArrayList<>();
+                           // float[][] trainerPointArray = null;
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject jObject = jArray.getJSONObject(i);
 
-                                frameList = new ArrayList<>();
-
-                                trainerPointArray = new float[14][2];
+                                float[][] trainerPointArray = new float[2][14];
 
                                 for (Iterator<String> it = jObject.keys(); it.hasNext(); ) {
                                     String key = it.next();//"0" / "Head"
@@ -174,17 +174,19 @@ public class TrainerVideoAnalysisManager {
                                     float y = Float.parseFloat(strY);
                                     int numberKey = Integer.parseInt(key);
 
-                                    trainerPointArray[numberKey][0] = x;
-                                    trainerPointArray[numberKey][1] = y;
+                                    trainerPointArray[0][numberKey] = x;
+                                    trainerPointArray[1][numberKey] = y;
                                 }
-                                Log.v("trainerPointArray", trainerPointArray.toString());
+
+
                                 frameList.add(trainerPointArray);
 
                             }
+                            Log.v("frameList",frameList.size()+"");
                             trainerPointArraysInDayExr.add(frameList);
-
-                            // textView.setText(dataList.get(0) + dataList.get(1));
                             setCompleted();
+                            // textView.setText(dataList.get(0) + dataList.get(1));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

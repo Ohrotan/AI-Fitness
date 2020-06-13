@@ -64,6 +64,7 @@ public class RegMemberListActivity  extends AppCompatActivity {
 
         Intent intent = getIntent();
         exrId = intent.getExtras().getString("exr_id");
+        Log.d("REG_MEM_LIST_exrID" , ""+exrId);
 
         getData();
     }
