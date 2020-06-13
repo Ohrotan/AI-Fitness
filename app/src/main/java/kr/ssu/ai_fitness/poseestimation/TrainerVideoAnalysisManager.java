@@ -1,8 +1,13 @@
 package kr.ssu.ai_fitness.poseestimation;
 
 import android.app.Activity;
+
+import android.app.Dialog;
+
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.ActionMenuView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -101,6 +106,13 @@ public class TrainerVideoAnalysisManager {
                                 getDataFromFile(url);
                                 //DownloadFileFromURL().execute(url)
                             }
+
+                            /*ac.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ed.dismiss();
+                                }
+                            });*/
 
                         } catch (JSONException e) {
                             e.printStackTrace();
