@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import kr.ssu.ai_fitness.fragment.TrainerExrProgramFragment;
+import kr.ssu.ai_fitness.poseestimation.CameraActivity;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 
 //메모장
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
          if (v == btn2) {
              //intent = new Intent(getApplicationContext(), MemberExrProgramListActivity.class);
+             intent = new Intent(getApplicationContext(), CameraActivity.class);
         } else if (v == btn3) {
             intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class);
         } else if (v == btn4) {
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         }
         //제호
         else if (v == btn8) {
-            intent = new Intent(getApplicationContext(), RegMemberListActivity.class);
+            intent = new Intent(getApplicationContext(), BlankClass.class);
         } else if (v == btn9) {
             intent = new Intent(getApplicationContext(), RegMemberDetailActivity.class);
         } else if (v == btn10) {

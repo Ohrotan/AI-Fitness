@@ -23,6 +23,7 @@ public class URLs {
     public static final String URL_READDAYPROGRAMTITLE = ROOT_URL + "/member/read_day_program_title";
     public static final String URL_EDITPROFILE = ROOT_URL + "/member/edit_profile";
     public static final String URL_READFEEDBACK = ROOT_URL + "/member/read_feedback";
+    public static final String URL_READANALYSIS = ROOT_URL + "/member/read_analysis";
 
     public static final String URL_EXR_CREATE = ROOT_URL + "/exr/create";
 
@@ -40,4 +41,6 @@ public class URLs {
     public static final String URL_DELETE_VIDEO = ROOT_URL + "/video/delete_tr_video";
     public static final String URL_CREATE_VIDEO = ROOT_URL + "/video/create_tr_video";
     public static final String URL_UPDATE_VIDEO_TITLE = ROOT_URL + "/video/update_tr_video";
+
+    public static final String URL_READ_ANALYSIS = ROOT_URL + "/member/read_analysis";
 }
