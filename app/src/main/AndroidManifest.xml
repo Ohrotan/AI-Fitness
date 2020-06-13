@@ -45,8 +45,6 @@
         <activity android:name=".TrainerProfileActivity" />
         <activity android:name=".ProfileEditActivity" />
 
-        <activity android:name=".BlankClassJava" />
-
 
         <activity
             android:name="kr.ssu.ai_fitness.poseestimation.CameraActivity"

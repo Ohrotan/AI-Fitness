@@ -298,8 +298,8 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
 
 
 
-            var dia = ErrorDialog.newInstance(getString(R.string.camera_error))
-                    dia.show(childFragmentManager, FRAGMENT_DIALOG)
+            /*var dia = ErrorDialog.newInstance(getString(R.string.camera_error))
+                    dia.show(childFragmentManager, FRAGMENT_DIALOG)*/
 
 
             /*backgroundThread = HandlerThread(HANDLE_THREAD_NAME)
@@ -307,7 +307,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
             backgroundHandler = Handler(backgroundThread!!.getLooper())*/
 
             trainerVideoAnalysisManager = TrainerVideoAnalysisManager(context, 0);//dayid 수정 필요
-            trainerVideoAnalysisManager!!.getAnalysisFilePaths(activity, dia);
+            trainerVideoAnalysisManager!!.getAnalysisFilePaths(activity, textView);
 
             //showToast("아무거나")
 
