@@ -168,12 +168,12 @@ if(trainerPointArray!=null)
         var accuracy = 0.1;
         var threshold = 8;
         for (i in 0..13) {
-            val mx = mPrintPointArray!![0][i]
+            val mx = normalizedPointArray!![0][i]
             val tx = trainerPointArray!![0][i]
-            val my = mPrintPointArray!![1][i]
+            val my = normalizedPointArray!![1][i]
             val ty = trainerPointArray!![1][i]
-            if (mx <= tx + accuracy && mx <= tx - accuracy)//x값이 트레이너의 값보다 좌우 10% 이내일 때 , 10%도 임의로 정함
-                if (my <= ty + accuracy && my <= ty - accuracy)
+            if (mx <= tx + accuracy && mx >= tx - accuracy)//x값이 트레이너의 값보다 좌우 10% 이내일 때 , 10%도 임의로 정함
+                if (my <= ty + accuracy && my >= ty - accuracy)
                     ++cnt; //일치하는 값으로 카운트함
         }
         return cnt > threshold // 카운트가 8보다 클때 트레이너와 동작이 일치하는 것으로 결론, 8은 임의로 정함
