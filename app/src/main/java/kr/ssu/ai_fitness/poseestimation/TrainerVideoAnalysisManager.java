@@ -1,7 +1,11 @@
 package kr.ssu.ai_fitness.poseestimation;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.ActionMenuView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +83,9 @@ public class TrainerVideoAnalysisManager {
                 new Response.Listener<String>() {
                     public void onResponse(final String response) {
                         try {
+
+                            //Toast.makeText(context, "파일받기시작!!!!", Toast.LENGTH_SHORT).show();
+
                             Log.d("GetANALYSIS_RESPONSE", response);
                             JSONArray jArray = new JSONArray(response);
 
@@ -98,6 +105,13 @@ public class TrainerVideoAnalysisManager {
                                 getDataFromFile(url);
                                 //DownloadFileFromURL().execute(url)
                             }
+
+                            /*ac.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ed.dismiss();
+                                }
+                            });*/
 
                         } catch (JSONException e) {
                             e.printStackTrace();
