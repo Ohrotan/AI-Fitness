@@ -15,14 +15,14 @@ public class MemberAllExrProgramListViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.member_all_exr_program_listview);
         ViewGroup layout = (ViewGroup) findViewById(R.id.gotoExrProgramDetail);
-
+/*
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
     }
 }

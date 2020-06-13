@@ -1,12 +1,18 @@
 package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -14,7 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import kr.ssu.ai_fitness.BeforeDayExrProgramActivity;
+import kr.ssu.ai_fitness.ExrProgramDetailActivity;
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.util.ImageViewTask;
 
 public class MemberExrprogramListAdapter extends BaseAdapter {
     Context context;
@@ -44,17 +53,19 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int i, View view, final ViewGroup viewGroup) {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.member_exr_program_listview, null);
         }
         TextView name = view.findViewById(R.id.name);
-        TextView title = view.findViewById(R.id.title);
+        final TextView title = view.findViewById(R.id.title);
         TextView start_date = view.findViewById(R.id.period_date);
         TextView time = view.findViewById(R.id.time);
         TextView mem_cnt = view.findViewById(R.id.mem_cnt);
         TextView day_title = view.findViewById(R.id.day_title);
         TextView day_intro = view.findViewById(R.id.day_intro);
+        final TextView day_id = view.findViewById(R.id.day_id);
+        ImageButton button = view.findViewById(R.id.button);
         ProgressBar p = view.findViewById(R.id.ProgBar);
         name.setText(items.get(i).get("name"));
         title.setText(items.get(i).get("title"));
@@ -63,8 +74,32 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         mem_cnt.setText(items.get(i).get("mem_cnt"));
         day_title.setText(items.get(i).get("day_title"));
         day_intro.setText(items.get(i).get("day_intro"));
+        day_id.setText((items.get(i).get("day_id")));
         int prog = Integer.parseInt(items.get(i).get("time"));
+        String path = items.get(i).get("image");
+        ImageView profile = view.findViewById(R.id.pic);
+        ImageViewTask task = new ImageViewTask(profile);
+        task.execute(path);
         p.setProgress(prog);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {//day_id를 날려준다.
+                Toast.makeText(context, day_id.getText(),Toast.LENGTH_SHORT).show();
+                String str;
+                if(day_id.getText().toString().equals("null"))
+                {
+                    str = "0";
+                }
+                else {
+                    str = day_id.getText().toString();
+                }
+                int day_id_num = Integer.parseInt(str);
+                Intent intent = new Intent(context, BeforeDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
+                intent.putExtra("day_program_id", day_id_num);
+               context.startActivity(intent);
+            }
+        });
 
         return view;
     }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -35,6 +36,7 @@ public class HomeActivity extends AppCompatActivity {
 
     int isTrainer;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,8 @@ public class HomeActivity extends AppCompatActivity {
             int trainer_id = SharedPrefManager.getInstance(this).getUser().getId();
             trainerVideoDownload.downloadTrainerVideos(trainer_id);
         }
+
+
         Intent intent = getIntent();
         int isChattingBack = intent.getIntExtra("isChattingBack", 0);
 
@@ -86,6 +90,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
         //*****사용자(회원, 트레이너, 관리자)마다 연결된 프레그먼트가 달라야함
         homeFragment = new HomeFragment();
         memberExrProgramListFragment = new MemberExrProgramListFragment();
@@ -96,13 +101,11 @@ public class HomeActivity extends AppCompatActivity {
         if (isChattingBack == 1) {//채팅 액티비티에서 뒤로가기 누른 경우
             bottomNavigationView.setSelectedItemId(R.id.action_chatting);
             setFrag(2);
-        }
-        else {
+        } else {
             setFrag(0);     //첫 프레그먼트를 무엇으로 할 것인지 선택(여기서는 홈화면)
         }
 
     }
-
 
     //*****프레그먼트 교환 메서드도 사용자(회원, 트레이너, 관리자)마다 다르게 만들어야 한다.
     // 프레그먼트 교체해주는 setFrag() 정의
@@ -117,7 +120,7 @@ public class HomeActivity extends AppCompatActivity {
 
             case 1:
                 ft.replace(R.id.main_frame, memberExrProgramListFragment);
-                Log.d("abcd","실행");
+                Log.d("abcd", "실행");
                 ft.commit();
                 break;
 
@@ -136,5 +139,11 @@ public class HomeActivity extends AppCompatActivity {
                 ft.commit();
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }

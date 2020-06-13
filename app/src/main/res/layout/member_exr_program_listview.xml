@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
     android:layout_height="360dp"
     android:background="@drawable/border_layout"
     android:layout_margin="10dp">
@@ -12,7 +13,7 @@
             android:id="@+id/pic"
             android:background="@drawable/img_rounding"
             android:scaleType="fitXY"
-            android:src="@drawable/bonobono" />
+            app:srcCompat="@drawable/person"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="90dp"
@@ -165,13 +166,25 @@
             android:layout_marginLeft="0dp"
             android:textColor="#000000"/>
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/people_icn"
+            android:layout_toRightOf="@+id/today_program_title"
+            android:gravity="right"
+            android:id="@+id/day_id"
+            android:text=""
+            android:textSize="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="0dp"
+            android:textColor="@color/white"/>
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/run_icn"
             android:id="@+id/day_title"
             android:gravity="left"
             android:text="3일차 허벅지 뽀개기"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="40dp"
             android:textColor="#3498DB"/>
@@ -182,7 +195,7 @@
             android:id="@+id/day_intro"
             android:gravity="right"
             android:text="- 오늘은 허벅지를 박살내겠습니다."
-            android:textSize="16dp"
+            android:textSize="15dp"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="45dp"
             android:textColor="#3498DB"/>

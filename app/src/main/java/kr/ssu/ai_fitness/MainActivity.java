@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         }
         //제호
         else if (v == btn8) {
-            intent = new Intent(getApplicationContext(), BlankClass.class);
+
         } else if (v == btn9) {
             intent = new Intent(getApplicationContext(), RegMemberDetailActivity.class);
         } else if (v == btn10) {

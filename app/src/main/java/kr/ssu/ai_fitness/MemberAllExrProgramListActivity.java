@@ -2,12 +2,16 @@ package kr.ssu.ai_fitness;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import kr.ssu.ai_fitness.adapter.MemberAllExrprogramListAdapter;
+import kr.ssu.ai_fitness.dto.Member;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -39,11 +43,14 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
     private static final String TAG_LEVEL = "level";
     private static final String TAG_MEMCNT = "mem_cnt";
     private static final String TAG_RATING = "rating";
+    private static final String TAG_IMAGE = "image";
 
     JSONArray peoples = null;
     ListView list;
     ArrayList<HashMap<String, String>> personList;
     String myJSON;
+    //TextView membername = (TextView)findViewById(R.id.membername);
+    //TextView memortrainer = (TextView)findViewById(R.id.memortrainer);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +58,21 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_member_all_exr_program_list);
         list = (ListView) findViewById(R.id.listView);
         personList = new ArrayList<HashMap<String, String>>();
+        final Member user;
+        user = SharedPrefManager.getInstance(this).getUser();
+
         getData("4");
     }
 
     private void getData(final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200522t144315-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200604t221859-dot-ai-fitness-369.an.r.appspot.com/member/readmemexrprogram",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(final String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
+                        HashMap<String, String> persons = null;
 
                         try {
                             JSONObject jsonObj = new JSONObject(response);
@@ -78,34 +89,40 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                 String level = c.getString(TAG_LEVEL);
                                 String mem_cnt = c.getString(TAG_MEMCNT);
                                 String rating = c.getString(TAG_RATING);
+                                String image = c.getString(TAG_IMAGE);
 
                                 String level_star = "";
                                 String rating_star = "";
-                                HashMap<String, String> persons = new HashMap<String, String>();
+                                persons = new HashMap<String, String>();
 
                                 persons.put(TAG_ID, id);
-                                name = name + " - ";
                                 persons.put(TAG_NAME, name);
                                 persons.put(TAG_TITLE, title);
                                 level = makeStarString(level);
                                 persons.put(TAG_LEVEL,level);
                                 if(!rating.equals("null")){rating = makeStarString(rating);}
+                                else{rating = "";}
                                 persons.put(TAG_RATING,rating);
+                                if(mem_cnt.equals("null")){mem_cnt = "0";}
                                 persons.put(TAG_MEMCNT,mem_cnt+" 명");
+                                persons.put(TAG_IMAGE, image);
                                 personList.add(persons);
                             }
 
                             //adapter에 data값
                             //adapter.addItem(new Member_reg_program(ddd[0], "★★★★☆","★★★★☆","30 명","","","",""));
-                            ListAdapter adapter = new SimpleAdapter(
+                            /*ListAdapter adapter = new SimpleAdapter(
                                     MemberAllExrProgramListActivity.this, personList, R.layout.member_all_exr_program_listview,
                                     new String[]{TAG_ID,TAG_NAME,TAG_TITLE,TAG_LEVEL,TAG_RATING,TAG_MEMCNT}, //
                                     new int[]{R.id.exr_id, R.id.name, R.id.title,R.id.level_star,R.id.rating_star,R.id.numOfProg}
-                            );
+                            );*/
+                            MemberAllExrprogramListAdapter adapter = new MemberAllExrprogramListAdapter(getApplicationContext(),personList,persons);
+
 
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
 
                                     String lst_txt = adapterView.getItemAtPosition(i).toString();
                                     Log.d("위치", i+"");
@@ -113,24 +130,25 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                     Log.d("정보", lst_txt);
                                     String[] array = lst_txt.split(",");
 
-                                    Log.d("이름", array[2].substring(6));
-                                    Log.d("평점", array[3].substring(8));
-                                    Log.d("아이디", array[4].substring(4));
-                                    Log.d("제목", array[5].substring(7));
+                                    Log.d("이름", array[3].substring(6));
+                                    Log.d("평점", array[4].substring(8));
+                                    Log.d("아이디", array[5].substring(4));
+                                    Log.d("제목", array[6].substring(7));
 
 
-                                    String id = array[4].substring(4);
-                                    String name = array[2].substring(6);
-                                    String title = array[5].substring(7);
-                                    String rating_star = array[3].substring(8);
+                                    String id = array[5].substring(4);
+                                    String name = array[3].substring(6);
+                                    String title = array[6].substring(7);
+                                    String rating_star = array[4].substring(8);
                                     Intent intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class); // 다음 넘어갈 클래스 지정
                                     intent.putExtra("id", id);
                                     intent.putExtra("name", name);
                                     intent.putExtra("title", title);
                                     intent.putExtra("rating_star", rating_star);
-                                    startActivity(intent); // 다음 화면으로 넘어간다*/
+                                    startActivity(intent); // 다음 화면으로 넘어간다
                                 }
                             });
+
                             list.setAdapter(adapter);
 
 

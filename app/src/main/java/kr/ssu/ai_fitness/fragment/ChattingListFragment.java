@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -51,6 +54,8 @@ public class ChattingListFragment extends Fragment {
     private String festivalName;
     private String contentId;
 
+    FrameLayout topLL;
+
     RecyclerView recyclerView;
     PersonAdapter adapter;
 
@@ -65,6 +70,8 @@ public class ChattingListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_chatting_list, container, false);
+
+        topLL = view.findViewById(R.id.fragment_chatting_list_framelayout);
 
         //uid랑 trainer 값 가져옴
         uid = SharedPrefManager.getInstance(getActivity()).getUser().getId();
@@ -102,6 +109,19 @@ public class ChattingListFragment extends Fragment {
                             //JSONObject userJson = obj.getJSONObject(1);
 
                             Log.d("xxxxxxxxx", ""+destUsersCount);
+
+                            if (destUsersCount == 0) {
+                                TextView topTV1 = new TextView(getActivity());
+                                topTV1.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+                                topTV1.setBackgroundColor(Color.parseColor("#00FFFFFF"));
+                                topTV1.setPadding(20, 10, 10, 10);
+                                topTV1.setTextColor(Color.parseColor("#404040"));
+                                topTV1.setTextSize(30);
+                                topTV1.setText("채팅이 아직 없습니다.");
+                                topLL.addView(topTV1);
+
+                                return;
+                            }
 
                             //상대방 리스트 만든다
                             for (int i =0; i < destUsersCount; ++i) {
