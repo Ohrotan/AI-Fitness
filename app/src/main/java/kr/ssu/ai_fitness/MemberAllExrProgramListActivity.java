@@ -141,7 +141,7 @@ public class MemberAllExrProgramListActivity extends AppCompatActivity {
                                     String title = array[6].substring(7);
                                     String rating_star = array[4].substring(8);
                                     Intent intent = new Intent(getApplicationContext(), ExrProgramDetailActivity.class); // 다음 넘어갈 클래스 지정
-                                    intent.putExtra("id", id);
+                                    intent.putExtra("exr_id", id);
                                     intent.putExtra("name", name);
                                     intent.putExtra("title", title);
                                     intent.putExtra("rating_star", rating_star);
