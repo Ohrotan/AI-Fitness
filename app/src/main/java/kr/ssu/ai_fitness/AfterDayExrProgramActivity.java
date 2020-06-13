@@ -69,7 +69,7 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (isTrainer == 1) {//*****트레이너인 경우는 mem_id를 이전 액티비티에서 넘겨줘야 한다.
-            mem_id = intent.getIntExtra("day_id", -1);
+            mem_id = intent.getIntExtra("id", -1);
         }
         else {//일반회원은 자신의 uid를 얻어온다.
             mem_id = SharedPrefManager.getInstance(this).getUser().getId();
@@ -77,7 +77,7 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 
         Log.d("member_id", ""+mem_id);
         //*****db 검색을 위해 day_program_id를 이전 액티비티에서 넘겨줘야 한다.
-        day_program_id = intent.getIntExtra("id", -1);
+        day_program_id = intent.getIntExtra("day_id", -1);
 
         textViewIntro = findViewById(R.id.activity_after_day_exr_program_intro_content);
         textViewTotalTime = findViewById(R.id.activity_after_day_exr_program_time);
@@ -200,6 +200,8 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
                             //response를 json object로 변환함.
                             JSONArray obj = new JSONArray(response);
                             int isFound = obj.getInt(0);
+
+                            Log.d("AFTERXXXXX", ""+obj);
 
                             if (isFound == 0) {
                                 Toast.makeText(AfterDayExrProgramActivity.this, "day_program_id is not valid", Toast.LENGTH_SHORT).show();
