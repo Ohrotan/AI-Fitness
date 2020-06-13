@@ -80,6 +80,7 @@ public class TrainerVideoAnalysisManager {
     }
 
     public void getAnalysisFilePaths(Activity ac,TextView textView) {
+
         // queue = Volley.newRequestQueue(context);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READ_ANALYSIS,

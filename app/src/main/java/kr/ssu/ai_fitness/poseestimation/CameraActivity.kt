@@ -29,64 +29,64 @@ import org.opencv.android.OpenCVLoader
  */
 class CameraActivity : Activity() {
 
-  private val mLoaderCallback = object : BaseLoaderCallback(this) {
-    override fun onManagerConnected(status: Int) {
-      when (status) {
-        LoaderCallbackInterface.SUCCESS -> isOpenCVInit = true
-        LoaderCallbackInterface.INCOMPATIBLE_MANAGER_VERSION -> {
+    private val mLoaderCallback = object : BaseLoaderCallback(this) {
+        override fun onManagerConnected(status: Int) {
+            when (status) {
+                LoaderCallbackInterface.SUCCESS -> isOpenCVInit = true
+                LoaderCallbackInterface.INCOMPATIBLE_MANAGER_VERSION -> {
+                }
+                LoaderCallbackInterface.INIT_FAILED -> {
+                }
+                LoaderCallbackInterface.INSTALL_CANCELED -> {
+                }
+                LoaderCallbackInterface.MARKET_ERROR -> {
+                }
+                else -> {
+                    super.onManagerConnected(status)
+                }
+            }
         }
-        LoaderCallbackInterface.INIT_FAILED -> {
-        }
-        LoaderCallbackInterface.INSTALL_CANCELED -> {
-        }
-        LoaderCallbackInterface.MARKET_ERROR -> {
-        }
-        else -> {
-          super.onManagerConnected(status)
-        }
-      }
-    }
-  }
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_camera)
-
-    //test
-    Log.v("volley test", "start manager");
-    val manager = TrainerVideoAnalysisManager(this, 0)
-    manager.getDataFromFile("https://storage.googleapis.com/ai-fitness/tr_video_analysis/new_info.txt");
-
-    if (null == savedInstanceState) {
-      //Activity내의 프래그먼트와 상호작용을 하기 위한 인터페이스
-      fragmentManager
-              //Start a series of edit operations on the Fragments associated with this FragmentManager.
-              //프래그먼트와 연결하기 위한 시작(준비) 리턴 타입: FragmentTransaction
-          .beginTransaction()
-              //이미 있는 프래그먼트를 대체함, add는 중복되는 프래그먼트가 생길 수 있으므로
-          .replace(R.id.container, Camera2BasicFragment.newInstance())
-              //즉시 커밋되는게 아니라, 메인스레드에 커밋이 실행되기를 요청하는 것(스케줄링을 함)
-          .commit()
-    }
-  }
-
-  override fun onResume() {
-    super.onResume()
-    if (!OpenCVLoader.initDebug()) {
-      OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, mLoaderCallback)
-    } else {
-      mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS)
-    }
-  }
-
-  companion object {
-
-    init {
-      //        System.loadLibrary("opencv_java");
-      System.loadLibrary("opencv_java3")
     }
 
-    @JvmStatic
-    var isOpenCVInit = false
-  }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_camera)
+
+        //test
+        Log.v("volley test", "start manager");
+        val manager = TrainerVideoAnalysisManager(this, 0)
+        manager.getDataFromFile("https://storage.googleapis.com/ai-fitness/tr_video_analysis/new_info.txt");
+
+        if (null == savedInstanceState) {
+            //Activity내의 프래그먼트와 상호작용을 하기 위한 인터페이스
+            fragmentManager
+                    //Start a series of edit operations on the Fragments associated with this FragmentManager.
+                    //프래그먼트와 연결하기 위한 시작(준비) 리턴 타입: FragmentTransaction
+                    .beginTransaction()
+                    //이미 있는 프래그먼트를 대체함, add는 중복되는 프래그먼트가 생길 수 있으므로
+                    .replace(R.id.container, Camera2BasicFragment.newInstance())
+                    //즉시 커밋되는게 아니라, 메인스레드에 커밋이 실행되기를 요청하는 것(스케줄링을 함)
+                    .commit()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!OpenCVLoader.initDebug()) {
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION, this, mLoaderCallback)
+        } else {
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS)
+        }
+    }
+
+    companion object {
+
+        init {
+            //        System.loadLibrary("opencv_java");
+            System.loadLibrary("opencv_java3")
+        }
+
+        @JvmStatic
+        var isOpenCVInit = false
+    }
 }
