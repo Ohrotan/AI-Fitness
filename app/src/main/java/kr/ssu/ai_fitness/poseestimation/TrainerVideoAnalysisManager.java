@@ -76,7 +76,7 @@ public class TrainerVideoAnalysisManager {
         this.trainerPointArraysInDayExr = trainerPointArraysInDayExr;
     }
 
-    public void getAnalysisFilePaths() {
+    public void getAnalysisFilePaths(Activity ac, Camera2BasicFragment.ErrorDialog ed) {
         // queue = Volley.newRequestQueue(context);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URLs.URL_READ_ANALYSIS,

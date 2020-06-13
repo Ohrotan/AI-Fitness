@@ -16,10 +16,7 @@
 package kr.ssu.ai_fitness.poseestimation
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.app.Dialog
-import android.app.DialogFragment
-import android.app.Fragment
+import android.app.*
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -297,8 +294,10 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
             // create either a new ImageClassifierQuantizedMobileNet or an ImageClassifierFloatInception
             //      classifier = new ImageClassifierQuantizedMobileNet(getActivity());
 
-            /*var dia = ErrorDialog.newInstance(getString(R.string.camera_error))
-                    dia.show(childFragmentManager, FRAGMENT_DIALOG)*/
+
+
+            var dia = ErrorDialog.newInstance(getString(R.string.camera_error))
+                    dia.show(childFragmentManager, FRAGMENT_DIALOG)
 
 
             /*backgroundThread = HandlerThread(HANDLE_THREAD_NAME)
@@ -306,7 +305,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
             backgroundHandler = Handler(backgroundThread!!.getLooper())*/
 
             trainerVideoAnalysisManager = TrainerVideoAnalysisManager(context, 0);//dayid 수정 필요
-            trainerVideoAnalysisManager!!.getAnalysisFilePaths();
+            trainerVideoAnalysisManager!!.getAnalysisFilePaths(activity, dia);
 
             //showToast("아무거나")
 
