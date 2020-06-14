@@ -66,6 +66,9 @@ internal constructor(
     var frameCnt = 0 //매칭검사할 프레임번호
     var motionCnt = 0 //회원의 동작 완료 횟수
 
+    var startTime = 0L //동작 인식 시작 시간
+    var endTime = 0L //동작인식 완료 시간
+
 
     val activity = activity
     fun initTflite(useGPU: Boolean) {
@@ -109,9 +112,13 @@ internal constructor(
             frameCnt++;
         }
         // Here's where the magic happens!!!
-        val startTime = SystemClock.uptimeMillis()
+        startTime = SystemClock.uptimeMillis()
+      /*  while (startTime - endTime < 200) { //이전 동작 인식이 끝난 시간과 현재 시간과의 차이
+            startTime = SystemClock.uptimeMillis()
+        }*/
+        //Log.d(TAG, "이전 동작 인식이 끝난 시간과 현재 시간과의 차이: " + Long.toString(startTime - endTime))
         runInference()
-        val endTime = SystemClock.uptimeMillis()
+        endTime = SystemClock.uptimeMillis()
         Log.d(TAG, "Timecost to run model inference: " + Long.toString(endTime - startTime))
 
         bitmap.recycle()
