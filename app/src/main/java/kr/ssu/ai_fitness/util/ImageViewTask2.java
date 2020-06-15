@@ -46,6 +46,7 @@ public class ImageViewTask2 extends AsyncTask<String, Void, Bitmap> {
 
             try{
 
+                //서버에서 받아온 bitmap을 내부 저장소에 저장한다.
                 File file = new File("test.png");
                 FileOutputStream fos = mContext.openFileOutput("test.png" , 0);
                 bm.compress(Bitmap.CompressFormat.PNG, 100 , fos);
