@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import kr.ssu.ai_fitness.BeforeDayExrProgramActivity;
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
@@ -30,15 +34,13 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
     ArrayList<HashMap<String, String>> items;
     HashMap<String, String> persons;
     int cnt;
-    ArrayList<String> image;
 
-    public MemberExrprogramListAdapter(Context context, ArrayList<HashMap<String, String>> items, HashMap<String, String> persons, int cnt, ArrayList<String> image)
+    public MemberExrprogramListAdapter(Context context, ArrayList<HashMap<String, String>> items, HashMap<String, String> persons, int cnt)
     {
         this.context = context;
         this.items = items;
         this.persons = persons;
         this.cnt = cnt;
-        this.image = image;
     }
 
     @Override
@@ -94,6 +96,8 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         TextView ttt = view.findViewById(R.id.ttt);
         final TextView day_id = view.findViewById(R.id.day_id);
         ImageButton button = view.findViewById(R.id.button);
+        RelativeLayout relativeLayout = view.findViewById(R.id.member_exr_program_listview_relativelayout1);
+        LinearLayout linearLayout = view.findViewById(R.id.member_exr_program_listview_linearlayout1);
         ProgressBar p = view.findViewById(R.id.ProgBar);
         name.setText(items.get(i).get("name"));
         title.setText(items.get(i).get("title"));
@@ -106,16 +110,37 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         ttt.setText(items.get(i).get("image"));
         ImageView img = (ImageView) view.findViewById(R.id.pic);
         path = items.get(pos).get("image");
-        ImageChange(img,image.get(i));
+        ImageViewTask task = new ImageViewTask(img);
+        task.execute(path);
+        try {
+            Bitmap bm = task.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         int prog = Integer.parseInt(items.get(i).get("time"));
         path += ttt.getText().toString();
 
         p.setProgress(prog);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {//day_id를 날려준다.
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ExrProgramDetailActivity.class);
+                intent.putExtra("exr_id", items.get(i).get("exr_id"));
+                intent.putExtra("title", items.get(i).get("title")); //"title"문자 받아옴
+                intent.putExtra("name", items.get(i).get("name"));
+                //intent.putExtra("rating_star", );
+
+                context.startActivity(intent);
+            }
+        });
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(context, day_id.getText(),Toast.LENGTH_SHORT).show();
                 String str;
                 if(day_id.getText().toString().equals("null"))
@@ -128,21 +153,11 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
                 int day_id_num = Integer.parseInt(str);
                 Intent intent = new Intent(context, BeforeDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
                 intent.putExtra("day_program_id", day_id_num);
-               context.startActivity(intent);
+                context.startActivity(intent);
             }
         });
 
         return view;
-    }
-    public void ImageChange(final ImageView img, final String path)
-    {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ImageViewTask task = new ImageViewTask(img);
-                task.execute(path);
-            }
-        }).run();
     }
 
     public class CustomViewHolder{

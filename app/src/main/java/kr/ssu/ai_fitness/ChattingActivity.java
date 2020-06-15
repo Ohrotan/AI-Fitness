@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -26,13 +27,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
 
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
-import kr.ssu.ai_fitness.util.ImageViewTask;
+import kr.ssu.ai_fitness.util.ImageViewTask2;
 import kr.ssu.ai_fitness.vo.ChatModel;
 
 public class ChattingActivity extends AppCompatActivity {
@@ -123,7 +127,27 @@ public class ChattingActivity extends AppCompatActivity {
         //super.onBackPressed();
 
         finish();
-        //*****채팅방에서 뒤로가기 눌렀을 때 홈화면으로 돌아가는 문제 해결해야함.
+
+        //내부 저장소에 임시로 저장한 프사가 존재하면 삭제해주는 부분
+        File tempFile = new File("data/data/kr.ssu.ai_fitness/files/test.png");
+        boolean isExists = tempFile.exists();
+        if (isExists) {
+            File file = new File("data/data/kr.ssu.ai_fitness/files");
+            File[] flist = file.listFiles();
+            for(int i = 0 ; i < flist.length ; i++)
+            {
+                String fname = flist[i].getName();
+                if(fname.equals("test.png"))
+                {
+                    flist[i].delete();//삭제함
+                }
+            }
+        }
+        else {
+            Log.d("ChattingActivity", "Not found exception");
+        }
+
+        //채팅방에서 뒤로가기 눌렀을 때 채팅 리스트 화면으로 돌아가게 해준다.
         Intent intent = new Intent(ChattingActivity.this, HomeActivity.class);
         intent.putExtra("isChattingBack", 1);
         startActivity(intent);
@@ -284,10 +308,33 @@ public class ChattingActivity extends AppCompatActivity {
                 LinearLayout2 = itemView.findViewById(R.id.item_chat_LinearLayout2);
                 timestamp = itemView.findViewById(R.id.item_chat_timestamp);
 
-                //*****사진 세팅하는 부분. 지금은 매번 서버에서 받아오는데, 이전 액티비티에서 비트맵같은 걸 전달받아서 그걸 세팅해주도록 수정하면 더 좋을 듯
-                ImageViewTask task = new ImageViewTask(profile);
-                task.execute(destUserImage);
+                //사진 세팅하는 부분
 
+                ///파일 존재하는지 file.exists()로 체크한다
+                File file = new File("data/data/kr.ssu.ai_fitness/files/test.png");
+
+                boolean isExists = file.exists();
+
+                if (isExists) {//파일이 내부 저장소에 존재하면 그걸 이용한다.
+                    //imgpath는 내부 저장소 경로
+                    String imgpath = "data/data/kr.ssu.ai_fitness/files/test.png";
+                    Bitmap bm = BitmapFactory.decodeFile(imgpath);
+                    profile.setImageBitmap(bm);
+                    Log.d("ChattingActivity", "success to load bitmap");
+                }
+                else {//파일이 내부 저장소에 없으면 서버에서 받아온다.
+                    Log.d("ChattingActivity", "fail to load bitmap");
+                    ImageViewTask2 task = new ImageViewTask2(profile, ChattingActivity.this);
+                    task.execute(destUserImage);
+                    try {
+                        //task.get()은 AsycTask는 기본적으로 비동기 처리이기 때문에 동기처리해주기 위함이다.
+                        Bitmap bm = task.get();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             public void setItem(ChatModel.Comment item) {

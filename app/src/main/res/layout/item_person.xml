@@ -10,8 +10,7 @@
     <ImageView
         android:id="@+id/item_person_imageview"
         android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_height="80dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
