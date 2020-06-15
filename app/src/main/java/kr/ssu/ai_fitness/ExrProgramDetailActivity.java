@@ -167,6 +167,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             String gender = "";
                             String level = "";
                             String level_star = "";
+                            //String rating = "";
                             String max = "";
                             String mem_cnt = "";
                             String intro = "";
@@ -191,6 +192,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 equip = c.getString(TAG_EQUIP);
                                 gender = c.getString(TAG_GENDER);
                                 level = c.getString(TAG_LEVEL);
+                                //rating = c.getString("rating");
                                 max = c.getString(TAG_MAX);
                                 mem_cnt = c.getString(TAG_MEMCNT);
                                 intro = c.getString(TAG_INTRO);
@@ -225,6 +227,8 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             txt.setText(mem_cnt + "명");
                             txt = (TextView)findViewById(R.id.max);
                             txt.setText(max + "명");
+                            txt = (TextView)findViewById(R.id.star);
+                            //txt.setText(rating);
                             txt = (TextView)findViewById(R.id.equip);
                             txt.setText(equip);
                             txt = (TextView)findViewById(R.id.intro);
@@ -249,7 +253,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                         lst_txt = lst_txt.substring(1, lst_txt.length() - 1);
                                         Log.d("정보", lst_txt);
                                         String[] array = lst_txt.split(",");
-                                        if(i <= cnt)
+                                        if(i < cnt)
                                         {
                                             //Toast.makeText(getApplicationContext(),array[1].substring(8),Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), AfterDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정

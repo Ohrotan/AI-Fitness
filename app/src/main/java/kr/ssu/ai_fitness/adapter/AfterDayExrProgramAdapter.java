@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        Log.d("xxxxxxx_position", ""+position);
         MemberExrVideoModel item = items.get(position);
         holder.setItem(item, items);
 

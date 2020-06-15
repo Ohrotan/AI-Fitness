@@ -126,7 +126,6 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView.setAdapter(adapter);
 
         requestReadDayProgramAfter();
 
@@ -258,6 +257,8 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 //                                    textViewTotalTime.setText("운동시간: "+resultTime);
 
                                 }
+
+                                recyclerView.setAdapter(adapter);
                             }
 
                         } catch (JSONException e) {
