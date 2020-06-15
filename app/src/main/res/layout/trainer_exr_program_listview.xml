@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/darkGray"
                     android:textSize="16dp"
-                    android:text="112명"
+                    android:text=""
                     android:id="@+id/mem_id_cnt_sum"/>
             </LinearLayout>
             <LinearLayout
