@@ -140,7 +140,7 @@ public class MemberExrProgramListFragment extends Fragment {
                                 Log.d("index",i+"");
                                 persons = new HashMap<String, String>();
                                 persons.put(TAG_EXRID, arr[i][0]);
-                                arr[i][1] = arr[i][1] + " - ";
+                                arr[i][1] = arr[i][1];
                                 persons.put(TAG_NAME, arr[i][1]);
                                 persons.put(TAG_TITLE, arr[i][2]);
                                 arr[i][3] = arr[i][3] + " - " + arr[i][4];
