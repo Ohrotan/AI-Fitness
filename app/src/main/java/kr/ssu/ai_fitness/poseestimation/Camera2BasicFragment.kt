@@ -38,6 +38,8 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.legacy.app.FragmentCompat
 import kr.ssu.ai_fitness.R
+import kr.ssu.ai_fitness.vo.DayProgramVideoModel
+import java.io.IOException
 import kr.ssu.ai_fitness.util.FileDownloadService
 import kr.ssu.ai_fitness.util.ServiceGenerator
 import okhttp3.ResponseBody
@@ -315,6 +317,12 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         trainerVideoView?.setMediaController(mc) // Video View 에 사용할 컨트롤러 지정
         trainerVideoView?.requestFocus() // 포커스 얻어오기
         trainerVideoView?.start() // 동영상 재생
+
+
+        val day_id = activity.intent.getIntExtra("day_id",-1)
+
+        //동작에 대한 아이디, 이름, 카운트, 세트, 비디오 경로 정보
+        var videoInfos = activity.intent.getParcelableArrayListExtra<DayProgramVideoModel>("videoInfos")
 
 
         radiogroup!!.setOnCheckedChangeListener { group, checkedId ->

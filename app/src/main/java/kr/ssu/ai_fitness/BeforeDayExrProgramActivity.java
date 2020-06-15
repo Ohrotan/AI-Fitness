@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.ssu.ai_fitness.adapter.BeforeDayExrProgramAdapter;
+import kr.ssu.ai_fitness.poseestimation.CameraActivity;
 import kr.ssu.ai_fitness.url.URLs;
 import kr.ssu.ai_fitness.vo.DayProgramVideoModel;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
@@ -47,6 +48,8 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
     String intro;
     ArrayList<DayProgramVideoModel> videoInfos = new ArrayList<>();
 
+    boolean videoInfoDownloded = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +64,10 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
         //******MemberExrProgramListAcitivity에서 여기로 넘어 온다.
         //*****여기 액티비티로 넘어오기 전에 intent로 day_program 의 id를 넘겨줘야 한다.
         Intent intent = getIntent();
-        day_program_id = intent.getIntExtra("day_program_id", -1);
+        day_program_id = intent.getIntExtra("day_id", -1);
 
         if (day_program_id == -1) {
-            Toast.makeText(BeforeDayExrProgramActivity.this, "전달받은 day_program_id가 유효하지 않습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BeforeDayExrProgramActivity.this, "전달받은 day_id가 유효하지 않습니다.", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -73,10 +76,13 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //ai와 운동하는 화면으로 넘어간다.
 
-                finish();
-                Intent intent = new Intent(BeforeDayExrProgramActivity.this, ExercisingActivity.class);
+                Intent intent = new Intent(BeforeDayExrProgramActivity.this, CameraActivity.class);
+                intent.putExtra("day_id", day_program_id);
+                while (!videoInfoDownloded) ;
+                intent.putParcelableArrayListExtra("videoInfos",videoInfos);
 
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -99,8 +105,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
 
                             if (isFound == 0) {
                                 Toast.makeText(BeforeDayExrProgramActivity.this, "day_program_id is not valid", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
+                            } else {
                                 JSONObject dayProgramObj = obj.getJSONObject(1);
 
                                 //일별 프로그램의 제목과 운동소개를 받아옴.
@@ -113,9 +118,10 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
 
                                 int videoCount = obj.getInt(2);
 
-                                for (int i =0; i < videoCount; i++) {
-                                    JSONObject videoObj = obj.getJSONObject(3+i);
+                                for (int i = 0; i < videoCount; i++) {
+                                    JSONObject videoObj = obj.getJSONObject(3 + i);
                                     DayProgramVideoModel temp = new DayProgramVideoModel(
+                                            videoObj.getInt("id"),
                                             videoObj.getInt("counts"),
                                             videoObj.getInt("sets"),
                                             videoObj.getString("thumb_img"),
@@ -124,7 +130,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
                                     );
                                     videoInfos.add(temp);
                                 }
-
+                                videoInfoDownloded = true;
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(BeforeDayExrProgramActivity.this, LinearLayoutManager.VERTICAL, false);
                                 recyclerView.setLayoutManager(layoutManager);
                                 BeforeDayExrProgramAdapter adapter = new BeforeDayExrProgramAdapter();
@@ -151,7 +157,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
                 params.put("day_program_id", String.valueOf(day_program_id));
-                Log.d("xxxxxxxxxxxx",String.valueOf(day_program_id));
+                Log.d("xxxxxxxxxxxx", String.valueOf(day_program_id));
                 return params;
             }
         };
