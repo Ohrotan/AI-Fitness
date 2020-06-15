@@ -28,16 +28,15 @@
         >
 
         <VideoView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/trainerVideoView"/>
+            android:id="@+id/trainerVideoView"
+            android:layout_width="224dp"
+            android:layout_height="165dp" />
 
         <kr.ssu.ai_fitness.poseestimation.AutoFitTextureView
             android:id="@+id/texture"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            />
+            android:layout_height="273dp"
+            android:layout_gravity="center_vertical" />
 
         <kr.ssu.ai_fitness.poseestimation.DrawView
             android:id="@+id/drawview"
