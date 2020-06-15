@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import kr.ssu.ai_fitness.BeforeDayExrProgramActivity;
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
@@ -108,7 +110,15 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         ttt.setText(items.get(i).get("image"));
         ImageView img = (ImageView) view.findViewById(R.id.pic);
         path = items.get(pos).get("image");
-        ImageChange(img,path);
+        ImageViewTask task = new ImageViewTask(img);
+        task.execute(path);
+        try {
+            Bitmap bm = task.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         int prog = Integer.parseInt(items.get(i).get("time"));
         path += ttt.getText().toString();
@@ -148,16 +158,6 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         });
 
         return view;
-    }
-    public void ImageChange(final ImageView img, final String path)
-    {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ImageViewTask task = new ImageViewTask(img);
-                task.execute(path);
-            }
-        }).run();
     }
 
     public class CustomViewHolder{
