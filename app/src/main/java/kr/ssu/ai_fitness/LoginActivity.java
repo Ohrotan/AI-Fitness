@@ -92,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         button_gmail = findViewById(R.id.acitvity_login_gmailbutton);
 
 
+        //여기부터는 구글 로그인을 위한 부분
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
