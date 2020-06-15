@@ -62,7 +62,7 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         MemberExrVideoModel item = items.get(position);
-        holder.setItem(item);
+        holder.setItem(item, items);
 
         ImageViewTask task = new ImageViewTask(holder.image);
         task.execute(item.getThumb_img());
@@ -111,9 +111,17 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
             buttonRegisterFeedback = itemView.findViewById(R.id.item_after_day_exr_program_button);
         }
 
-        public void setItem(MemberExrVideoModel item) {
-            //*****item에서 사진 데이터 빼내서 profile에 세팅해줘야함
-            title.setText(item.getTitle()+" "+item.getCounts()+"회 "+item.getSets()+"세트");
+        public void setItem(MemberExrVideoModel item, ArrayList<MemberExrVideoModel> items) {
+            //****현재는 회원 영상이 무조건 하나이기 때문에 동작의 횟수랑 세트를 하나의 스트링에 합쳐서 출력한다.
+            String str = "";
+            for (MemberExrVideoModel tmp : items) {
+                str = str + tmp.getTitle()+" "+tmp.getCounts()+"회 "+tmp.getSets()+"세트\n";
+            }
+            title.setText(str);
+
+            //title.setText(item.getTitle()+" "+item.getCounts()+"회 "+item.getSets()+"세트");
+
+
             date.setText(item.getDate());
             feedback.setText(item.getFeedback());
         }
