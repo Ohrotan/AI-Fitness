@@ -30,13 +30,15 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
     ArrayList<HashMap<String, String>> items;
     HashMap<String, String> persons;
     int cnt;
+    ArrayList<String> image;
 
-    public MemberExrprogramListAdapter(Context context, ArrayList<HashMap<String, String>> items, HashMap<String, String> persons, int cnt)
+    public MemberExrprogramListAdapter(Context context, ArrayList<HashMap<String, String>> items, HashMap<String, String> persons, int cnt, ArrayList<String> image)
     {
         this.context = context;
         this.items = items;
         this.persons = persons;
         this.cnt = cnt;
+        this.image = image;
     }
 
     @Override
@@ -104,7 +106,7 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         ttt.setText(items.get(i).get("image"));
         ImageView img = (ImageView) view.findViewById(R.id.pic);
         path = items.get(pos).get("image");
-        ImageChange(img,path);
+        ImageChange(img,image.get(i));
 
         int prog = Integer.parseInt(items.get(i).get("time"));
         path += ttt.getText().toString();

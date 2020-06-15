@@ -82,6 +82,10 @@ public class TrainerExrProgramFragment extends Fragment {
         tv.setText(name);
 
         getData(user_id + "");
+
+        TextView textView = (TextView)view.findViewById(R.id.empty_text);
+        list.setEmptyView(textView);
+
         regbtn = view.findViewById(R.id.reg_btn);
         managebtn = view.findViewById(R.id.manage_btn);
 

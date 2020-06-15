@@ -77,7 +77,11 @@ public class MemberExrProgramListFragment extends Fragment {
         String name = user.getName();
         TextView tv = (TextView)view.findViewById(R.id.name);
         tv.setText(name);
-        getData(id + "");
+        //getData(id + "");
+        CheckTypesTask chk = new CheckTypesTask(id);
+        chk.execute();
+        TextView textView = (TextView)view.findViewById(R.id.empty_text);
+        list.setEmptyView(textView);
 
         return view;
     }
@@ -133,6 +137,7 @@ public class MemberExrProgramListFragment extends Fragment {
                             int [] check_last_idx = check_same_idx(arr,last_of_len);//중복된 exr_id중 하나만 추출
                             int cnt_idx = cnt_idx(arr,last_of_len);
                             int cnt = 0;
+                            ArrayList<String> image = new ArrayList<String>();
 
                             for (int j = 0; j < cnt_idx*2; j+=2) {
                                 int i = check_last_idx[j];
@@ -150,14 +155,15 @@ public class MemberExrProgramListFragment extends Fragment {
                                 persons.put(TAG_DAY_INTRO, arr[i][8]);
                                 persons.put("day_id", arr[i][9]);
                                 persons.put("image", arr[i][10]);
+                                image.add(arr[i][10]);
                                 personList.add(persons);
                                 cnt++;
                             }
                             Log.d("갯수",cnt+"");
-                            MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons,cnt);
+                            MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons,cnt,image);
 
                             //MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons);
-                            //클릭 안됨....
+
 
                             list.setAdapter(adapter);
                             Log.d("끝","끝남");
@@ -266,8 +272,14 @@ public class MemberExrProgramListFragment extends Fragment {
     }
     private class CheckTypesTask extends AsyncTask<Void, Void, Void> {
 
+        int id;
+
         ProgressDialog asyncDialog = new ProgressDialog(
                 getActivity());
+
+        public CheckTypesTask(int id) {
+            this.id = id;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -282,11 +294,8 @@ public class MemberExrProgramListFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... arg0) {
             try {
-                for (int i = 0; i < 5; i++) {
-                    //asyncDialog.setProgress(i * 30);
-                    Thread.sleep(500);
-                }
-            } catch (InterruptedException e) {
+                getData(id+"");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
