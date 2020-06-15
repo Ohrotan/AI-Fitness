@@ -221,46 +221,56 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         switch (v.getId()){
             case R.id.fragment_home_myprogram1:
-                intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
-                //*****intent.putExtra() 사용해서 해당 프로그램 id 같은 걸 인텐트로 넘겨줘야 할 수도 있음
-                intent.putExtra("id", String.valueOf(myPrograms.get(0).getId()));
-                intent.putExtra("title", myPrograms.get(0).getProgram_title());
-                intent.putExtra("name", myPrograms.get(0).getTrainer_name());
+                if (user.getTrainer() == 1) {
+                    intent = new Intent(getActivity(), RegMemberListActivity.class);
+                    //*****intent.putExtra() 사용해서 해당 프로그램 id 같은 걸 인텐트로 넘겨줘야 할 수도 있음
+                    intent.putExtra("exr_id", String.valueOf(myPrograms.get(0).getId()));
+                    intent.putExtra("title", myPrograms.get(0).getProgram_title());
+                    intent.putExtra("name", myPrograms.get(0).getTrainer_name());
+                }
+                else {
+                    intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
+                    //*****intent.putExtra() 사용해서 해당 프로그램 id 같은 걸 인텐트로 넘겨줘야 할 수도 있음
+                    intent.putExtra("exr_id", String.valueOf(myPrograms.get(0).getId()));
+                    intent.putExtra("title", myPrograms.get(0).getProgram_title());
+                    intent.putExtra("name", myPrograms.get(0).getTrainer_name());
+                }
+
 
                 Log.d("xxxxx", "" + myPrograms.get(0).getId()+ myPrograms.get(0).getProgram_title()+myPrograms.get(0).getTrainer_name());
                 break;
 
             case R.id.fragment_home_myprogram2:
                 intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
-                intent.putExtra("id", String.valueOf(myPrograms.get(1).getId()));
+                intent.putExtra("exr_id", String.valueOf(myPrograms.get(1).getId()));
                 intent.putExtra("title", myPrograms.get(1).getProgram_title());
                 intent.putExtra("name", myPrograms.get(1).getTrainer_name());
                 break;
 
             case R.id.fragment_home_myprogram3:
                 intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
-                intent.putExtra("id", String.valueOf(myPrograms.get(2).getId()));
+                intent.putExtra("exr_id", String.valueOf(myPrograms.get(2).getId()));
                 intent.putExtra("title", myPrograms.get(2).getProgram_title());
                 intent.putExtra("name", myPrograms.get(2).getTrainer_name());
                 break;
 
             case R.id.fragment_home_textview_program1:
                 intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
-                intent.putExtra("id", String.valueOf(allProgram.get(0).getId()));
+                intent.putExtra("exr_id", String.valueOf(allProgram.get(0).getId()));
                 intent.putExtra("title", allProgram.get(0).getTitle());
                 intent.putExtra("name", allProgram.get(0).getName());
                 break;
 
             case R.id.fragment_home_textview_program2:
                 intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
-                intent.putExtra("id", String.valueOf(allProgram.get(1).getId()));
+                intent.putExtra("exr_id", String.valueOf(allProgram.get(1).getId()));
                 intent.putExtra("title", allProgram.get(1).getTitle());
                 intent.putExtra("name", allProgram.get(1).getName());
                 break;
 
             case R.id.fragment_home_textview_program3:
                 intent = new Intent(getActivity(), ExrProgramDetailActivity.class);
-                intent.putExtra("id", String.valueOf(allProgram.get(2).getId()));
+                intent.putExtra("exr_id", String.valueOf(allProgram.get(2).getId()));
                 intent.putExtra("title", allProgram.get(2).getTitle());
                 intent.putExtra("name", allProgram.get(2).getName());
                 break;
@@ -404,7 +414,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                             //피드백 프로그램 or 내가 신청한 프로그램 부분 세팅한다.
                             if (myProgramCount == 0) {
-                                textView_myProgram1.setText("신청한 운동 프로그램이 없습니다.");
+                                if (user.getTrainer() == 1) {
+                                    textView_myProgram1.setText("피드백 대기 중인 프로그램이 없습니다.");
+                                }
+                                else {
+                                    textView_myProgram1.setText("신청한 운동 프로그램이 없습니다.");
+                                }
                             }
                             if (myProgramCount >= 1) {
                                 textView_myProgram1.setText(myPrograms.get(0).getTrainer_name() + "-" + myPrograms.get(0).getProgram_title());
