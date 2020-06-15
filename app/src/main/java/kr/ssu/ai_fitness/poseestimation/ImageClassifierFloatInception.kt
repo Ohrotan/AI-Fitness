@@ -28,7 +28,7 @@ import java.io.FileWriter
 /**
  * Pose Estimator
  */
-class ImageClassifierFloatInception private constructor(
+class ImageClassifierFloatInception public constructor(
         activity: Activity,
         trainerVideoAnalysisManager: TrainerVideoAnalysisManager,
         motionCnt: Int,
@@ -39,6 +39,7 @@ class ImageClassifierFloatInception private constructor(
         modelPath: String,
         numBytesPerChannel: Int = 4 // a 32bit float value requires 4 bytes
 ) : ImageClassifier(activity, trainerVideoAnalysisManager, motionCnt, imageSizeX, imageSizeY, modelPath, numBytesPerChannel) {
+
 
     /**
      * An array to hold inference results, to be feed into Tensorflow Lite as outputs.
@@ -73,7 +74,8 @@ class ImageClassifierFloatInception private constructor(
     }
 
     override fun runInference() {
-        tflite?.run(imgData!!, heatMapArray)
+        Log.v("Camera2VideoFragment", "Image FLoat ~~ runInference()")
+        tflite!!.run(imgData!!, heatMapArray)
 
         if (mPrintPointArray == null)
             mPrintPointArray = Array(2) { FloatArray(14) }
@@ -140,13 +142,13 @@ class ImageClassifierFloatInception private constructor(
 
         val root = File(activity.filesDir.absolutePath)
         val gpxfile = File(root, "member_motion_data.txt")
-        val writer = FileWriter(gpxfile,true)
-        Log.i("txt",gpxfile.absolutePath)
+        val writer = FileWriter(gpxfile, true)
+        Log.i("txt", gpxfile.absolutePath)
         for (i in 0..13) {
             normalizedPointArray!![0][i] = (mPrintPointArray!![0][i] - startX) / sizeX
             normalizedPointArray!![1][i] = (mPrintPointArray!![1][i] - startY) / sizeY
 
-            writer.append( "" + normalizedPointArray!![0][i] + " " + normalizedPointArray!![1][i]+" ")
+            writer.append("" + normalizedPointArray!![0][i] + " " + normalizedPointArray!![1][i] + " ")
 
             Log.i("TestOutPut-matching", "member pic[$i] (" + normalizedPointArray!![0][i] + "," + normalizedPointArray!![1][i] +
                     ")")

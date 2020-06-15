@@ -21,6 +21,7 @@ import android.graphics.Paint
 import android.graphics.Paint.Style.FILL
 import android.graphics.PointF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import kr.ssu.ai_fitness.R
 import java.util.*
@@ -107,9 +108,11 @@ class DrawView : View {
         var tempX: Float
         var tempY: Float
         for (i in 0..13) {
+            ;
             tempX = point[0][i] /  ratio / mRatioX
             tempY = point[1][i] / ratio / mRatioY
             mDrawPoint.add(PointF(tempX, tempY))
+         //   Log.v("draw","mDrawPoint.size "+mDrawPoint.size)
         }
     }
 
