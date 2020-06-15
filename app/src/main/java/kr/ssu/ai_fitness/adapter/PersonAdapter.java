@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
 
 import kr.ssu.ai_fitness.ChattingActivity;
 import kr.ssu.ai_fitness.HomeActivity;
@@ -110,6 +111,14 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
                 ImageViewTask task = new ImageViewTask(holder.imageView);
                 task.execute(item.getImage());
+                try {
+                    //비동기가 아닌 동기처리로 바꿔준다.
+                    Bitmap bm = task.get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
             }
         }
