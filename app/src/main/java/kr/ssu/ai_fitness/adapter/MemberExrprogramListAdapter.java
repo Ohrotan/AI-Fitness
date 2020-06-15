@@ -29,12 +29,14 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
     Context context;
     ArrayList<HashMap<String, String>> items;
     HashMap<String, String> persons;
+    int cnt;
 
-    public MemberExrprogramListAdapter(Context context, ArrayList<HashMap<String, String>> items, HashMap<String, String> persons)
+    public MemberExrprogramListAdapter(Context context, ArrayList<HashMap<String, String>> items, HashMap<String, String> persons, int cnt)
     {
         this.context = context;
         this.items = items;
         this.persons = persons;
+        this.cnt = cnt;
     }
 
     @Override
@@ -54,9 +56,32 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, final ViewGroup viewGroup) {
+
+        CustomViewHolder holder;
+        final int pos = i;
+
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.member_exr_program_listview, null);
+
+            ImageView img = (ImageView) view.findViewById(R.id.pic);
+
+            /*String path = items.get(pos).get("image");
+            Log.d("경로", path);
+            ImageViewTask task = new ImageViewTask(img);
+            task.execute(path);*/
+            //final View finalView = view;
+            //final String finalPath = items.get(i).get("image");
+
+
+            holder = new CustomViewHolder();
+            holder.m_ImageView = img;
+            view.setTag(holder);
+
         }
+        else{
+            holder = (CustomViewHolder)view.getTag();
+        }
+        String path = "";
         TextView name = view.findViewById(R.id.name);
         final TextView title = view.findViewById(R.id.title);
         TextView start_date = view.findViewById(R.id.period_date);
@@ -64,6 +89,7 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         TextView mem_cnt = view.findViewById(R.id.mem_cnt);
         TextView day_title = view.findViewById(R.id.day_title);
         TextView day_intro = view.findViewById(R.id.day_intro);
+        TextView ttt = view.findViewById(R.id.ttt);
         final TextView day_id = view.findViewById(R.id.day_id);
         ImageButton button = view.findViewById(R.id.button);
         ProgressBar p = view.findViewById(R.id.ProgBar);
@@ -75,11 +101,14 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         day_title.setText(items.get(i).get("day_title"));
         day_intro.setText(items.get(i).get("day_intro"));
         day_id.setText((items.get(i).get("day_id")));
+        ttt.setText(items.get(i).get("image"));
+        ImageView img = (ImageView) view.findViewById(R.id.pic);
+        path = items.get(pos).get("image");
+        ImageChange(img,path);
+
         int prog = Integer.parseInt(items.get(i).get("time"));
-        String path = items.get(i).get("image");
-        ImageView profile = view.findViewById(R.id.pic);
-        ImageViewTask task = new ImageViewTask(profile);
-        task.execute(path);
+        path += ttt.getText().toString();
+
         p.setProgress(prog);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -102,5 +131,19 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         });
 
         return view;
+    }
+    public void ImageChange(final ImageView img, final String path)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ImageViewTask task = new ImageViewTask(img);
+                task.execute(path);
+            }
+        }).run();
+    }
+
+    public class CustomViewHolder{
+        public ImageView m_ImageView;
     }
 }

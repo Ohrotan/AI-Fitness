@@ -39,6 +39,11 @@
         android:layout_height="1dp"
         android:layout_marginVertical="5dp"
         android:background="@color/darkGray"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="트레이너의 이름을 입력하세요"
+        android:id="@+id/editSearch"/>
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"

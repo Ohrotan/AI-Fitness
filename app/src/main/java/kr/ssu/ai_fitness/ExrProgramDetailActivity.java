@@ -223,6 +223,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 b.setVisibility(Button.GONE);
                             }
                             //String으로 받았던 변수들 형변환
+                            Log.d("정보", id + t_id + period + level + max);
                             int exr_id = Integer.parseInt(id);
                             int trainer_id = Integer.parseInt(t_id);
                             int periodint = Integer.parseInt(period);

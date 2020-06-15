@@ -6,6 +6,13 @@
     android:layout_height="360dp"
     android:background="@drawable/border_layout"
     android:layout_margin="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="0dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:id="@+id/ttt"/>
         <ImageView
             android:layout_width="90dp"
             android:layout_height="90dp"
