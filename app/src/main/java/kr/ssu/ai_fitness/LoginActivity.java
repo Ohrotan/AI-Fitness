@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -22,6 +24,23 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +63,13 @@ public class LoginActivity extends AppCompatActivity {
     private Button button_login;
     private Button button_signup;
 
+    private static final String TAG = "GoogleActivity";
+    private static final int RC_SIGN_IN = 9001;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+
+    private SignInButton button_gmail;
+
     ProgressDialog progressDialog;
 
     @Override
@@ -63,6 +89,27 @@ public class LoginActivity extends AppCompatActivity {
         editText_pwd = (EditText)findViewById(R.id.et_login_password);
         button_login = (Button)findViewById(R.id.btn_login);
         button_signup = (Button)findViewById(R.id.btn_signup);
+        button_gmail = findViewById(R.id.acitvity_login_gmailbutton);
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        //*****gmail 로그인 버튼
+        button_gmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+
 
         //로그인 버튼 클릭
         button_login.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +129,76 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity( new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("xxx", "Google sign in failed", e);
+                // ...
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        progressDialog = ProgressDialog.show(LoginActivity.this, "로그인 중", "Please wait...", false, false);
+
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            //구글 로그인 성공했을 경우
+                            Log.d("xxx", "signInWithCredential:success");
+
+                            progressDialog.dismiss();
+
+                            Member user = new Member(
+                                    1,
+                                    "admin@admin.com",
+                                    "admin",
+                                    "admin",
+                                    1,
+                                    1,
+                                    (byte)0,
+                                    "1999-09-09",
+                                    1,
+                                    1,
+                                    "admin",
+                                    "ai-fitness/profile_img/8c6d56f3-de2f-4339-ad8d-7834361889a2.jpg",
+                                    (byte)0,
+                                    (byte)1,
+                                    (byte)1
+                            );
+
+                            //user를 shared preferences에 저장
+                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+
+                            //mainactivity로 넘어감
+                            finish();
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("xxx", "signInWithCredential:failure", task.getException());
+                        }
+
+                        // ...
+                    }
+                });
     }
 
     void requirePermission() {
@@ -194,42 +311,6 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
-//                            //response 에러가 아니라면
-//                            if (!obj.getBoolean("error")) {
-//                                //토스트메시지 출력
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//
-//                                //response로 부터 user 얻어냄
-//                                JSONObject userJson = obj.getJSONObject("user");
-//
-//                                //받은 정보를 토대로 user 객체 생성
-//                                Member user = new Member(
-//                                        userJson.getString("id"),
-//                                        userJson.getString("pwd"),
-//                                        userJson.getString("name"),
-//                                        userJson.getDouble("height"),
-//                                        userJson.getDouble("weight"),
-//                                        (byte)userJson.getInt("gender"),
-//                                        userJson.getString("birth"),
-//                                        userJson.getDouble("muscle"),
-//                                        userJson.getDouble("fat"),
-//                                        userJson.getString("intro"),
-//                                        userJson.getString("image"),
-//                                        (byte)userJson.getInt("trainer"),
-//                                        (byte)userJson.getInt("admin"),
-//                                        (byte)userJson.getInt("alarm")
-//                                );
-//
-//                                //user를 shared preferences에 저장
-//                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-//
-//                                //mainactivity로 넘어감
-//                                finish();
-//                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//                            } else {
-//                                //에러일 때도 토스트 메시지 출력
-//                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-//                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

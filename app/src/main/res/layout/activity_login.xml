@@ -79,6 +79,14 @@
         android:text="로그인"
         android:textColor="#ffffff" />
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/acitvity_login_gmailbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,6 +115,8 @@
             android:text="아이디/비밀번호 찾기"
             android:textColor="#ffffff" />
     </LinearLayout>
+
+
 
 
 </LinearLayout>
