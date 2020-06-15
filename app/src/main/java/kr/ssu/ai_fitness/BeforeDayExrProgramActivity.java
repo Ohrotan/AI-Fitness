@@ -61,7 +61,7 @@ public class BeforeDayExrProgramActivity extends AppCompatActivity {
         //******MemberExrProgramListAcitivity에서 여기로 넘어 온다.
         //*****여기 액티비티로 넘어오기 전에 intent로 day_program 의 id를 넘겨줘야 한다.
         Intent intent = getIntent();
-        day_program_id = intent.getIntExtra("day_program_id", -1);
+        day_program_id = intent.getIntExtra("day_id", -1);
 
         if (day_program_id == -1) {
             Toast.makeText(BeforeDayExrProgramActivity.this, "전달받은 day_program_id가 유효하지 않습니다.", Toast.LENGTH_SHORT).show();
