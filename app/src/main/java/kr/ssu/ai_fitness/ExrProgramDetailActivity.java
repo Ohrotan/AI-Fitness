@@ -198,17 +198,15 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 daytitle = c.getString(TAG_DAYTITLE);
                                 dayintro = c.getString(TAG_DAYINTRO);
                                 image = c.getString(TAG_IMAGE);
+                                persons = new HashMap<String, String>();
                                 if(!daytitle.equals("null")||!dayintro.equals("null")) {
                                     daily += daytitle + "\n\t\t" + dayintro + "\n";
                                     Log.d("출력", daytitle);
                                     persons.put(TAG_DAYTITLE,daytitle);
                                     persons.put(TAG_DAYID,day_id);
                                     dayList.add(persons);
-
                                 }
                                 if(isRegister.equals("")){ isRegister += c.getString(TAG_EID);}
-                                Log.d("결과",arr[i-1][0] + " " + arr[i-1][1]);
-
                             }
 
                             DetailAdapter adapter = new DetailAdapter(getApplicationContext(),dayList,persons);
@@ -251,12 +249,22 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                         lst_txt = lst_txt.substring(1, lst_txt.length() - 1);
                                         Log.d("정보", lst_txt);
                                         String[] array = lst_txt.split(",");
-                                        //Log.d("피드백", array[0].substring(9));
                                         if(i <= cnt)
                                         {
-                                            /*Intent intent = new Intent(getApplicationContext(), AfterDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
-                                            intent.putExtra("day_id", "");
-                                            startActivity(intent); // 다음 화면으로 넘어간다*/
+                                            //Toast.makeText(getApplicationContext(),array[1].substring(8),Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getApplicationContext(), AfterDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
+                                            int day_id = Integer.parseInt(array[1].substring(8));
+                                            int m_id = Integer.parseInt(mem_id);
+                                            intent.putExtra("day_id", day_id);
+                                            intent.putExtra("id", m_id);
+                                            startActivity(intent); // 다음 화면으로 넘어간다
+                                        }
+                                        else
+                                        {
+                                            Intent intent = new Intent(getApplicationContext(), BeforeDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
+                                            int day_id = Integer.parseInt(array[1].substring(8));
+                                            intent.putExtra("day_id", day_id);
+                                            startActivity(intent); // 다음 화면으로 넘어간다
                                         }
 
                                     }
