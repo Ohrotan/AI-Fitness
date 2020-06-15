@@ -79,6 +79,8 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
         //*****db 검색을 위해 day_program_id를 이전 액티비티에서 넘겨줘야 한다.
         day_program_id = intent.getIntExtra("day_id", -1);
 
+        Toast.makeText(this, "member_id: "+mem_id + " / day_program_id : " + day_program_id, Toast.LENGTH_SHORT).show();
+
         textViewIntro = findViewById(R.id.activity_after_day_exr_program_intro_content);
         textViewTotalTime = findViewById(R.id.activity_after_day_exr_program_time);
         recyclerView = findViewById(R.id.activity_after_day_exr_program_rv);
@@ -201,6 +203,7 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
                             JSONArray obj = new JSONArray(response);
                             int isFound = obj.getInt(0);
 
+                            Log.d("After~Activity_response", response);
                             Log.d("AFTERXXXXX", ""+obj);
 
                             if (isFound == 0) {
