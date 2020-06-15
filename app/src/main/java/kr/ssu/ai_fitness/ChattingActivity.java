@@ -128,7 +128,6 @@ public class ChattingActivity extends AppCompatActivity {
 
         finish();
 
-
         //내부 저장소에 임시로 저장한 프사가 존재하면 삭제해주는 부분
         File tempFile = new File("data/data/kr.ssu.ai_fitness/files/test.png");
         boolean isExists = tempFile.exists();
