@@ -51,6 +51,7 @@ import android.widget.Toast
 import androidx.legacy.app.FragmentCompat
 //import com.edvard.poseestimation.*
 import kr.ssu.ai_fitness.R
+import kr.ssu.ai_fitness.vo.DayProgramVideoModel
 import java.io.IOException
 import java.lang.Long
 import java.util.ArrayList
@@ -277,6 +278,12 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         drawView = view.findViewById(R.id.drawview)
         layoutBottom = view.findViewById(R.id.layout_bottom)
         radiogroup = view.findViewById(R.id.radiogroup);
+
+        val day_id = activity.intent.getIntExtra("day_id",-1)
+
+        //동작에 대한 아이디, 이름, 카운트, 세트, 비디오 경로 정보
+        var videoInfos = activity.intent.getParcelableArrayListExtra<DayProgramVideoModel>("videoInfos")
+
 
         radiogroup!!.setOnCheckedChangeListener { group, checkedId ->
             if(checkedId==R.id.radio_cpu){

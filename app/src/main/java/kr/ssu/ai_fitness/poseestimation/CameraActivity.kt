@@ -19,6 +19,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import kr.ssu.ai_fitness.R
+import kr.ssu.ai_fitness.vo.DayProgramVideoModel
 
 import org.opencv.android.BaseLoaderCallback
 import org.opencv.android.LoaderCallbackInterface
@@ -51,6 +52,9 @@ class CameraActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
+
+
+
 
         //test
         Log.v("volley test", "start manager");

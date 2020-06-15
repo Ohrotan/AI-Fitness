@@ -96,7 +96,7 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
                 }
                 int day_id_num = Integer.parseInt(str);
                 Intent intent = new Intent(context, BeforeDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
-                intent.putExtra("day_program_id", day_id_num);
+                intent.putExtra("day_id", day_id_num);
                context.startActivity(intent);
             }
         });
