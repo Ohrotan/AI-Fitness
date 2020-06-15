@@ -90,7 +90,7 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return 1;//****현재는 무조건 회원 영상이 하나이기 때문에 갯수는 1개이다.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
