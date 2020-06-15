@@ -334,7 +334,7 @@
                 android:layout_below="@+id/day_list"
                 android:layout_margin="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"/>
         </RelativeLayout>
     </ScrollView>
     <Button

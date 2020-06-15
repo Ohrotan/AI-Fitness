@@ -208,11 +208,11 @@ public class TrainerExrProgramFragment extends Fragment {
                                     lst_txt = lst_txt.substring(1, lst_txt.length() - 1);
                                     Log.d("정보", lst_txt);
                                     String[] array = lst_txt.split(",");
-                                    Log.d("피드백", array[8].substring(10));
-                                    if (array[8].substring(10).equals("피드백이 필요합니다!")) {
-                                        Toast.makeText(getContext(),array[3].substring(4), Toast.LENGTH_SHORT).show();
+                                    Log.d("피드백", array[0].substring(9));//0,9 or 8,10
+                                    if (array[0].substring(9).equals("피드백이 필요합니다!")) {
+                                        Toast.makeText(getContext(),array[7].substring(4), Toast.LENGTH_SHORT).show(); // 3,4 or 7,4
                                         Intent intent = new Intent(getContext(), RegMemberListActivity.class); // 다음 넘어갈 클래스 지정
-                                        intent.putExtra("exr_id", array[3].substring(4));
+                                        intent.putExtra("exr_id", array[7].substring(4));
                                         startActivity(intent); // 다음 화면으로 넘어간다*/
                                     }
                                 }
