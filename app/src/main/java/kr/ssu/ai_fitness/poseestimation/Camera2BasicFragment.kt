@@ -15,48 +15,39 @@
 
 package kr.ssu.ai_fitness.poseestimation
 
+//import com.edvard.poseestimation.*
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.AlertDialog
+import android.app.Dialog
+import android.app.DialogFragment
+import android.app.Fragment
 import android.content.Context
+import android.content.Intent.getIntent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.ImageFormat
-import android.graphics.Matrix
-import android.graphics.Point
-import android.graphics.RectF
-import android.graphics.SurfaceTexture
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraCaptureSession
-import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraDevice
-import android.hardware.camera2.CameraManager
-import android.hardware.camera2.CaptureRequest
-import android.hardware.camera2.CaptureResult
-import android.hardware.camera2.TotalCaptureResult
+import android.graphics.*
+import android.hardware.camera2.*
 import android.media.ImageReader
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
-import androidx.core.content.ContextCompat
 import android.util.Log
 import android.util.Size
-import android.view.LayoutInflater
-import android.view.Surface
-import android.view.TextureView
-import android.view.View
-import android.view.ViewGroup
-import android.widget.RadioGroup
-import android.widget.TextView
-import android.widget.Toast
+import android.view.*
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.legacy.app.FragmentCompat
-//import com.edvard.poseestimation.*
 import kr.ssu.ai_fitness.R
-import java.io.IOException
+import kr.ssu.ai_fitness.util.FileDownloadService
+import kr.ssu.ai_fitness.util.ServiceGenerator
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.*
 import java.lang.Long
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.Collections
-import java.util.Comparator
+import java.net.URI
+import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 
@@ -75,6 +66,9 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
     private var classifier: ImageClassifier? = null
     private var layoutBottom: ViewGroup? = null
     private var radiogroup: RadioGroup? = null
+    private var trainerVideoView: VideoView? = null
+    private var filename: String? = null
+    private val contect: Context? = null
 
     private var trainerVideoAnalysisManager: TrainerVideoAnalysisManager? = null
     /**
@@ -276,7 +270,52 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         layoutFrame = view.findViewById(R.id.layout_frame)
         drawView = view.findViewById(R.id.drawview)
         layoutBottom = view.findViewById(R.id.layout_bottom)
-        radiogroup = view.findViewById(R.id.radiogroup);
+        radiogroup = view.findViewById(R.id.radiogroup)
+        trainerVideoView = view.findViewById(R.id.trainerVideoView)
+
+        var videoStoragePath: String = activity.getIntent().getStringExtra("path")
+        if (videoStoragePath == null) {
+            videoStoragePath = "ai-fitness/tr_video/6c94c8aa-a478-428c-a2d2-b6bca2de7538.mp4"
+        }
+        // VideoView : 동영상을 재생하는 뷰
+        // VideoView : 동영상을 재생하는 뷰
+        //vv = findViewById<View>(R.id.video_play_videoview) as VideoView
+
+        val tempName = videoStoragePath.split("/").toTypedArray()
+        filename = tempName[tempName.size - 1]
+
+        val filepath = context.filesDir
+        if (File("$filepath/$filename").exists()) {
+            Log.v("video play", "이미 저장된 동영상")
+            trainerVideoView?.setVideoPath("$filepath/$filename")
+        } else {
+            val downloadService = ServiceGenerator.create(FileDownloadService::class.java)
+            val call = downloadService.downloadFileWithDynamicUrlSync(videoStoragePath)
+            call.enqueue(object : Callback<ResponseBody?> {
+                override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
+                    if (response.isSuccessful) {
+                        Log.d(TAG, "server contacted and has file")
+                        val writtenToDisk: Boolean? = response.body()?.let { writeResponseBodyToDisk(it) }
+                        Log.d(TAG, "file download was a success? $writtenToDisk")
+                    } else {
+                        Log.d(TAG, "server contact failed")
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                    Log.e(TAG, "error")
+                }
+            })
+        }
+
+        // MediaController : 특정 View 위에서 작동하는 미디어 컨트롤러 객체
+
+        // MediaController : 특정 View 위에서 작동하는 미디어 컨트롤러 객체
+        val mc = MediaController(context)
+        trainerVideoView?.setMediaController(mc) // Video View 에 사용할 컨트롤러 지정
+        trainerVideoView?.requestFocus() // 포커스 얻어오기
+        trainerVideoView?.start() // 동영상 재생
+
 
         radiogroup!!.setOnCheckedChangeListener { group, checkedId ->
             if(checkedId==R.id.radio_cpu){
@@ -284,6 +323,43 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
             } else {
                 startBackgroundThread(Runnable { classifier!!.initTflite(true) })
             }
+        }
+    }
+
+    private fun writeResponseBodyToDisk(body: ResponseBody): Boolean {
+        return try {
+            // todo change the file location/name according to your needs
+            val filepath = context.filesDir
+            val futureStudioIconFile = File("$filepath/$filename")
+            var inputStream: InputStream? = null
+            var outputStream: OutputStream? = null
+            try {
+                val fileReader = ByteArray(1024 * 1024 * 100)
+                val fileSize = body.contentLength()
+                var fileSizeDownloaded: kotlin.Long = 0
+                inputStream = body.byteStream()
+                outputStream = FileOutputStream(futureStudioIconFile)
+                while (true) {
+                    val read = inputStream.read(fileReader)
+                    if (read == -1) {
+                        Log.d(TAG, futureStudioIconFile.path)
+                        trainerVideoView?.setVideoPath(futureStudioIconFile.path)
+                        break
+                    }
+                    outputStream.write(fileReader, 0, read)
+                    fileSizeDownloaded += read.toLong()
+                    Log.d(TAG, "file download: $fileSizeDownloaded of $fileSize")
+                }
+                outputStream.flush()
+                true
+            } catch (e: IOException) {
+                false
+            } finally {
+                inputStream?.close()
+                outputStream?.close()
+            }
+        } catch (e: IOException) {
+            false
         }
     }
 
@@ -352,6 +428,10 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         classifier!!.close()
         super.onDestroy()
     }
+
+    //private fun nextVideo()
+
+
 
     /**
      * Sets up member variables related to camera.
