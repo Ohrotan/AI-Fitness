@@ -154,8 +154,6 @@ public class MemberExrProgramListFragment extends Fragment {
                                 cnt++;
                             }
                             Log.d("갯수",cnt+"");
-                            CheckTypesTask task = new CheckTypesTask();
-                            task.execute();
                             MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons,cnt);
 
                             //MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons);
