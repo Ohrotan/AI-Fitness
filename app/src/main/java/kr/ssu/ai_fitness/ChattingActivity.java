@@ -129,11 +129,9 @@ public class ChattingActivity extends AppCompatActivity {
         finish();
 
 
-        ///
+        //내부 저장소에 임시로 저장한 프사가 존재하면 삭제해주는 부분
         File tempFile = new File("data/data/kr.ssu.ai_fitness/files/test.png");
-
         boolean isExists = tempFile.exists();
-
         if (isExists) {
             File file = new File("data/data/kr.ssu.ai_fitness/files");
             File[] flist = file.listFiles();
@@ -142,7 +140,7 @@ public class ChattingActivity extends AppCompatActivity {
                 String fname = flist[i].getName();
                 if(fname.equals("test.png"))
                 {
-                    flist[i].delete();
+                    flist[i].delete();//삭제함
                 }
             }
         }
@@ -311,23 +309,26 @@ public class ChattingActivity extends AppCompatActivity {
                 LinearLayout2 = itemView.findViewById(R.id.item_chat_LinearLayout2);
                 timestamp = itemView.findViewById(R.id.item_chat_timestamp);
 
-                //*****사진 세팅하는 부분. 지금은 매번 서버에서 받아오는데, 이전 액티비티에서 비트맵같은 걸 전달받아서 그걸 세팅해주도록 수정하면 더 좋을 듯
+                //사진 세팅하는 부분
 
+                ///파일 존재하는지 file.exists()로 체크한다
                 File file = new File("data/data/kr.ssu.ai_fitness/files/test.png");
 
                 boolean isExists = file.exists();
 
-                if (isExists) {
+                if (isExists) {//파일이 내부 저장소에 존재하면 그걸 이용한다.
+                    //imgpath는 내부 저장소 경로
                     String imgpath = "data/data/kr.ssu.ai_fitness/files/test.png";
                     Bitmap bm = BitmapFactory.decodeFile(imgpath);
                     profile.setImageBitmap(bm);
                     Log.d("ChattingActivity", "success to load bitmap");
                 }
-                else {
+                else {//파일이 내부 저장소에 없으면 서버에서 받아온다.
                     Log.d("ChattingActivity", "fail to load bitmap");
                     ImageViewTask2 task = new ImageViewTask2(profile, ChattingActivity.this);
                     task.execute(destUserImage);
                     try {
+                        //task.get()은 AsycTask는 기본적으로 비동기 처리이기 때문에 동기처리해주기 위함이다.
                         Bitmap bm = task.get();
                     } catch (ExecutionException e) {
                         e.printStackTrace();
