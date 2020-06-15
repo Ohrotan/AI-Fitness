@@ -55,6 +55,7 @@ public class RegMemberDetailAdapter extends RecyclerView.Adapter<RegMemberDetail
                         //Toast.makeText(mContext, "Item Chosen : " + pos, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(mContext, AfterDayExrProgramActivity.class);
 
+                        intent.putExtra("id", mData.get(pos).getMem_id());
                         intent.putExtra("day_id", mData.get(pos).getId());
                         //intent.putExtra("title", mData.get(pos).getTitle());
                         //intent.putExtra("exrId", mData.get(pos).getExrId());

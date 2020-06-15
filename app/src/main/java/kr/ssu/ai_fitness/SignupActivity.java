@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -50,6 +51,7 @@ import java.util.UUID;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.url.URLs;
+import kr.ssu.ai_fitness.util.ProfileEdit;
 import kr.ssu.ai_fitness.util.ProfileUpload;
 import kr.ssu.ai_fitness.volley.VolleySingleton;
 
@@ -211,13 +213,17 @@ public class SignupActivity extends AppCompatActivity {
             bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false);
         }
 
-        int byteSize = bitmap.getRowBytes() * bitmap.getHeight();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(byteSize);
-        bitmap.copyPixelsToBuffer(byteBuffer);
+//        int byteSize = bitmap.getRowBytes() * bitmap.getHeight();
+//        ByteBuffer byteBuffer = ByteBuffer.allocate(byteSize);
+//        bitmap.copyPixelsToBuffer(byteBuffer);
+//
+//        byte[] byteArray = byteBuffer.array();
 
-        byte[] byteArray = byteBuffer.array();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] jpgdata = bos.toByteArray();
 
-        return new ByteArrayInputStream(byteArray);
+        return new ByteArrayInputStream(jpgdata);
     }
 
 

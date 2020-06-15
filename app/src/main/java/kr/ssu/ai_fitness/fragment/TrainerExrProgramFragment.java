@@ -139,6 +139,7 @@ public class TrainerExrProgramFragment extends Fragment {
                                 for (int j = i; j < peoples.length(); j++) {
                                     JSONObject c2 = peoples.getJSONObject(j);
                                     String id_ = c2.getString(TAG_ID);
+                                    persons.put(TAG_ID,id_);
                                     if (id_.equals(id))//현재 ID와 같으면 피드백이 null여부 판단
                                     {
                                         String isnull = c2.getString(TAG_FEEDBACK);
@@ -158,11 +159,30 @@ public class TrainerExrProgramFragment extends Fragment {
                                 persons.put(TAG_TITLE, title);
                                 period += "일 프로그램";
                                 persons.put(TAG_PERIOD, period);
+                                if(mem_cnt.equals("null")){mem_cnt = "0";}
                                 String cnt_people = mem_cnt + "명 / " + max + "명";
                                 persons.put(TAG_MEM_CNT, cnt_people);
-                                persons.put(TAG_LEVEL, level);
+                                if(level.equals("null")){level = "0";}
+                                int num = Integer.parseInt(level);
+                                String level_star = "";
+                                for(int l = 0;  l< num; l++ )
+                                {
+                                    level_star += "★";
+                                }
+                                persons.put(TAG_LEVEL, level_star);
                                 persons.put(TAG_EQUIP, equip);
-                                persons.put(TAG_RATING, rating);
+                                if(rating.equals("null")){rating = "0";}
+                                num = Integer.parseInt(rating);
+                                String rating_star = "";
+                                for(int l = 0;  l< num; l++ )
+                                {
+                                    rating_star += "★";
+                                }
+                                persons.put(TAG_RATING, rating_star);
+                                if(gender.equals("M")){gender = "남성";}
+                                else if(gender.equals("F")){gender = "여성";}
+                                else if(gender.equals("A")){gender = "모두";}
+                                else{gender = "";}
                                 persons.put(TAG_GENDER, gender);
                                 persons.put(TAG_FEEDBACK, anyfeedback);
                                 personList.add(persons);
@@ -186,8 +206,9 @@ public class TrainerExrProgramFragment extends Fragment {
                                     String[] array = lst_txt.split(",");
                                     Log.d("피드백", array[0].substring(9));
                                     if (array[0].substring(9).equals("피드백이 필요합니다!")) {
-                                        Toast.makeText(getContext(), "피드백 화면 전환", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(),array[7].substring(4), Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(getContext(), RegMemberListActivity.class); // 다음 넘어갈 클래스 지정
+                                        intent.putExtra("exr_id", array[7].substring(4));
                                         startActivity(intent); // 다음 화면으로 넘어간다*/
                                     }
                                 }

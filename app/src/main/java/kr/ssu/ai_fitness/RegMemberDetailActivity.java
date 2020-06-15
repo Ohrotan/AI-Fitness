@@ -142,7 +142,7 @@ public class RegMemberDetailActivity extends AppCompatActivity {
                                 feedbackList.add(feedback);
                                 Log.d("GET_DAY_TITLE_JSON", "id = " + dayId + " title = " + dayTitle + " feedback = " + feedback);
                                 //mName = jObject.getString("name");
-                                dayProgram = new DayProgram(dayId, dayTitle, feedback);
+                                dayProgram = new DayProgram(dayId, memId, dayTitle, feedback);
                                 adapter.addItem(dayProgram);
                             }
                             rView.setAdapter(adapter);

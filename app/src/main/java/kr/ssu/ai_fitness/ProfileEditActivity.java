@@ -199,6 +199,7 @@ public class ProfileEditActivity extends AppCompatActivity implements View.OnCli
         weightEdit.setText(Double.toString(user.getWeight()));
         muscleEdit.setText(Double.toString(user.getMuscle()));
         fatEdit.setText(Double.toString(user.getFat()));
+        selfIntro.setText(user.getIntro());
     }
 
     @Override
