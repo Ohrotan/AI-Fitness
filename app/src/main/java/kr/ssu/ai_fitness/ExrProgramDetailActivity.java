@@ -201,25 +201,17 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 if(!daytitle.equals("null")||!dayintro.equals("null")) {
                                     daily += daytitle + "\n\t\t" + dayintro + "\n";
                                     Log.d("출력", daytitle);
-                                    arr[i-1][0] = daytitle;
-                                    arr[i-1][1] = day_id;
+                                    persons.put(TAG_DAYTITLE,daytitle);
+                                    persons.put(TAG_DAYID,day_id);
+                                    dayList.add(persons);
 
                                 }
                                 if(isRegister.equals("")){ isRegister += c.getString(TAG_EID);}
                                 Log.d("결과",arr[i-1][0] + " " + arr[i-1][1]);
 
                             }
-                            for(int j = 0; j < 2; j++)
-                            {
-                                persons.put(TAG_DAYTITLE,arr[j][0]);
-                                persons.put(TAG_DAYID,arr[j][1]);
-                                dayList.add(persons);
-                                Log.d("tlqkf",dayList.get(0).get(TAG_DAYTITLE).toString());
-                            }
 
                             DetailAdapter adapter = new DetailAdapter(getApplicationContext(),dayList,persons);
-
-
 
                             TextView txt;
                             txt = (TextView)findViewById(R.id.level);
