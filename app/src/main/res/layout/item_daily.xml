@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/regMemberDetailTextItem"
+        android:text="n일차 운동프로그램"
+        android:textSize="25sp"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="@color/darkGray"
+        tools:ignore="MissingConstraints" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/day_id"
+        android:textSize="0dp"/>
+
+</LinearLayout>

@@ -9,9 +9,13 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.ssu.ai_fitness.adapter.DetailAdapter;
+import kr.ssu.ai_fitness.adapter.MemberAllExrprogramListAdapter;
 import kr.ssu.ai_fitness.dto.ExrProgram;
 import kr.ssu.ai_fitness.dto.Member;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
@@ -57,7 +63,8 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
 
     JSONArray peoples = null;
     ListView list;
-    ArrayList<HashMap<String, String>> personList;
+    ArrayList<HashMap<String, String>> dayList;
+
     String id = "";
     String title="";
     String name = "";
@@ -70,7 +77,8 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exr_program_detail);
-
+        list = (ListView)findViewById(R.id.listView);
+        dayList = new ArrayList<HashMap<String, String>>();
         TextView title_ = (TextView) findViewById(R.id.title);
         TextView name_ = (TextView) findViewById(R.id.name);
         TextView rating_star_ = (TextView)findViewById(R.id.star);
@@ -140,7 +148,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     private void getData(final String exr_id, final String mem_id) {
 
         //서버에서 받아오는 부분
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200611t205746-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200615t222609-dot-ai-fitness-369.an.r.appspot.com/exr/readexrdetail",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -167,8 +175,14 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             String daily = "";
                             String isRegister = "";
                             String image = "";
-
-                            for (int i = 0; i < peoples.length(); i++) {
+                            HashMap<String, String> persons = new HashMap<String, String>();
+                            final ArrayList<String> listv = new ArrayList<>();
+                            Log.d("response", response);
+                            int len = peoples.length();
+                            String [][] arr = new String[len][2];
+                            JSONObject c2 = peoples.getJSONObject(0);
+                            int cnt = c2.getInt("cnt");
+                            for (int i = 1; i < peoples.length(); i++) {
                                 JSONObject c = peoples.getJSONObject(i);
                                 id = c.getString(TAG_ID);
                                 t_id = c.getString(TAG_TRAINERID);
@@ -186,10 +200,25 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 image = c.getString(TAG_IMAGE);
                                 if(!daytitle.equals("null")||!dayintro.equals("null")) {
                                     daily += daytitle + "\n\t\t" + dayintro + "\n";
+                                    Log.d("출력", daytitle);
+                                    arr[i-1][0] = daytitle;
+                                    arr[i-1][1] = day_id;
+
                                 }
                                 if(isRegister.equals("")){ isRegister += c.getString(TAG_EID);}
-                                Log.d("결과",id+t_id+title+period);
+                                Log.d("결과",arr[i-1][0] + " " + arr[i-1][1]);
+
                             }
+                            for(int j = 0; j < 2; j++)
+                            {
+                                persons.put(TAG_DAYTITLE,arr[j][0]);
+                                persons.put(TAG_DAYID,arr[j][1]);
+                                dayList.add(persons);
+                                Log.d("tlqkf",dayList.get(0).get(TAG_DAYTITLE).toString());
+                            }
+
+                            DetailAdapter adapter = new DetailAdapter(getApplicationContext(),dayList,persons);
+
 
 
                             TextView txt;
@@ -210,17 +239,41 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             txt.setText(equip);
                             txt = (TextView)findViewById(R.id.intro);
                             txt.setText(intro);
-                            txt = (TextView)findViewById(R.id.daily_list);
-                            txt.setText(daily);
                             txt = (TextView)findViewById(R.id.day_id);
                             txt.setText(day_id);
                             ImageView img = (ImageView)findViewById(R.id.pic);
                             ImageViewTask task = new ImageViewTask(img);
                             task.execute(image);
+
+
+
                             Log.d("등록됬는지 확인", isRegister);
                             if(!(isRegister.equals("null"))) {
                                 Button b = findViewById(R.id.apply_btn);
                                 b.setVisibility(Button.GONE);
+                                list.setAdapter(adapter);
+                                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                        String lst_txt = adapterView.getItemAtPosition(i).toString();
+                                        lst_txt = lst_txt.substring(1, lst_txt.length() - 1);
+                                        Log.d("정보", lst_txt);
+                                        String[] array = lst_txt.split(",");
+                                        //Log.d("피드백", array[0].substring(9));
+                                        if(i <= cnt)
+                                        {
+                                            /*Intent intent = new Intent(getApplicationContext(), AfterDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
+                                            intent.putExtra("day_id", "");
+                                            startActivity(intent); // 다음 화면으로 넘어간다*/
+                                        }
+
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                txt = (TextView)findViewById(R.id.day_list);
+                                txt.setText(daily);
                             }
                             //String으로 받았던 변수들 형변환
                             Log.d("정보", id + t_id + period + level + max);
