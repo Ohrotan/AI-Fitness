@@ -17,13 +17,16 @@ package kr.ssu.ai_fitness.poseestimation
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Paint.Style.FILL
 import android.graphics.PointF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import kr.ssu.ai_fitness.R
 import java.util.*
+import kotlin.system.measureTimeMillis
 
 /**
  * Created by edvard on 18-3-23.
@@ -41,6 +44,8 @@ class DrawView : View {
     private var mRatioY: Float = 0.toFloat()
     private var mImgWidth: Int = 0
     private var mImgHeight: Int = 0
+
+    private var exrInfo: CurExerciseState? = null
 
     private val mColorArray = intArrayOf(
             resources.getColor(R.color.color_top, null),
@@ -71,6 +76,7 @@ class DrawView : View {
             textSize = sp(13).toFloat()
         }
     }
+
 
     constructor(context: Context) : super(context)
 
@@ -107,11 +113,18 @@ class DrawView : View {
         var tempX: Float
         var tempY: Float
         for (i in 0..13) {
-            tempX = point[0][i] /  ratio / mRatioX
+            ;
+            tempX = point[0][i] / ratio / mRatioX
             tempY = point[1][i] / ratio / mRatioY
             mDrawPoint.add(PointF(tempX, tempY))
+            //   Log.v("draw","mDrawPoint.size "+mDrawPoint.size)
         }
     }
+
+    fun setExrInfo(info: CurExerciseState) {
+        this.exrInfo = info
+    }
+
 
     /**
      * Sets the aspect ratio for this view. The size of the view will be measured based on the ratio
@@ -163,7 +176,17 @@ class DrawView : View {
         for ((index, pointF) in mDrawPoint.withIndex()) {
             mPaint.color = mColorArray[index]
             canvas.drawCircle(pointF.x, pointF.y, circleRadius, mPaint)
+
         }
+        if (exrInfo == null) {
+            exrInfo = CurExerciseState(5, 4, 3, 1);
+        }
+        mPaint.color = Color.BLACK
+        canvas.drawText("cur exr: " + exrInfo!!.curExr, 70f, 200f, mPaint);
+        canvas.drawText("cur set: " + exrInfo!!.curSet, 70f, 250f, mPaint);
+        canvas.drawText("cur num: " + exrInfo!!.curNum, 70f, 300f, mPaint);
+
+        canvas.drawText("Good!!", 200f, 350f, mPaint);
     }
 
     override fun onMeasure(

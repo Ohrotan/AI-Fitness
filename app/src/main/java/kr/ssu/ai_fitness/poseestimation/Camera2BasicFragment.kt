@@ -26,6 +26,8 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.*
 import android.hardware.camera2.*
+import android.hardware.camera2.CameraDevice.TEMPLATE_PREVIEW
+import android.hardware.camera2.CameraDevice.TEMPLATE_RECORD
 import android.media.ImageReader
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
@@ -41,6 +43,8 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.legacy.app.FragmentCompat
 import kr.ssu.ai_fitness.R
+import kr.ssu.ai_fitness.dto.MemberExrHistory
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager
 import kr.ssu.ai_fitness.util.FileDownloadService
 import kr.ssu.ai_fitness.util.ServiceGenerator
 import kr.ssu.ai_fitness.vo.DayProgramVideoModel
@@ -71,10 +75,13 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
     private var layoutBottom: ViewGroup? = null
     private var radiogroup: RadioGroup? = null
     private var trainerVideoView: VideoView? = null
+    private var saveBtn: Button? = null
+
+
     private var filename: String? = null
     private var recorder: MediaRecorder? = null
     private var memberFilename: String? = null
-
+    private var isRecording: Boolean = false
     private var trainerVideoAnalysisManager: TrainerVideoAnalysisManager? = null
 
     /**
@@ -137,7 +144,9 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
             // This method is called when the camera is opened.  We start camera preview here.
             cameraOpenCloseLock.release()
             cameraDevice = currentCameraDevice
-            createCameraPreviewSession()
+            //   recordMemberVideo()
+            startPreview()
+            configureTransform(textureView!!.width, textureView!!.height)
         }
 
         override fun onDisconnected(currentCameraDevice: CameraDevice) {
@@ -279,16 +288,23 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         layoutBottom = view.findViewById(R.id.layout_bottom)
         radiogroup = view.findViewById(R.id.radiogroup)
         trainerVideoView = view.findViewById(R.id.trainerVideoView)
+        saveBtn = view.findViewById(R.id.saveRecordingBtn)
+
+        saveBtn!!.setOnClickListener(View.OnClickListener { view ->
+            Log.v(TAG_RECORD, "save btn clicked")
+            if (isRecording) stopRecordingVideo() else startRecordingVideo()
+           // saveMemberVideo()
+        })
 
         val day_id = activity.intent.getIntExtra("day_id", -1)
 
         //동작에 대한 아이디, 이름, 카운트, 세트, 비디오 경로 정보
         var videoInfos = activity.intent.getParcelableArrayListExtra<DayProgramVideoModel>("videoInfos")
-        if(videoInfos==null){
+        if (videoInfos == null) {
             videoInfos = ArrayList<DayProgramVideoModel>();
-            videoInfos.add(DayProgramVideoModel(3,2,null,null,"video title!!"))
+            videoInfos.add(DayProgramVideoModel(3, 2, null, null, "video title!!"))
         }
-        for(info in videoInfos!!) {
+        for (info in videoInfos!!) {
             var videoStoragePath: String? = info.video
             if (videoStoragePath == null) {
                 videoStoragePath = "ai-fitness/tr_video/75ec254b-9ad8-482c-bef0-2fed3671db6a.mp4"
@@ -442,6 +458,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
     }
 
     override fun onPause() {
+        // saveMemberVideo()
         closeCamera()
         stopBackgroundThread()
         super.onPause()
@@ -467,6 +484,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
     ) {
         val activity = activity
         val manager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
         try {
             for (cameraId in manager.cameraIdList) {
                 val characteristics = manager.getCameraCharacteristics(cameraId)
@@ -589,7 +607,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
             }
             manager.openCamera(cameraId!!, stateCallback, backgroundHandler)
 
-            recordMemberVideo()
+            // recordMemberVideo()
 
         } catch (e: CameraAccessException) {
             Log.e(TAG, "Failed to open Camera", e)
@@ -597,6 +615,145 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
             throw RuntimeException("Interrupted while trying to lock camera opening.", e)
         }
 
+    }
+
+    @Throws(IOException::class)
+    private fun setUpMediaRecorder() {
+        val cameraActivity = activity ?: return
+        if(recorder==null){
+            recorder = MediaRecorder()
+        }
+
+        val videoFileName = UUID.randomUUID().toString() + ".mp4"
+        val videoFilePath = context.getDir("member_video", Context.MODE_PRIVATE).absolutePath
+        memberFilename = videoFilePath + "/" + videoFileName
+
+        Log.v(TAG_RECORD, "video file path:" + memberFilename)
+
+        recorder!!.apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setVideoSource(MediaRecorder.VideoSource.SURFACE)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            setOutputFile(memberFilename)
+            setVideoEncodingBitRate(10000000)
+            setVideoFrameRate(30)
+            setVideoSize(textView!!.width, textView!!.height)
+            setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            prepare()
+            isRecording = true
+        }
+    }
+
+    private fun startRecordingVideo() {
+        if (cameraDevice == null || !textureView!!.isAvailable) return
+
+        try {
+            closePreviewSession()
+            setUpMediaRecorder()
+            val texture = textureView!!.surfaceTexture.apply {
+                setDefaultBufferSize(previewSize!!.width, previewSize!!.height)
+            }
+
+            // Set up Surface for camera preview and MediaRecorder
+
+            val previewSurface = Surface(texture)
+            val recorderSurface = recorder!!.surface
+            val surfaces = ArrayList<Surface>().apply {
+                add(previewSurface)
+                add(recorderSurface)
+            }
+            previewRequestBuilder = cameraDevice!!.createCaptureRequest(TEMPLATE_RECORD).apply {
+                addTarget(previewSurface)
+                addTarget(recorderSurface)
+            }
+
+            // Start a capture session
+            // Once the session starts, we can update the UI and start recording
+            cameraDevice?.createCaptureSession(surfaces,
+                    object : CameraCaptureSession.StateCallback() {
+
+                        override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
+                            captureSession = cameraCaptureSession
+                            updatePreview()
+                            activity?.runOnUiThread {
+                                recorder?.start()
+                            }
+                        }
+
+                        override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
+                            if (activity != null) showToast("Failed")
+                        }
+                    }, backgroundHandler)
+        } catch (e: CameraAccessException) {
+            Log.e(TAG, e.toString())
+        } catch (e: IOException) {
+            Log.e(TAG, e.toString())
+        }
+
+    }
+
+    private fun closePreviewSession() {
+        captureSession?.close()
+        captureSession = null
+    }
+
+    private fun updatePreview() {
+        if (cameraDevice == null) return
+
+        try {
+            setUpCaptureRequestBuilder(previewRequestBuilder)
+            HandlerThread("CameraPreview").start()
+            captureSession?.setRepeatingRequest(previewRequestBuilder!!.build(),
+                    null, backgroundHandler)
+        } catch (e: CameraAccessException) {
+            Log.e(TAG, e.toString())
+        }
+
+    }
+
+    private fun stopRecordingVideo() {
+        isRecording = false
+        recorder?.apply {
+            stop()
+            reset()
+        }
+
+        if (activity != null) showToast("Video saved")
+        startPreview()
+    }
+
+    private fun startPreview() {
+        if (cameraDevice == null || !textureView!!.isAvailable) return
+
+        try {
+            closePreviewSession()
+            val texture = textureView!!.surfaceTexture
+            texture.setDefaultBufferSize(previewSize!!.width, previewSize!!.height)
+            previewRequestBuilder = cameraDevice!!.createCaptureRequest(TEMPLATE_PREVIEW)
+
+            val previewSurface = Surface(texture)
+            previewRequestBuilder!!.addTarget(previewSurface)
+
+            cameraDevice?.createCaptureSession(listOf(previewSurface),
+                    object : CameraCaptureSession.StateCallback() {
+
+                        override fun onConfigured(session: CameraCaptureSession) {
+                            captureSession = session
+                            updatePreview()
+                        }
+
+                        override fun onConfigureFailed(session: CameraCaptureSession) {
+                            if (activity != null) showToast("Failed")
+                        }
+                    }, backgroundHandler)
+        } catch (e: CameraAccessException) {
+            Log.e(TAG, e.toString())
+        }
+
+    }
+    private fun setUpCaptureRequestBuilder(builder: CaptureRequest.Builder?) {
+        builder?.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
     }
 
     private fun recordMemberVideo() {
@@ -623,6 +780,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
 
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
         recorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+        recorder.setVideoSize(MAX_PREVIEW_HEIGHT, MAX_PREVIEW_WIDTH)
 
         val videoFileName = UUID.randomUUID().toString() + ".mp4"
         val videoFilePath = context.getDir("member_video", Context.MODE_PRIVATE).absolutePath
@@ -632,29 +790,40 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         recorder!!.setOutputFile(memberFilename)
 
         recorder!!.setPreviewDisplay(Surface(textureView!!.surfaceTexture))
+
         recorder!!.prepare();
         recorder!!.surface
         recorder!!.start();
-
+        isRecording = true;
+        Log.v(TAG_RECORD, "recording started completed")
 
     }
 
     private fun saveMemberVideo() {
-        recorder!!.stop();
+        Log.v(TAG_RECORD, "saveMemberVideo, Recording is:" + isRecording)
+        try {
 
-        Log.v(TAG_RECORD, "recording stopped")
-        recorder!!.reset();   // You can reuse the object by going back to setAudioSource() step
-        recorder!!.surface.release()
-/*
+
+            Log.v(TAG_RECORD, "recording stopped")
+            recorder!!.reset();   // You can reuse the object by going back to setAudioSource() step
+            recorder!!.surface.release()
+        } catch (exception: RuntimeException) {
+            Log.v(TAG_RECORD, "stop fail")
+            exception.printStackTrace()
+
+        }
+
         val memberExrHistory = MemberExrHistory();
         memberExrHistory.mem_id = SharedPrefManager.getInstance(context).user.id.toString()
         memberExrHistory.day_id = activity.intent.getStringExtra("day_id")
         memberExrHistory.exr_id = "-1"
         memberExrHistory.day_program_video_id
         memberExrHistory.video = memberFilename!!.split("/").last()
-        memberExrHistory.thumb_img = UUID.randomUUID().toString()+".jpg"
+        memberExrHistory.thumb_img = UUID.randomUUID().toString() + ".jpg"
         memberExrHistory.time
-
+        Log.v(TAG_RECORD, memberExrHistory.toString())
+        recordMemberVideo()
+/*
         val uri = Uri.fromFile(File(memberFilename))
         val videoIs = getVideoInputStream(uri)
         val imgIs = getThumbImgInputStream(uri)
@@ -719,9 +888,11 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
      */
     private fun closeCamera() {
         try {
-            saveMemberVideo()
+
             cameraOpenCloseLock.acquire()
+
             recorder!!.release() //동영상 녹화하는 객체 클로즈
+            recorder = null
             Log.v(TAG_RECORD, "recording release")
             if (null != captureSession) {
                 captureSession!!.close()
@@ -804,7 +975,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
                                 // Auto focus should be continuous for camera preview.
                                 previewRequestBuilder!!.set(
                                         CaptureRequest.CONTROL_AF_MODE,
-                                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
+                                CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
                                 )
 
                                 // Finally, we start displaying the camera preview.

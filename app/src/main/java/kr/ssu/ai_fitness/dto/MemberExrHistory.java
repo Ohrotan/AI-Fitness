@@ -121,4 +121,20 @@ public class MemberExrHistory {
     public void setThumb_img(String thumb_img) {
         this.thumb_img = thumb_img;
     }
+
+    @Override
+    public String toString() {
+        return "MemberExrHistory{" +
+                "id='" + id + '\'' +
+                ", mem_id='" + mem_id + '\'' +
+                ", exr_id='" + exr_id + '\'' +
+                ", day_id='" + day_id + '\'' +
+                ", day_program_video_id='" + day_program_video_id + '\'' +
+                ", video='" + video + '\'' +
+                ", thumb_img='" + thumb_img + '\'' +
+                ", feedback='" + feedback + '\'' +
+                ", time='" + time + '\'' +
+                ", reg_date='" + reg_date + '\'' +
+                '}';
+    }
 }

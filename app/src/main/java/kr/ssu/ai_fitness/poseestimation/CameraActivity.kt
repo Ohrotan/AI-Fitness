@@ -68,7 +68,7 @@ class CameraActivity : Activity() {
                     //프래그먼트와 연결하기 위한 시작(준비) 리턴 타입: FragmentTransaction
                     .beginTransaction()
                     //이미 있는 프래그먼트를 대체함, add는 중복되는 프래그먼트가 생길 수 있으므로
-                    .replace(R.id.container, Camera2BasicFragment.newInstance())
+                    .replace(R.id.container, Camera2VideoFragment())
                     //즉시 커밋되는게 아니라, 메인스레드에 커밋이 실행되기를 요청하는 것(스케줄링을 함)
                     .commit()
         }
