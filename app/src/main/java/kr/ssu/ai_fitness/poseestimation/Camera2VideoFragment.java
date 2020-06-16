@@ -397,6 +397,17 @@ public class Camera2VideoFragment extends Fragment
 
     }
 
+    private void showToast(String text) {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                textView.setText(text);
+                drawView.invalidate();
+            }
+        });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -542,7 +553,7 @@ public class Camera2VideoFragment extends Fragment
         trainerVideoAnalysisManager = new TrainerVideoAnalysisManager(this.getContext(), 0);//dayid 수정 필요
         trainerVideoAnalysisManager.getAnalysisFilePaths(this.getActivity(), textView);
 
-        //showToast("아무거나")
+        showToast("아무거나");
 
         classifier = new ImageClassifierFloatInception(this.getActivity(), trainerVideoAnalysisManager,
                 0, 192, 192, 96, 96,
@@ -866,7 +877,7 @@ public class Camera2VideoFragment extends Fragment
                         public void onConfigured(CameraCaptureSession session) {
                             Log.v("session", "configured 866");
                             mPreviewSession = session;
-                           updatePreview();
+                            updatePreview();
                             startRecordingVideo();
                         }
 
@@ -909,6 +920,7 @@ public class Camera2VideoFragment extends Fragment
      */
     private void classifyFrame() {
         if (classifier == null || this.getActivity() == null || mCameraDevice == null) {
+            showToast("Uninitialized Classifier or invalid context.");
             return;
         }
         Bitmap bitmap = mTextureView.getBitmap(classifier.getImageSizeX(), classifier.getImageSizeY());
@@ -917,6 +929,9 @@ public class Camera2VideoFragment extends Fragment
         bitmap.recycle();
         // if (classifier.getMPrintPointArray() != null)
         drawView.setDrawPoint(classifier.getMPrintPointArray(), 0.5f);
+        drawView.setExrInfo(new CurExerciseState((int) System.currentTimeMillis() % 4,
+                (int) System.currentTimeMillis() % 7, (int) System.currentTimeMillis() % 10, 1));
+        showToast(textToShow);
     }
 
     /**
@@ -990,7 +1005,7 @@ public class Camera2VideoFragment extends Fragment
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
-        Log.v(TAG,"startRecordingVideo fun");
+        Log.v(TAG, "startRecordingVideo fun");
         try {
             closePreviewSession();
             setUpMediaRecorder();
@@ -1062,7 +1077,7 @@ public class Camera2VideoFragment extends Fragment
         if (null != activity) {
             Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
                     Toast.LENGTH_LONG).show();
-            Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
+            showToast("Video saved");
         }
         mNextVideoAbsolutePath = null;
         startPreview();
