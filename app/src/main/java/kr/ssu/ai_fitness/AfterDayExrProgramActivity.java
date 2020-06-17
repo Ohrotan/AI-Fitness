@@ -293,5 +293,4 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
         stringRequest.setShouldCache(false);
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
-
 }
