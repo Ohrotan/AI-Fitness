@@ -114,7 +114,10 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
         public void setItem(MemberExrVideoModel item) {
             //*****item에서 사진 데이터 빼내서 profile에 세팅해줘야함
             title.setText(item.getTitle()+" "+item.getCounts()+"회 "+item.getSets()+"세트");
-            date.setText(item.getDate());
+            date.setText(item.getDate().substring(0,20));
+            if(item.getFeedback()==null){
+                item.setFeedback("피드백을 기다리고 있습니다.");
+            }
             feedback.setText(item.getFeedback());
         }
     }

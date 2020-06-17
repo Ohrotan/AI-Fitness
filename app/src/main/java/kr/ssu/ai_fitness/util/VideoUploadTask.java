@@ -45,9 +45,13 @@ public class VideoUploadTask extends AsyncTask<Void, Void, String> {
     InputStream videoInputStream;
     Activity activity;
     Bitmap thumbImgBitmap;
-    public VideoUploadTask(){
+
+    boolean isFinish = false;
+
+    public VideoUploadTask() {
 
     }
+
     public VideoUploadTask(InputStream videoInputStream, InputStream thumbImgInputStream, MemberExrHistory info) {
         this.memInfo = info;
         this.thumbImgInputStream = thumbImgInputStream;
@@ -63,22 +67,40 @@ public class VideoUploadTask extends AsyncTask<Void, Void, String> {
         this.activity = activity;
     }
 
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public void setFinish() {
+        isFinish = true;
+    }
+
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-      //  uploading = new ProgressDialog();
+        if (isFinish) {
+            uploading = new ProgressDialog(activity);
+            uploading.setTitle("비디오 업로드 중..");
+            uploading.show();
+        }
     }
 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        //uploading.dismiss();
+        if (isFinish) {
+            uploading.dismiss();
+        }
         if (trInfo != null) {
             //shared Pref에 저장
             setTitleKorean();
             TrainerVideoDownload tvd = new TrainerVideoDownload(this.activity);
             tvd.downloadTrainerVideos(trInfo.getTrainer_id());
             //  Toast.makeText(TrainerVideoRegActivity.this,"complete",Toast.LENGTH_SHORT).show();
+        }
+        if (isFinish) {
+            activity.finish();
         }
     }
 
@@ -89,7 +111,7 @@ public class VideoUploadTask extends AsyncTask<Void, Void, String> {
         if (memInfo != null) {
             Log.v("http-request", "doin bg- memInfo");
             msg = uploadMemberVideo(videoInputStream, thumbImgInputStream, memInfo);
-            Log.v("http-request", "doin bg-"+msg);
+            Log.v("http-request", "doin bg-" + msg);
         }
         if (trInfo != null) {
             msg = uploadTrainerVideo(videoInputStream, thumbImgInputStream, trInfo);
@@ -336,7 +358,7 @@ public class VideoUploadTask extends AsyncTask<Void, Void, String> {
             dos.writeBytes("Content-Disposition: form-data; name=\"time\"  " + twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Type: text/plain" + lineEnd);
             dos.writeBytes(lineEnd);
-            dos.writeBytes(info.getTime() + "");
+            dos.writeBytes("10:00");
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + lineEnd);
 

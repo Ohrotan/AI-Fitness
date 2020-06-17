@@ -23,6 +23,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
@@ -84,6 +85,8 @@ import java.util.UUID;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import kr.ssu.ai_fitness.AfterDayExrProgramActivity;
+import kr.ssu.ai_fitness.ExrResultActivity;
 import kr.ssu.ai_fitness.R;
 import kr.ssu.ai_fitness.dto.MemberExrHistory;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
@@ -118,6 +121,9 @@ public class Camera2VideoFragment extends Fragment
     private long endExrTime;
     private long startMotionTime;
     private long endMotionTime;
+
+    private int motionCnt = 0; //시나리오 촬영용 임시변수
+    private ArrayList<CurExerciseState> tmpExrStates; //시나리오 촬영용 임시변수
 
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
@@ -331,6 +337,24 @@ public class Camera2VideoFragment extends Fragment
         return new Camera2VideoFragment();
     }
 
+    public Camera2VideoFragment() {
+        super();
+        tmpExrStates = new ArrayList<>();
+        tmpExrStates.add(new CurExerciseState(0, 0, 1, 1, "Miss"));
+        tmpExrStates.add(new CurExerciseState(0, 0, 1, 1, "Miss"));
+        tmpExrStates.add(new CurExerciseState(1, 0, 1, 1, "Good"));
+        tmpExrStates.add(new CurExerciseState(2, 0, 1, 1, "Perfect"));
+        tmpExrStates.add(new CurExerciseState(3, 0, 1, 1, "Bad"));
+
+        //다음영상
+        tmpExrStates.add(new CurExerciseState(0, 0, 2, 1, "Miss"));
+        tmpExrStates.add(new CurExerciseState(0, 0, 2, 1, "Miss"));
+        tmpExrStates.add(new CurExerciseState(1, 0, 2, 1, "Good"));
+        tmpExrStates.add(new CurExerciseState(2, 0, 2, 1, "Perfect"));
+
+        tmpExrStates.add(new CurExerciseState(1, 1, 2, 1, "Bad"));
+        tmpExrStates.add(new CurExerciseState(2, 1, 2, 1, "Good"));
+    }
 
     /**
      * Takes photos and classify them periodically.
@@ -440,7 +464,8 @@ public class Camera2VideoFragment extends Fragment
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopRecordingVideo();
+                stopRecordingVideo(true);
+                getActivity().finish();
             }
         });
         // view.findViewById(R.id.info).setOnClickListener(this);
@@ -946,10 +971,40 @@ public class Camera2VideoFragment extends Fragment
         String textToShow = classifier.classifyFrame(bitmap);
         bitmap.recycle();
         // if (classifier.getMPrintPointArray() != null)
-        drawView.setDrawPoint(classifier.getMPrintPointArray(), 0.5f);
+        //    drawView.setDrawPoint(classifier.getMPrintPointArray(), 0.5f);
+        if (System.currentTimeMillis() - startMotionTime > 4000) {
+            startMotionTime = System.currentTimeMillis();
+            if (motionCnt < tmpExrStates.size()) {
+                if (motionCnt == 5) {
+                    stopRecordingVideo(false);
+                    //   startRecordingVideo();
+                }
+                drawView.setExrInfo(tmpExrStates.get(motionCnt++));
+            } else {
+                stopRecordingVideo(true);
+                Intent intent = new Intent(getActivity(), ExrResultActivity.class);
+                ArrayList<Integer> list_perfect = new ArrayList<>();
+                ArrayList<Integer> list_good = new ArrayList<>();
+                ArrayList<Integer> list_bad = new ArrayList<>();
 
-        drawView.setExrInfo(new CurExerciseState((int) System.currentTimeMillis() % 4,
-                (int) System.currentTimeMillis() % 7, (int) System.currentTimeMillis() % 10, 1,"Miss"));
+                list_perfect.add(1);
+                list_perfect.add(1);
+                list_good.add(1);
+                list_good.add(2);
+                list_bad.add(1);
+                list_bad.add(1);
+
+                intent.putExtra("list_perfect", list_perfect);
+                intent.putExtra("list_good", list_good);
+                intent.putExtra("list_bad", list_bad);
+
+
+                //getActivity().finish();
+                getActivity().startActivity(intent);
+            }
+        }
+
+
         showToast(textToShow);
     }
 
@@ -1084,7 +1139,7 @@ public class Camera2VideoFragment extends Fragment
         }
     }
 
-    private void stopRecordingVideo() {
+    private void stopRecordingVideo(boolean isLast) {
         // UI
         mIsRecordingVideo = false;
         //    mButtonVideo.setText(R.string.record);
@@ -1103,9 +1158,9 @@ public class Camera2VideoFragment extends Fragment
         MemberExrHistory memberExrHistory = new MemberExrHistory();
         int user_id = SharedPrefManager.getInstance(this.getContext()).getUser().getId();
         memberExrHistory.setMem_id(user_id + "");
-        memberExrHistory.setDay_id(activity.getIntent().getStringExtra("day_id") == null ? "-1" : activity.getIntent().getStringExtra("day_id"));
-        memberExrHistory.setExr_id("-1");
-        memberExrHistory.setDay_program_video_id("-1");
+        memberExrHistory.setDay_id(activity.getIntent().getStringExtra("day_id") == null ? "57" : activity.getIntent().getStringExtra("day_id"));
+        memberExrHistory.setExr_id("88");
+        memberExrHistory.setDay_program_video_id("70");
         String[] strs = mNextVideoAbsolutePath.split("/");
         memberExrHistory.setVideo(strs[strs.length - 1]);
         memberExrHistory.setThumb_img(UUID.randomUUID().toString() + ".jpg");
@@ -1116,9 +1171,15 @@ public class Camera2VideoFragment extends Fragment
         InputStream videoIs = getVideoInputStream(uri);
         InputStream imgIs = getThumbImgInputStream();
         VideoUploadTask vut = new VideoUploadTask(videoIs, imgIs, memberExrHistory);
+
+        if (!isLast) {
+            startPreview();
+        } else {
+            vut.setActivity(getActivity());
+            vut.setFinish();
+        }
         vut.execute();
         mNextVideoAbsolutePath = null;
-        startPreview();
     }
 
     public InputStream getThumbImgInputStream() {

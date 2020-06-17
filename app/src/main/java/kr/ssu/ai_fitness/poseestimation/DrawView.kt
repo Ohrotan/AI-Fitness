@@ -148,6 +148,33 @@ class DrawView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
+        mPaint.color = Color.BLACK
+        mPaint.textSize = 100f
+
+
+
+        if (exrInfo == null) {
+            exrInfo = CurExerciseState(0,0,1,1,"Miss")
+            return;
+        }
+        canvas.drawText("오늘의 " + exrInfo!!.curExr + "번째 동작", 70f, 250f, mPaint);
+        canvas.drawText("" + exrInfo!!.curSet + " 세트 완료", 70f, 400f, mPaint);
+        canvas.drawText("" + exrInfo!!.curNum + " 회", 70f, 550f, mPaint);
+
+        if (exrInfo!!.grade == "Miss") {
+            mPaint.color = Color.RED
+        } else if (exrInfo!!.grade == "Bad") {
+            mPaint.color = Color.YELLOW
+        } else if (exrInfo!!.grade == "Good") {
+            mPaint.color = Color.BLUE
+        } else if (exrInfo!!.grade == "Perfect") {
+            mPaint.color = Color.GREEN
+        }
+        canvas.drawText("" + exrInfo!!.grade + "!!", 70f, 700f, mPaint);
+
+
+
         if (mDrawPoint.isEmpty()) return
         var prePointF: PointF? = null
         mPaint.color = 0xff6fa8dc.toInt()
@@ -178,19 +205,9 @@ class DrawView : View {
             canvas.drawCircle(pointF.x, pointF.y, circleRadius, mPaint)
 
         }
-        if (exrInfo == null) {
-            exrInfo = CurExerciseState(5, 4, 3, 1);
-        }
 
 
-        mPaint.color = Color.BLACK
-        mPaint.textSize = 20f
-
-        canvas.drawText( "오늘의 "+exrInfo!!.curExr+"번째 동작", 70f, 200f, mPaint);
-        canvas.drawText( ""+ exrInfo!!.curSet + " 세트 하는 중", 70f, 280f, mPaint);
-        canvas.drawText(""+ exrInfo!!.curNum + " 회", 70f, 360f, mPaint);
-
-        canvas.drawText("Good!!", 200f, 440f, mPaint);
+        // canvas.drawText("Good!!", 200f, 520f, mPaint);
     }
 
     override fun onMeasure(
