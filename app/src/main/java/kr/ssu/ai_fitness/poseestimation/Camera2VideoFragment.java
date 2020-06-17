@@ -713,7 +713,7 @@ public class Camera2VideoFragment extends Fragment
 
                 // We don't use a front facing camera in this sample.
                 int facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                if (facing == CameraCharacteristics.LENS_FACING_BACK) {
                     continue;
                 }
 
@@ -835,7 +835,7 @@ public class Camera2VideoFragment extends Fragment
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
-            this.cameraId = manager.getCameraIdList()[0];
+           // this.cameraId = manager.getCameraIdList()[0];
 
             // Choose the sizes for camera preview and video recording
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
@@ -984,7 +984,7 @@ public class Camera2VideoFragment extends Fragment
 
         // if (classifier.getMPrintPointArray() != null)
         //    drawView.setDrawPoint(classifier.getMPrintPointArray(), 0.5f);
-        if (System.currentTimeMillis() - startMotionTime > 5000) {
+        if (System.currentTimeMillis() - startMotionTime > 4800) {
             startMotionTime = System.currentTimeMillis();
 
             // if (motionCnt == 5) {
