@@ -84,10 +84,12 @@ public class VideoUploadTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-
+        Log.v("http-request", "doin bg");
         String msg = "";
         if (memInfo != null) {
+            Log.v("http-request", "doin bg- memInfo");
             msg = uploadMemberVideo(videoInputStream, thumbImgInputStream, memInfo);
+            Log.v("http-request", "doin bg-"+msg);
         }
         if (trInfo != null) {
             msg = uploadTrainerVideo(videoInputStream, thumbImgInputStream, trInfo);

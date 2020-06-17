@@ -23,20 +23,21 @@
     <kr.ssu.ai_fitness.poseestimation.AutoFitFrameLayout
         android:id="@+id/layout_frame"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
         >
 
         <VideoView
             android:id="@+id/trainerVideoView"
-            android:layout_width="224dp"
-            android:layout_height="165dp" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
         <kr.ssu.ai_fitness.poseestimation.AutoFitTextureView
             android:id="@+id/texture"
-            android:layout_width="match_parent"
-            android:layout_height="273dp"
-            android:layout_gravity="center_vertical" />
+            android:layout_width="200dp"
+            android:layout_height="300dp"
+            android:layout_gravity="bottom|right" />
 
         <kr.ssu.ai_fitness.poseestimation.DrawView
             android:id="@+id/drawview"
@@ -56,6 +57,7 @@
         android:background="#1c000000"
         android:paddingStart="10dp"
         android:paddingEnd="0dp"
+        android:visibility="gone"
         >
 
         <TextView
@@ -145,17 +147,19 @@
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
+        android:layout_gravity="left|top"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:text="asd" />
+        android:padding="20dp"
+        tools:text="운동명" />
 
     <Button
         android:id="@+id/saveRecordingBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="save"
+        android:text="중단하기"
+        android:layout_margin="10dp"
         android:layout_gravity="end"/>
 
     <RadioGroup
@@ -163,7 +167,8 @@
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
         <RadioButton android:id="@+id/radio_gpu"
             android:textColor="@color/black"
             android:layout_width="wrap_content"

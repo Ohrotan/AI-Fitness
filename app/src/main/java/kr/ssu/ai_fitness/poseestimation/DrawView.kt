@@ -181,12 +181,16 @@ class DrawView : View {
         if (exrInfo == null) {
             exrInfo = CurExerciseState(5, 4, 3, 1);
         }
-        mPaint.color = Color.BLACK
-        canvas.drawText("cur exr: " + exrInfo!!.curExr, 70f, 200f, mPaint);
-        canvas.drawText("cur set: " + exrInfo!!.curSet, 70f, 250f, mPaint);
-        canvas.drawText("cur num: " + exrInfo!!.curNum, 70f, 300f, mPaint);
 
-        canvas.drawText("Good!!", 200f, 350f, mPaint);
+
+        mPaint.color = Color.BLACK
+        mPaint.textSize = 20f
+
+        canvas.drawText( "오늘의 "+exrInfo!!.curExr+"번째 동작", 70f, 200f, mPaint);
+        canvas.drawText( ""+ exrInfo!!.curSet + " 세트 하는 중", 70f, 280f, mPaint);
+        canvas.drawText(""+ exrInfo!!.curNum + " 회", 70f, 360f, mPaint);
+
+        canvas.drawText("Good!!", 200f, 440f, mPaint);
     }
 
     override fun onMeasure(

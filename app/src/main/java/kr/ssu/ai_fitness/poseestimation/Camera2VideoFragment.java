@@ -41,8 +41,10 @@ import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.ImageReader;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -66,6 +68,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.legacy.app.FragmentCompat;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -76,12 +80,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import kr.ssu.ai_fitness.R;
+import kr.ssu.ai_fitness.dto.MemberExrHistory;
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
 import kr.ssu.ai_fitness.util.FileDownloadService;
 import kr.ssu.ai_fitness.util.ServiceGenerator;
+import kr.ssu.ai_fitness.util.VideoUploadTask;
 import kr.ssu.ai_fitness.vo.DayProgramVideoModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -105,6 +113,11 @@ public class Camera2VideoFragment extends Fragment
     private String filename;
     private boolean isRecording;
     private TrainerVideoAnalysisManager trainerVideoAnalysisManager;
+
+    private long startExrTime;
+    private long endExrTime;
+    private long startMotionTime;
+    private long endMotionTime;
 
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
@@ -584,6 +597,7 @@ public class Camera2VideoFragment extends Fragment
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
+        startExrTime = System.currentTimeMillis();
 
     }
 
@@ -615,6 +629,10 @@ public class Camera2VideoFragment extends Fragment
      * Stops the background thread and its {@link Handler}.
      */
     private void stopBackgroundThread() {
+        if (mBackgroundThread == null) {
+            runClassifier = false;
+            return;
+        }
         mBackgroundThread.quitSafely();
         try {
             mBackgroundThread.join();
@@ -929,8 +947,9 @@ public class Camera2VideoFragment extends Fragment
         bitmap.recycle();
         // if (classifier.getMPrintPointArray() != null)
         drawView.setDrawPoint(classifier.getMPrintPointArray(), 0.5f);
+
         drawView.setExrInfo(new CurExerciseState((int) System.currentTimeMillis() % 4,
-                (int) System.currentTimeMillis() % 7, (int) System.currentTimeMillis() % 10, 1));
+                (int) System.currentTimeMillis() % 7, (int) System.currentTimeMillis() % 10, 1,"Miss"));
         showToast(textToShow);
     }
 
@@ -1005,7 +1024,7 @@ public class Camera2VideoFragment extends Fragment
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
-        Log.v(TAG, "startRecordingVideo fun");
+        startMotionTime = System.currentTimeMillis();
         try {
             closePreviewSession();
             setUpMediaRecorder();
@@ -1073,14 +1092,69 @@ public class Camera2VideoFragment extends Fragment
         mMediaRecorder.stop();
         mMediaRecorder.reset();
 
+        endExrTime = System.currentTimeMillis();
+
         Activity activity = getActivity();
         if (null != activity) {
             Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
                     Toast.LENGTH_LONG).show();
             showToast("Video saved");
         }
+        MemberExrHistory memberExrHistory = new MemberExrHistory();
+        int user_id = SharedPrefManager.getInstance(this.getContext()).getUser().getId();
+        memberExrHistory.setMem_id(user_id + "");
+        memberExrHistory.setDay_id(activity.getIntent().getStringExtra("day_id") == null ? "-1" : activity.getIntent().getStringExtra("day_id"));
+        memberExrHistory.setExr_id("-1");
+        memberExrHistory.setDay_program_video_id("-1");
+        String[] strs = mNextVideoAbsolutePath.split("/");
+        memberExrHistory.setVideo(strs[strs.length - 1]);
+        memberExrHistory.setThumb_img(UUID.randomUUID().toString() + ".jpg");
+        memberExrHistory.setTime("" + (endMotionTime - startMotionTime));
+        Log.v(TAG, memberExrHistory.toString());
+
+        Uri uri = Uri.fromFile(new File(mNextVideoAbsolutePath));
+        InputStream videoIs = getVideoInputStream(uri);
+        InputStream imgIs = getThumbImgInputStream();
+        VideoUploadTask vut = new VideoUploadTask(videoIs, imgIs, memberExrHistory);
+        vut.execute();
         mNextVideoAbsolutePath = null;
         startPreview();
+    }
+
+    public InputStream getThumbImgInputStream() {
+        MediaMetadataRetriever mMMR = new MediaMetadataRetriever();
+        Uri uri = Uri.fromFile(new File(mNextVideoAbsolutePath));
+        mMMR.setDataSource(this.getContext(), uri);
+        Bitmap bitmap = mMMR.getFrameAtTime();
+
+        int origWidth = bitmap.getWidth();
+        int origHeight = bitmap.getHeight();
+
+        final int destWidth = 300;//or the width you need
+
+        if (origWidth > destWidth) {
+            int destHeight = origHeight / (origWidth / destWidth);
+            bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false);
+        }
+
+        //thumbImgBitmap = bitmap;
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] jpgdata = bos.toByteArray();
+
+        return new ByteArrayInputStream(jpgdata);
+    }
+
+    public InputStream getVideoInputStream(Uri uri) {
+        InputStream is = null;
+        OutputStream outputStream = null;
+        try {
+            is = this.getActivity().getContentResolver().openInputStream(uri);
+        } catch (IOException e) {
+            return null;
+        }
+        return is;
     }
 
     /**
