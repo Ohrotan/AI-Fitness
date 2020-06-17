@@ -150,7 +150,7 @@ class DrawView : View {
         super.onDraw(canvas)
 
         mPaint.color = Color.BLACK
-        mPaint.textSize = 100f
+        mPaint.textSize = 80f
 
 
 
@@ -158,9 +158,9 @@ class DrawView : View {
             exrInfo = CurExerciseState(0,0,1,1,"Miss")
             return;
         }
-        canvas.drawText("오늘의 " + exrInfo!!.curExr + "번째 동작", 70f, 250f, mPaint);
-        canvas.drawText("" + exrInfo!!.curSet + " 세트 완료", 70f, 400f, mPaint);
-        canvas.drawText("" + exrInfo!!.curNum + " 회", 70f, 550f, mPaint);
+        canvas.drawText("" + exrInfo!!.curExr + "번째 동작", 50f, 1100f, mPaint);
+        canvas.drawText("" + exrInfo!!.curSet + " 세트 완료", 50f, 1200f, mPaint);
+        canvas.drawText("" + exrInfo!!.curNum + " 회", 50f, 1300f, mPaint);
 
         if (exrInfo!!.grade == "Miss") {
             mPaint.color = Color.RED
@@ -171,7 +171,7 @@ class DrawView : View {
         } else if (exrInfo!!.grade == "Perfect") {
             mPaint.color = Color.GREEN
         }
-        canvas.drawText("" + exrInfo!!.grade + "!!", 70f, 700f, mPaint);
+        canvas.drawText("" + exrInfo!!.grade + "!!", 50f, 1400f, mPaint);
 
 
 

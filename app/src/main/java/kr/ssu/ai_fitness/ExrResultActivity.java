@@ -57,7 +57,7 @@ public class ExrResultActivity extends AppCompatActivity {
         //   adapter.addItem(new MotionInfo("1.스쿼트", 3, 1, list_perfect.get(i), list_good.get(i), list_bad.get(i)));
         // }
         adapter.addItem(new MotionInfo("1. 사이드", 3, 1, list_perfect.get(0), list_good.get(0), list_bad.get(0)));
-        adapter.addItem(new MotionInfo("2. 런지", 2, 2, list_perfect.get(1), list_good.get(1), list_bad.get(1)));
+      //  adapter.addItem(new MotionInfo("2. 런지", 2, 2, list_perfect.get(1), list_good.get(1), list_bad.get(1)));
 
         recyclerView.setAdapter(adapter);
 

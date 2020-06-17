@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -101,6 +102,7 @@ import retrofit2.Response;
 
 public class Camera2VideoFragment extends Fragment
         implements ActivityCompat.OnRequestPermissionsResultCallback {
+    ProgressDialog loading;
 
     private boolean runClassifier;
     private boolean checkedPermissions;
@@ -339,14 +341,16 @@ public class Camera2VideoFragment extends Fragment
 
     public Camera2VideoFragment() {
         super();
+
         tmpExrStates = new ArrayList<>();
         tmpExrStates.add(new CurExerciseState(0, 0, 1, 1, "Miss"));
         tmpExrStates.add(new CurExerciseState(0, 0, 1, 1, "Miss"));
         tmpExrStates.add(new CurExerciseState(1, 0, 1, 1, "Good"));
         tmpExrStates.add(new CurExerciseState(2, 0, 1, 1, "Perfect"));
-        tmpExrStates.add(new CurExerciseState(3, 0, 1, 1, "Bad"));
+        tmpExrStates.add(new CurExerciseState(3, 1, 1, 1, "Bad"));
 
         //다음영상
+        /*
         tmpExrStates.add(new CurExerciseState(0, 0, 2, 1, "Miss"));
         tmpExrStates.add(new CurExerciseState(0, 0, 2, 1, "Miss"));
         tmpExrStates.add(new CurExerciseState(1, 0, 2, 1, "Good"));
@@ -354,7 +358,9 @@ public class Camera2VideoFragment extends Fragment
 
         tmpExrStates.add(new CurExerciseState(1, 1, 2, 1, "Bad"));
         tmpExrStates.add(new CurExerciseState(2, 1, 2, 1, "Good"));
+    */
     }
+
 
     /**
      * Takes photos and classify them periodically.
@@ -439,7 +445,7 @@ public class Camera2VideoFragment extends Fragment
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-              //  textView.setText(text);
+                //  textView.setText(text);
                 drawView.invalidate();
             }
         });
@@ -468,9 +474,13 @@ public class Camera2VideoFragment extends Fragment
                 getActivity().finish();
             }
         });
+        textView.setText("사이드 크런치");
+        loading = new ProgressDialog(getActivity());
+        loading.setTitle("로딩 중..");
+        loading.show();
         // view.findViewById(R.id.info).setOnClickListener(this);
 
-        int day_id = this.getActivity().getIntent().getIntExtra("day_id", -1);
+        int day_id = this.getActivity().getIntent().getIntExtra("day_id", 60);
 
         //동작에 대한 아이디, 이름, 카운트, 세트, 비디오 경로 정보
         ArrayList<DayProgramVideoModel> videoInfos = this.getActivity().getIntent().getParcelableArrayListExtra("videoInfos");
@@ -481,7 +491,7 @@ public class Camera2VideoFragment extends Fragment
         for (DayProgramVideoModel info : videoInfos) {
             String videoStoragePath = info.getVideo();
             if (videoStoragePath == null) {
-                videoStoragePath = "ai-fitness/tr_video/75ec254b-9ad8-482c-bef0-2fed3671db6a.mp4";
+                videoStoragePath = "ai-fitness/tr_video/test_side_leg_raise.mp4";
             }
 
             String[] tempName = videoStoragePath.split("/");
@@ -502,7 +512,8 @@ public class Camera2VideoFragment extends Fragment
                         if (response.isSuccessful()) {
                             Log.d(TAG, "server contacted and has file");
                             boolean writtenToDisk = writeResponseBodyToDisk(response.body());
-
+                            loading.dismiss();
+                            startMotionTime = System.currentTimeMillis();
                             Log.d(TAG, "file download was a success? $writtenToDisk");
                         } else {
                             Log.d(TAG, "server contact failed");
@@ -781,8 +792,8 @@ public class Camera2VideoFragment extends Fragment
                     mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
                     drawView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
                 } else {
-                    layoutFrame.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
-                    mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
+                    layoutFrame.setAspectRatio(1640, 2960);
+                    mTextureView.setAspectRatio(1640, 2960);
                     drawView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
                 }
 
@@ -970,19 +981,23 @@ public class Camera2VideoFragment extends Fragment
 
         String textToShow = classifier.classifyFrame(bitmap);
         bitmap.recycle();
-        textView.setText("사이드 크런치");
+
         // if (classifier.getMPrintPointArray() != null)
         //    drawView.setDrawPoint(classifier.getMPrintPointArray(), 0.5f);
-        if (System.currentTimeMillis() - startMotionTime > 4000) {
+        if (System.currentTimeMillis() - startMotionTime > 5000) {
             startMotionTime = System.currentTimeMillis();
-            if (motionCnt < tmpExrStates.size()) {
-                if (motionCnt == 5) {
-                    textView.setText("런지");
-                    stopRecordingVideo(false);
-                    //   startRecordingVideo();
+
+            // if (motionCnt == 5) {
+            //  textView.setText("런지");
+            //    stopRecordingVideo(false);
+            //   startRecordingVideo();
+            drawView.setExrInfo(tmpExrStates.get(motionCnt++));
+            if (motionCnt == tmpExrStates.size()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                drawView.setExrInfo(tmpExrStates.get(motionCnt++));
-            } else {
                 stopRecordingVideo(true);
                 Intent intent = new Intent(getActivity(), ExrResultActivity.class);
                 ArrayList<Integer> list_perfect = new ArrayList<>();
@@ -990,10 +1005,7 @@ public class Camera2VideoFragment extends Fragment
                 ArrayList<Integer> list_bad = new ArrayList<>();
 
                 list_perfect.add(1);
-                list_perfect.add(1);
                 list_good.add(1);
-                list_good.add(2);
-                list_bad.add(1);
                 list_bad.add(1);
 
                 intent.putExtra("list_perfect", list_perfect);
@@ -1004,9 +1016,8 @@ public class Camera2VideoFragment extends Fragment
                 //getActivity().finish();
                 getActivity().startActivity(intent);
             }
+
         }
-
-
         showToast(textToShow);
     }
 
@@ -1081,7 +1092,7 @@ public class Camera2VideoFragment extends Fragment
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
-        startMotionTime = System.currentTimeMillis();
+
         try {
             closePreviewSession();
             setUpMediaRecorder();
@@ -1153,15 +1164,14 @@ public class Camera2VideoFragment extends Fragment
 
         Activity activity = getActivity();
         if (null != activity) {
-            Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,
-                    Toast.LENGTH_LONG).show();
+            //   Toast.makeText(activity, "Video saved: " + mNextVideoAbsolutePath,Toast.LENGTH_LONG).show();
             showToast("Video saved");
         }
         MemberExrHistory memberExrHistory = new MemberExrHistory();
         int user_id = SharedPrefManager.getInstance(this.getContext()).getUser().getId();
         memberExrHistory.setMem_id(user_id + "");
-        memberExrHistory.setDay_id(activity.getIntent().getStringExtra("day_id") == null ? "57" : activity.getIntent().getStringExtra("day_id"));
-        memberExrHistory.setExr_id("88");
+        memberExrHistory.setDay_id(activity.getIntent().getStringExtra("day_id") == null ? "60" : activity.getIntent().getStringExtra("day_id"));
+        memberExrHistory.setExr_id("89");
         memberExrHistory.setDay_program_video_id("70");
         String[] strs = mNextVideoAbsolutePath.split("/");
         memberExrHistory.setVideo(strs[strs.length - 1]);

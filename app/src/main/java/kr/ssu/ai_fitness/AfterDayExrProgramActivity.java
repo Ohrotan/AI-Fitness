@@ -78,9 +78,9 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 
         Log.d("member_id", "" + mem_id);
         //*****db 검색을 위해 day_program_id를 이전 액티비티에서 넘겨줘야 한다.
-        day_program_id = intent.getIntExtra("day_id", 57);
+        day_program_id = intent.getIntExtra("day_id", 60);
 
-        Toast.makeText(this, "member_id: "+mem_id + " / day_program_id : " + day_program_id, Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(this, "member_id: "+mem_id + " / day_program_id : " + day_program_id, Toast.LENGTH_SHORT).show();
 
         textViewIntro = findViewById(R.id.activity_after_day_exr_program_intro_content);
         textViewTotalTime = findViewById(R.id.activity_after_day_exr_program_time);
@@ -155,7 +155,10 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 
                                 //화면에 보이는 피드백 부분을 바꿔줌
                                 MemberExrVideoModel temp = adapter.getItem(position);
-                                temp.setFeedback(feedback);
+                                if (feedback == null)
+                                    temp.setFeedback("");
+                                else
+                                    temp.setFeedback(feedback);
                                 adapter.setItem(position, temp);
                                 adapter.notifyDataSetChanged();
 
@@ -206,7 +209,7 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 
                             Log.d("AFTERXXXXX", "" + obj);
                             Log.d("After~Activity_response", response);
-                            Log.d("AFTERXXXXX", ""+obj);
+                            Log.d("AFTERXXXXX", "" + obj);
 
                             if (isFound == 0) {
                                 Toast.makeText(AfterDayExrProgramActivity.this, "day_program_id is not valid", Toast.LENGTH_SHORT).show();
