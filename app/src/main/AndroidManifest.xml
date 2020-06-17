@@ -9,7 +9,8 @@
         android:roundIcon="@drawable/ic_trainer"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true">
         <activity android:name=".VideoPlayActivity"></activity>
         <activity android:name=".ExercisingActivity" />
         <activity android:name=".AfterDayExrProgramActivity" />

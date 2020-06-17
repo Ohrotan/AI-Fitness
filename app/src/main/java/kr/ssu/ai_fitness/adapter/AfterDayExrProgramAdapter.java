@@ -62,7 +62,7 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        Log.d("xxxxxxx_position", ""+position);
+        Log.d("xxxxxxx_position", "" + position);
         MemberExrVideoModel item = items.get(position);
         holder.setItem(item, items);
 
@@ -117,7 +117,7 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
             //****현재는 회원 영상이 무조건 하나이기 때문에 동작의 횟수랑 세트를 하나의 스트링에 합쳐서 출력한다.
             String str = "";
             for (MemberExrVideoModel tmp : items) {
-                str = str + tmp.getTitle()+" "+tmp.getCounts()+"회 "+tmp.getSets()+"세트\n";
+                str = str + tmp.getTitle() + " " + tmp.getCounts() + "회 " + tmp.getSets() + "세트\n";
             }
             title.setText(str);
 
@@ -125,6 +125,9 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
 
 
             date.setText(item.getDate());
+            if (item.getFeedback() == null) {
+                item.setFeedback("");
+            }
             feedback.setText(item.getFeedback());
         }
     }

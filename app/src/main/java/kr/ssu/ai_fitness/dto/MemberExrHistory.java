@@ -7,20 +7,39 @@ public class MemberExrHistory {
     private String day_id;
     private String day_program_video_id;
     private String video;
+    private String thumb_img;
     private String feedback;
     private String time;
-    private String date;
+    private String reg_date;
 
-    public MemberExrHistory(String id, String mem_id, String exr_id, String day_id, String day_program_video_id, String video, String feedback, String time, String date) {
+    public MemberExrHistory() {
+
+    }
+
+    public MemberExrHistory(String mem_id, String exr_id, String day_id, String day_program_video_id, String video, String thumb_img, String feedback, String time, String reg_date) {
+
+        this.mem_id = mem_id;
+        this.exr_id = exr_id;
+        this.day_id = day_id;
+        this.day_program_video_id = day_program_video_id;
+        this.video = video;
+        this.thumb_img = thumb_img;
+        this.feedback = feedback;
+        this.time = time;
+        this.reg_date = reg_date;
+    }
+
+    public MemberExrHistory(String id, String mem_id, String exr_id, String day_id, String day_program_video_id, String video, String thumb_img, String feedback, String time, String reg_date) {
         this.id = id;
         this.mem_id = mem_id;
         this.exr_id = exr_id;
         this.day_id = day_id;
         this.day_program_video_id = day_program_video_id;
         this.video = video;
+        this.thumb_img = thumb_img;
         this.feedback = feedback;
         this.time = time;
-        this.date = date;
+        this.reg_date = reg_date;
     }
 
     public String getId() {
@@ -55,8 +74,8 @@ public class MemberExrHistory {
         return time;
     }
 
-    public String getDate() {
-        return date;
+    public String getReg_date() {
+        return reg_date;
     }
 
     public void setId(String id) {
@@ -91,7 +110,31 @@ public class MemberExrHistory {
         this.time = time;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setReg_date(String reg_date) {
+        this.reg_date = reg_date;
+    }
+
+    public String getThumb_img() {
+        return thumb_img;
+    }
+
+    public void setThumb_img(String thumb_img) {
+        this.thumb_img = thumb_img;
+    }
+
+    @Override
+    public String toString() {
+        return "MemberExrHistory{" +
+                "id='" + id + '\'' +
+                ", mem_id='" + mem_id + '\'' +
+                ", exr_id='" + exr_id + '\'' +
+                ", day_id='" + day_id + '\'' +
+                ", day_program_video_id='" + day_program_video_id + '\'' +
+                ", video='" + video + '\'' +
+                ", thumb_img='" + thumb_img + '\'' +
+                ", feedback='" + feedback + '\'' +
+                ", time='" + time + '\'' +
+                ", reg_date='" + reg_date + '\'' +
+                '}';
     }
 }

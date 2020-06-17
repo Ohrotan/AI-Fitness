@@ -21,14 +21,15 @@
         android:id="@+id/item_after_day_exr_program_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:text="1.스쿼트 10회 3세트"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/item_after_day_exr_program_button"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
         android:backgroundTint="@color/accent"
         android:text="피드백 등록"
         android:textColor="@color/white"

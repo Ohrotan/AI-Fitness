@@ -1,44 +1,27 @@
 package kr.ssu.ai_fitness;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import kr.ssu.ai_fitness.dto.TrainerVideo;
 import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager;
-import kr.ssu.ai_fitness.url.URLs;
-import kr.ssu.ai_fitness.util.TrainerVideoDownload;
-import kr.ssu.ai_fitness.util.VideoUpload;
-import kr.ssu.ai_fitness.volley.VolleySingleton;
-
-import static kr.ssu.ai_fitness.TrainerVideoListActivity.REQUEST_FOR_REG_TR_VIDEO;
+import kr.ssu.ai_fitness.util.VideoUploadTask;
 
 public class TrainerVideoRegActivity extends AppCompatActivity {
 
@@ -49,7 +32,7 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
     private static final int SELECT_VIDEO = 3;
 
     private String selectedPath;
-    Uri selectedVideoImageUri;
+    Uri selectedVideoUri;
     InputStream thumbImgInputStream;
     Bitmap thumbImgBitmap;
 
@@ -74,7 +57,7 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
             chooseVideo();
         }
         if (v == tr_video_reg_btn) {
-            uploadVideo(selectedVideoImageUri);
+            uploadVideo(selectedVideoUri);
         }
     }
 
@@ -87,24 +70,25 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_VIDEO) {
                 System.out.println("SELECT_VIDEO");
-                selectedVideoImageUri = data.getData();
+                selectedVideoUri = data.getData();
 
-                selectedPath = selectedVideoImageUri.getPath();
+                selectedPath = selectedVideoUri.getPath();
 
                 //썸네일
-                thumbImgInputStream = getThumbImgInputStream(selectedVideoImageUri);
+                thumbImgInputStream = getThumbImgInputStream();
 
             }
         }
     }
 
     //getThumb
-    public InputStream getThumbImgInputStream(Uri uri) {
+    public InputStream getThumbImgInputStream() {
         MediaMetadataRetriever mMMR = new MediaMetadataRetriever();
-        mMMR.setDataSource(this, selectedVideoImageUri);
+        mMMR.setDataSource(this, selectedVideoUri);
         Bitmap bitmap = mMMR.getFrameAtTime();
         video_choose_btn.setImageBitmap(bitmap);
 
@@ -142,59 +126,19 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
 
     private void uploadVideo(Uri selectedVideoImageUri) {
 
-
-        class UploadVideoTask extends AsyncTask<Uri, Void, String> {
-
-            ProgressDialog uploading;
-
-            TrainerVideo info;
-            InputStream thumbImgInputStream;
-
-            UploadVideoTask(TrainerVideo info, InputStream thumbImgInputStream) {
-                this.info = info;
-                this.thumbImgInputStream = thumbImgInputStream;
-            }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                uploading = ProgressDialog.show(TrainerVideoRegActivity.this, "Uploading File", "Please wait...", false, false);
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                uploading.dismiss();
-                setTitleKorean();
-                //shared Pref에 저장
-                TrainerVideoDownload tvd = new TrainerVideoDownload(TrainerVideoRegActivity.this);
-                tvd.downloadTrainerVideos(userId);
-                //  Toast.makeText(TrainerVideoRegActivity.this,"complete",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            protected String doInBackground(Uri... params) {
-                VideoUpload u = new VideoUpload();
-
-                InputStream videoIs = getVideoInputStream(params[0]);
-                String msg = u.uploadVideo(videoIs, thumbImgInputStream, info);
-                return msg;
-            }
-        }
-
-
         //예시 데이터
         // SharedPrefManager.getInstance(getApplicationContext()).userLogin(new Member(99));
         userId = SharedPrefManager.getInstance(getApplicationContext()).getUser().getId();
 
         info = new TrainerVideo(userId, UUID.randomUUID() + ".jpg", UUID.randomUUID() + ".mp4", video_title_etv.getText().toString());
-        Log.i("Huzza", "Member : " + info.toString());
-        UploadVideoTask uv = new UploadVideoTask(info, thumbImgInputStream);
-        uv.execute(selectedVideoImageUri);
+
+        InputStream videoIs = getVideoInputStream(selectedVideoUri);
+        VideoUploadTask vut = new VideoUploadTask(videoIs, thumbImgInputStream, thumbImgBitmap,info, this);
+        vut.execute();
 
 
     }
-
+/*
     void setTitleKorean() {
         Log.v("video title", "video title update");
         Log.v("video title", info.getTitle());
@@ -231,5 +175,5 @@ public class TrainerVideoRegActivity extends AppCompatActivity {
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
-
+*/
 }

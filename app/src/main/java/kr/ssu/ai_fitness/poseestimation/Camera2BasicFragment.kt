@@ -15,50 +15,49 @@
 
 package kr.ssu.ai_fitness.poseestimation
 
+//import com.edvard.poseestimation.*
 import android.annotation.SuppressLint
-import android.app.*
+import android.app.AlertDialog
+import android.app.Dialog
+import android.app.DialogFragment
+import android.app.Fragment
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.ImageFormat
-import android.graphics.Matrix
-import android.graphics.Point
-import android.graphics.RectF
-import android.graphics.SurfaceTexture
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraCaptureSession
-import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraDevice
-import android.hardware.camera2.CameraManager
-import android.hardware.camera2.CaptureRequest
-import android.hardware.camera2.CaptureResult
-import android.hardware.camera2.TotalCaptureResult
+import android.graphics.*
+import android.hardware.camera2.*
+import android.hardware.camera2.CameraDevice.TEMPLATE_PREVIEW
+import android.hardware.camera2.CameraDevice.TEMPLATE_RECORD
 import android.media.ImageReader
+import android.media.MediaMetadataRetriever
+import android.media.MediaPlayer
+import android.media.MediaRecorder
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
-import androidx.core.content.ContextCompat
 import android.util.Log
 import android.util.Size
-import android.view.LayoutInflater
-import android.view.Surface
-import android.view.TextureView
-import android.view.View
-import android.view.ViewGroup
-import android.widget.RadioGroup
-import android.widget.TextView
-import android.widget.Toast
+import android.view.*
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.legacy.app.FragmentCompat
-//import com.edvard.poseestimation.*
 import kr.ssu.ai_fitness.R
-import java.io.IOException
+import kr.ssu.ai_fitness.dto.MemberExrHistory
+import kr.ssu.ai_fitness.sharedpreferences.SharedPrefManager
+import kr.ssu.ai_fitness.util.FileDownloadService
+import kr.ssu.ai_fitness.util.ServiceGenerator
+import kr.ssu.ai_fitness.vo.DayProgramVideoModel
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.*
 import java.lang.Long
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.Collections
-import java.util.Comparator
+import java.util.*
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 /**
  * Basic fragments for the Camera.
@@ -75,8 +74,16 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
     private var classifier: ImageClassifier? = null
     private var layoutBottom: ViewGroup? = null
     private var radiogroup: RadioGroup? = null
+    private var trainerVideoView: VideoView? = null
+    private var saveBtn: Button? = null
 
+
+    private var filename: String? = null
+    private var recorder: MediaRecorder? = null
+    private var memberFilename: String? = null
+    private var isRecording: Boolean = false
     private var trainerVideoAnalysisManager: TrainerVideoAnalysisManager? = null
+
     /**
      * [TextureView.SurfaceTextureListener] handles several lifecycle events on a [ ].
      */
@@ -88,6 +95,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
                 height: Int
         ) {
             openCamera(width, height)
+
         }
 
         override fun onSurfaceTextureSizeChanged(
@@ -119,7 +127,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
      * A reference to the opened [CameraDevice].
      */
     private var cameraDevice: CameraDevice? = null
-        
+
 
     /**
      * The [android.util.Size] of camera preview.
@@ -136,7 +144,9 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
             // This method is called when the camera is opened.  We start camera preview here.
             cameraOpenCloseLock.release()
             cameraDevice = currentCameraDevice
-            createCameraPreviewSession()
+            //   recordMemberVideo()
+            startPreview()
+            configureTransform(textureView!!.width, textureView!!.height)
         }
 
         override fun onDisconnected(currentCameraDevice: CameraDevice) {
@@ -276,14 +286,120 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         layoutFrame = view.findViewById(R.id.layout_frame)
         drawView = view.findViewById(R.id.drawview)
         layoutBottom = view.findViewById(R.id.layout_bottom)
-        radiogroup = view.findViewById(R.id.radiogroup);
+        radiogroup = view.findViewById(R.id.radiogroup)
+        trainerVideoView = view.findViewById(R.id.trainerVideoView)
+        saveBtn = view.findViewById(R.id.saveRecordingBtn)
+
+        saveBtn!!.setOnClickListener(View.OnClickListener { view ->
+            Log.v(TAG_RECORD, "save btn clicked")
+            if (isRecording) stopRecordingVideo() else startRecordingVideo()
+           // saveMemberVideo()
+        })
+
+        val day_id = activity.intent.getIntExtra("day_id", -1)
+
+        //동작에 대한 아이디, 이름, 카운트, 세트, 비디오 경로 정보
+        var videoInfos = activity.intent.getParcelableArrayListExtra<DayProgramVideoModel>("videoInfos")
+        if (videoInfos == null) {
+            videoInfos = ArrayList<DayProgramVideoModel>();
+            videoInfos.add(DayProgramVideoModel(3, 2, null, null, "video title!!"))
+        }
+        for (info in videoInfos!!) {
+            var videoStoragePath: String? = info.video
+            if (videoStoragePath == null) {
+                videoStoragePath = "ai-fitness/tr_video/75ec254b-9ad8-482c-bef0-2fed3671db6a.mp4"
+            }
+            // VideoView : 동영상을 재생하는 뷰
+            // VideoView : 동영상을 재생하는 뷰
+            //vv = findViewById<View>(R.id.video_play_videoview) as VideoView
+
+            val tempName = videoStoragePath.split("/").toTypedArray()
+            filename = tempName[tempName.size - 1]
+
+            val filepath = context.filesDir
+            if (File("$filepath/$filename").exists()) {
+                Log.v("video play", "이미 저장된 동영상")
+                trainerVideoView?.setVideoPath("$filepath/$filename")
+            } else {
+                val downloadService = ServiceGenerator.create(FileDownloadService::class.java)
+                val call = downloadService.downloadFileWithDynamicUrlSync(videoStoragePath)
+                call.enqueue(object : Callback<ResponseBody?> {
+                    override fun onResponse(call: Call<ResponseBody?>, response: Response<ResponseBody?>) {
+                        if (response.isSuccessful) {
+                            Log.d(TAG, "server contacted and has file")
+                            val writtenToDisk: Boolean? = response.body()?.let { writeResponseBodyToDisk(it) }
+                            Log.d(TAG, "file download was a success? $writtenToDisk")
+                        } else {
+                            Log.d(TAG, "server contact failed")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                        Log.e(TAG, "error")
+                    }
+                })
+            }
+
+            // MediaController : 특정 View 위에서 작동하는 미디어 컨트롤러 객체
+
+            // MediaController : 특정 View 위에서 작동하는 미디어 컨트롤러 객체
+            val mc = MediaController(context)
+            trainerVideoView?.setMediaController(mc) // Video View 에 사용할 컨트롤러 지정
+            trainerVideoView?.requestFocus() // 포커스 얻어오기
+            trainerVideoView?.start() // 동영상 재생
+            trainerVideoView?.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
+                override fun onPrepared(mp: MediaPlayer) {
+                    mp.setLooping(true)
+                }
+            })
+        }
+
+
+
 
         radiogroup!!.setOnCheckedChangeListener { group, checkedId ->
-            if(checkedId==R.id.radio_cpu){
+            if (checkedId == R.id.radio_cpu) {
                 startBackgroundThread(Runnable { classifier!!.initTflite(false) })
             } else {
                 startBackgroundThread(Runnable { classifier!!.initTflite(true) })
             }
+        }
+    }
+
+    private fun writeResponseBodyToDisk(body: ResponseBody): Boolean {
+        return try {
+            // todo change the file location/name according to your needs
+            val filepath = context.filesDir
+            val futureStudioIconFile = File("$filepath/$filename")
+            var inputStream: InputStream? = null
+            var outputStream: OutputStream? = null
+            try {
+                val fileReader = ByteArray(1024 * 1024 * 100)
+                val fileSize = body.contentLength()
+                var fileSizeDownloaded: kotlin.Long = 0
+                inputStream = body.byteStream()
+                outputStream = FileOutputStream(futureStudioIconFile)
+                while (true) {
+                    val read = inputStream.read(fileReader)
+                    if (read == -1) {
+                        Log.d(TAG, futureStudioIconFile.path)
+                        trainerVideoView?.setVideoPath(futureStudioIconFile.path)
+                        break
+                    }
+                    outputStream.write(fileReader, 0, read)
+                    fileSizeDownloaded += read.toLong()
+                    Log.d(TAG, "file download: $fileSizeDownloaded of $fileSize")
+                }
+                outputStream.flush()
+                true
+            } catch (e: IOException) {
+                false
+            } finally {
+                inputStream?.close()
+                outputStream?.close()
+            }
+        } catch (e: IOException) {
+            false
         }
     }
 
@@ -295,7 +411,6 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         try {
             // create either a new ImageClassifierQuantizedMobileNet or an ImageClassifierFloatInception
             //      classifier = new ImageClassifierQuantizedMobileNet(getActivity());
-
 
 
             /*var dia = ErrorDialog.newInstance(getString(R.string.camera_error))
@@ -311,7 +426,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
 
             //showToast("아무거나")
 
-           classifier = ImageClassifierFloatInception.create(activity, trainerVideoAnalysisManager!!)
+            classifier = ImageClassifierFloatInception.create(activity, trainerVideoAnalysisManager!!)
             if (drawView != null)
                 drawView!!.setImgSize(classifier!!.imageSizeX, classifier!!.imageSizeY)
         } catch (e: IOException) {
@@ -343,6 +458,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
     }
 
     override fun onPause() {
+        // saveMemberVideo()
         closeCamera()
         stopBackgroundThread()
         super.onPause()
@@ -352,6 +468,9 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         classifier!!.close()
         super.onDestroy()
     }
+
+    //private fun nextVideo()
+
 
     /**
      * Sets up member variables related to camera.
@@ -365,6 +484,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
     ) {
         val activity = activity
         val manager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
         try {
             for (cameraId in manager.cameraIdList) {
                 val characteristics = manager.getCameraCharacteristics(cameraId)
@@ -376,7 +496,8 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
                 }
 
                 val map =
-                        characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
+                        characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                                ?: continue
 
                 // // For still image captures, we use the largest available size.
                 val largest = Collections.max(
@@ -478,17 +599,268 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         configureTransform(width, height)
         val activity = activity
         val manager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
+
         try {
             if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw RuntimeException("Time out waiting to lock camera opening.")
             }
             manager.openCamera(cameraId!!, stateCallback, backgroundHandler)
+
+            // recordMemberVideo()
+
         } catch (e: CameraAccessException) {
             Log.e(TAG, "Failed to open Camera", e)
         } catch (e: InterruptedException) {
             throw RuntimeException("Interrupted while trying to lock camera opening.", e)
         }
 
+    }
+
+    @Throws(IOException::class)
+    private fun setUpMediaRecorder() {
+        val cameraActivity = activity ?: return
+        if(recorder==null){
+            recorder = MediaRecorder()
+        }
+
+        val videoFileName = UUID.randomUUID().toString() + ".mp4"
+        val videoFilePath = context.getDir("member_video", Context.MODE_PRIVATE).absolutePath
+        memberFilename = videoFilePath + "/" + videoFileName
+
+        Log.v(TAG_RECORD, "video file path:" + memberFilename)
+
+        recorder!!.apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setVideoSource(MediaRecorder.VideoSource.SURFACE)
+            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            setOutputFile(memberFilename)
+            setVideoEncodingBitRate(10000000)
+            setVideoFrameRate(30)
+            setVideoSize(textView!!.width, textView!!.height)
+            setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            prepare()
+            isRecording = true
+        }
+    }
+
+    private fun startRecordingVideo() {
+        if (cameraDevice == null || !textureView!!.isAvailable) return
+
+        try {
+            closePreviewSession()
+            setUpMediaRecorder()
+            val texture = textureView!!.surfaceTexture.apply {
+                setDefaultBufferSize(previewSize!!.width, previewSize!!.height)
+            }
+
+            // Set up Surface for camera preview and MediaRecorder
+
+            val previewSurface = Surface(texture)
+            val recorderSurface = recorder!!.surface
+            val surfaces = ArrayList<Surface>().apply {
+                add(previewSurface)
+                add(recorderSurface)
+            }
+            previewRequestBuilder = cameraDevice!!.createCaptureRequest(TEMPLATE_RECORD).apply {
+                addTarget(previewSurface)
+                addTarget(recorderSurface)
+            }
+
+            // Start a capture session
+            // Once the session starts, we can update the UI and start recording
+            cameraDevice?.createCaptureSession(surfaces,
+                    object : CameraCaptureSession.StateCallback() {
+
+                        override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {
+                            captureSession = cameraCaptureSession
+                            updatePreview()
+                            activity?.runOnUiThread {
+                                recorder?.start()
+                            }
+                        }
+
+                        override fun onConfigureFailed(cameraCaptureSession: CameraCaptureSession) {
+                            if (activity != null) showToast("Failed")
+                        }
+                    }, backgroundHandler)
+        } catch (e: CameraAccessException) {
+            Log.e(TAG, e.toString())
+        } catch (e: IOException) {
+            Log.e(TAG, e.toString())
+        }
+
+    }
+
+    private fun closePreviewSession() {
+        captureSession?.close()
+        captureSession = null
+    }
+
+    private fun updatePreview() {
+        if (cameraDevice == null) return
+
+        try {
+            setUpCaptureRequestBuilder(previewRequestBuilder)
+            HandlerThread("CameraPreview").start()
+            captureSession?.setRepeatingRequest(previewRequestBuilder!!.build(),
+                    null, backgroundHandler)
+        } catch (e: CameraAccessException) {
+            Log.e(TAG, e.toString())
+        }
+
+    }
+
+    private fun stopRecordingVideo() {
+        isRecording = false
+        recorder?.apply {
+            stop()
+            reset()
+        }
+
+        if (activity != null) showToast("Video saved")
+        startPreview()
+    }
+
+    private fun startPreview() {
+        if (cameraDevice == null || !textureView!!.isAvailable) return
+
+        try {
+            closePreviewSession()
+            val texture = textureView!!.surfaceTexture
+            texture.setDefaultBufferSize(previewSize!!.width, previewSize!!.height)
+            previewRequestBuilder = cameraDevice!!.createCaptureRequest(TEMPLATE_PREVIEW)
+
+            val previewSurface = Surface(texture)
+            previewRequestBuilder!!.addTarget(previewSurface)
+
+            cameraDevice?.createCaptureSession(listOf(previewSurface),
+                    object : CameraCaptureSession.StateCallback() {
+
+                        override fun onConfigured(session: CameraCaptureSession) {
+                            captureSession = session
+                            updatePreview()
+                        }
+
+                        override fun onConfigureFailed(session: CameraCaptureSession) {
+                            if (activity != null) showToast("Failed")
+                        }
+                    }, backgroundHandler)
+        } catch (e: CameraAccessException) {
+            Log.e(TAG, e.toString())
+        }
+
+    }
+    private fun setUpCaptureRequestBuilder(builder: CaptureRequest.Builder?) {
+        builder?.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
+    }
+
+    private fun recordMemberVideo() {
+        if (this.recorder == null)
+            this.recorder = MediaRecorder()
+        val recorder = this.recorder
+
+        //   recorder!!.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+        //   recorder!!.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
+
+        //    recorder!!.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        // recorder!!.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
+
+        //
+        //  recorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        //  recorder!!.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+
+        recorder!!.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+        recorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        // recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        // recorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
+
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        recorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+        recorder.setVideoSize(MAX_PREVIEW_HEIGHT, MAX_PREVIEW_WIDTH)
+
+        val videoFileName = UUID.randomUUID().toString() + ".mp4"
+        val videoFilePath = context.getDir("member_video", Context.MODE_PRIVATE).absolutePath
+        memberFilename = videoFilePath + "/" + videoFileName
+
+        Log.v(TAG_RECORD, "video file path:" + memberFilename)
+        recorder!!.setOutputFile(memberFilename)
+
+        recorder!!.setPreviewDisplay(Surface(textureView!!.surfaceTexture))
+
+        recorder!!.prepare();
+        recorder!!.surface
+        recorder!!.start();
+        isRecording = true;
+        Log.v(TAG_RECORD, "recording started completed")
+
+    }
+
+    private fun saveMemberVideo() {
+        Log.v(TAG_RECORD, "saveMemberVideo, Recording is:" + isRecording)
+        try {
+
+
+            Log.v(TAG_RECORD, "recording stopped")
+            recorder!!.reset();   // You can reuse the object by going back to setAudioSource() step
+            recorder!!.surface.release()
+        } catch (exception: RuntimeException) {
+            Log.v(TAG_RECORD, "stop fail")
+            exception.printStackTrace()
+
+        }
+
+        val memberExrHistory = MemberExrHistory();
+        memberExrHistory.mem_id = SharedPrefManager.getInstance(context).user.id.toString()
+        memberExrHistory.day_id = activity.intent.getStringExtra("day_id")
+        memberExrHistory.exr_id = "-1"
+        memberExrHistory.day_program_video_id
+        memberExrHistory.video = memberFilename!!.split("/").last()
+        memberExrHistory.thumb_img = UUID.randomUUID().toString() + ".jpg"
+        memberExrHistory.time
+        Log.v(TAG_RECORD, memberExrHistory.toString())
+        recordMemberVideo()
+/*
+        val uri = Uri.fromFile(File(memberFilename))
+        val videoIs = getVideoInputStream(uri)
+        val imgIs = getThumbImgInputStream(uri)
+        val vut = VideoUploadTask(videoIs,imgIs,memberExrHistory)
+        vut.execute()
+*/
+
+    }
+
+    //getThumb
+    fun getThumbImgInputStream(uri: Uri?): InputStream? {
+        val mMMR = MediaMetadataRetriever()
+        mMMR.setDataSource(context, uri)
+        var bitmap = mMMR.getFrameAtTime(5000)
+
+        val origWidth = bitmap.width
+        val origHeight = bitmap.height
+        val destWidth = 300 //or the width you need
+        if (origWidth > destWidth) {
+            val destHeight = origHeight / (origWidth / destWidth)
+            bitmap = Bitmap.createScaledBitmap(bitmap, destWidth, destHeight, false)
+        }
+        //thumbImgBitmap = bitmap
+        val bos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
+        val jpgdata = bos.toByteArray()
+        return ByteArrayInputStream(jpgdata)
+    }
+
+    fun getVideoInputStream(uri: Uri): InputStream? {
+        var inputStream: InputStream? = null
+        inputStream = try {
+            context.contentResolver.openInputStream(uri)
+        } catch (e: IOException) {
+            return null
+        }
+        return inputStream
     }
 
     private fun allPermissionsGranted(): Boolean {
@@ -516,7 +888,12 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
      */
     private fun closeCamera() {
         try {
+
             cameraOpenCloseLock.acquire()
+
+            recorder!!.release() //동영상 녹화하는 객체 클로즈
+            recorder = null
+            Log.v(TAG_RECORD, "recording release")
             if (null != captureSession) {
                 captureSession!!.close()
                 captureSession = null
@@ -598,7 +975,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
                                 // Auto focus should be continuous for camera preview.
                                 previewRequestBuilder!!.set(
                                         CaptureRequest.CONTROL_AF_MODE,
-                                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
+                                CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE
                                 )
 
                                 // Finally, we start displaying the camera preview.
@@ -731,6 +1108,7 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
          * Tag for the [Log].
          */
         private const val TAG = "TfLiteCameraDemo"
+        private const val TAG_RECORD = "CameraRecording"
 
         private const val FRAGMENT_DIALOG = "dialog"
 
@@ -815,3 +1193,4 @@ class Camera2BasicFragment : Fragment(), FragmentCompat.OnRequestPermissionsResu
         }
     }
 }
+

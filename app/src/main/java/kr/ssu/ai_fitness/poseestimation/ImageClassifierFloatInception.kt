@@ -16,18 +16,19 @@
 package kr.ssu.ai_fitness.poseestimation
 
 import android.app.Activity
+import android.os.Environment
 import android.util.Log
-
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
-import java.util.ArrayList
+import java.io.File
+import java.io.FileWriter
 
 /**
  * Pose Estimator
  */
-class ImageClassifierFloatInception private constructor(
+class ImageClassifierFloatInception public constructor(
         activity: Activity,
         trainerVideoAnalysisManager: TrainerVideoAnalysisManager,
         motionCnt: Int,
@@ -38,6 +39,7 @@ class ImageClassifierFloatInception private constructor(
         modelPath: String,
         numBytesPerChannel: Int = 4 // a 32bit float value requires 4 bytes
 ) : ImageClassifier(activity, trainerVideoAnalysisManager, motionCnt, imageSizeX, imageSizeY, modelPath, numBytesPerChannel) {
+
 
     /**
      * An array to hold inference results, to be feed into Tensorflow Lite as outputs.
@@ -72,7 +74,8 @@ class ImageClassifierFloatInception private constructor(
     }
 
     override fun runInference() {
-        tflite?.run(imgData!!, heatMapArray)
+        Log.v("Camera2VideoFragment", "Image FLoat ~~ runInference()")
+        tflite!!.run(imgData!!, heatMapArray)
 
         if (mPrintPointArray == null)
             mPrintPointArray = Array(2) { FloatArray(14) }
@@ -136,45 +139,62 @@ class ImageClassifierFloatInception private constructor(
         //모든 좌표를 0~1 사이의 값을 갖게 만듬
         normalizedPointArray = Array(2) { FloatArray(14) }
         Log.i("TestOutPut", "tr Frame cnt: " + frameCnt)
+
+        val root = File(activity.filesDir.absolutePath)
+        val gpxfile = File(root, "member_motion_data.txt")
+        val writer = FileWriter(gpxfile, true)
+        Log.i("txt", gpxfile.absolutePath)
         for (i in 0..13) {
             normalizedPointArray!![0][i] = (mPrintPointArray!![0][i] - startX) / sizeX
             normalizedPointArray!![1][i] = (mPrintPointArray!![1][i] - startY) / sizeY
-            Log.i("TestOutPut", "member pic[$i] (" + normalizedPointArray!![0][i] + "," + normalizedPointArray!![1][i] +
-            ")")
-if(trainerPointArray!=null)
-            Log.i("TestOutPut", "tr pic[$i] (" + trainerPointArray!![0][i] + "," + trainerPointArray!![1][i] +
+
+            writer.append("" + normalizedPointArray!![0][i] + " " + normalizedPointArray!![1][i] + " ")
+
+            Log.i("TestOutPut-matching", "member pic[$i] (" + normalizedPointArray!![0][i] + "," + normalizedPointArray!![1][i] +
                     ")")
+            if (trainerPointArray != null)
+                Log.i("TestOutPut-matching", "tr pic[$i] (" + trainerPointArray!![0][i] + "," + trainerPointArray!![1][i] +
+                        ")")
 
 
         }
 
-        if (trainerPointArray != null) {
-            Log.i("TestOutPut-matching", "similar() = " + similar())
+        writer.flush()
+        writer.close()
 
-            if (!similar()) { //트레이너와 동작이 일치하지 않았을 때
+        if (trainerPointArray != null) {
+            val result = similar()
+            Log.i("TestOutPut-matching", "similar() = " + result)
+
+            if (!result) { //트레이너와 동작이 일치하지 않았을 때
                 frameCnt = 0 //frame cnt 초기화, 다시 처음 자세부터 비교
-            } else if (similar() && frameCnt == frameList!!.size) { //프레임 끝까지 다 성공했으면 다시 루프 돌려야함
+            } else if (result && frameCnt == frameList!!.size) { //프레임 끝까지 다 성공했으면 다시 루프 돌려야함
                 frameCnt = 0
                 motionCnt++
-
-            }else{
-                Log.v("frameCnt?????!!!","pls")
+                Log.v("motionCnt?????!!!", "" + motionCnt)
+            } else {
+                Log.v("frameCnt?????!!!", "pls")
             }
         }
     }
 
     private fun similar(): Boolean {
         var cnt = 0;
-        var accuracy = 0.1;
-        var threshold = 8;
+        var accuracy = 0.2;
+        var threshold = 6;
         for (i in 0..13) {
             val mx = normalizedPointArray!![0][i]
             val tx = trainerPointArray!![0][i]
             val my = normalizedPointArray!![1][i]
             val ty = trainerPointArray!![1][i]
-            if (mx <= tx + accuracy && mx >= tx - accuracy)//x값이 트레이너의 값보다 좌우 10% 이내일 때 , 10%도 임의로 정함
-                if (my <= ty + accuracy && my >= ty - accuracy)
+            Log.v("TestOutPut-matching", "mx <= tx + accuracy && mx >= tx - accuracy :  " + mx + " <= " + (tx + accuracy) + " && " + mx + " >= " + (tx - accuracy))
+            if (mx <= tx + accuracy && mx >= tx - accuracy) {//x값이 트레이너의 값보다 좌우 10% 이내일 때 , 10%도 임의로 정함
+                Log.v("TestOutPut-matching", "my <= ty + accuracy && my >= ty - accuracy :  " + my + " <= " + (ty + accuracy) + " && " + my + " >= " + (ty - accuracy))
+                if (my <= ty + accuracy && my >= ty - accuracy) {
                     ++cnt; //일치하는 값으로 카운트함
+                    Log.v("TestOutPut-matching", "matching: " + cnt)
+                }
+            }
         }
         return cnt > threshold // 카운트가 8보다 클때 트레이너와 동작이 일치하는 것으로 결론, 8은 임의로 정함
     }

@@ -52,8 +52,8 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     private static final String TAG_LEVEL = "level";
     private static final String TAG_GENDER = "gender";
     private static final String TAG_PERIOD = "period";
-    private static final String TAG_EQUIP= "equip";
-    private static final String TAG_MAX= "max";
+    private static final String TAG_EQUIP = "equip";
+    private static final String TAG_MAX = "max";
     private static final String TAG_MEMCNT = "mem_cnt";
     private static final String TAG_INTRO = "intro";
     private static final String TAG_DAYTITLE = "day_title";
@@ -66,7 +66,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     ArrayList<HashMap<String, String>> dayList;
 
     String id = "";
-    String title="";
+    String title = "";
     String name = "";
     String rating_star = "";
     private Button applybtn;
@@ -77,13 +77,13 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exr_program_detail);
-        list = (ListView)findViewById(R.id.listView);
+        list = (ListView) findViewById(R.id.listView);
         dayList = new ArrayList<HashMap<String, String>>();
         TextView title_ = (TextView) findViewById(R.id.title);
         TextView name_ = (TextView) findViewById(R.id.name);
-        TextView rating_star_ = (TextView)findViewById(R.id.star);
-        TextView membername = (TextView)findViewById(R.id.membername);
-        TextView memortrainer = (TextView)findViewById(R.id.memortrainer);
+        TextView rating_star_ = (TextView) findViewById(R.id.star);
+        TextView membername = (TextView) findViewById(R.id.membername);
+        TextView memortrainer = (TextView) findViewById(R.id.memortrainer);
         final Intent intent = getIntent();
         id = intent.getStringExtra("exr_id");
         title = intent.getStringExtra("title"); //"title"문자 받아옴
@@ -94,40 +94,39 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
         user = SharedPrefManager.getInstance(this).getUser();
         String checkname = user.getName();
         final int mem_id = user.getId();
-        Log.d("id", id + mem_id+"");
+        Log.d("id", id + mem_id + "");
         byte isTrainer = user.getTrainer();
-        if(isTrainer == 0) { //트레이너 아닐때
+        if (isTrainer == 0) { //트레이너 아닐때
             String nameofmem = user.getName();
             membername.setText(nameofmem);
             memortrainer.setText(" 회원님 운동하세요!");
-        }
-        else{
+        } else {
             membername.setVisibility(TextView.GONE);
             memortrainer.setText(" 운동프로그램 상세정보");
         }
         title_.setText(title);
         name_.setText(name);
         rating_star_.setText(rating_star);
-        getData(id,mem_id+"");
-        if(isTrainer == 0 ||!checkname.equals(name) ) {// 트레이너가 아니거나 이름이 같지 않은 경우는 수정 할 수 없게 처리
+        getData(id, mem_id + "");
+        if (isTrainer == 0 || !checkname.equals(name)) {// 트레이너가 아니거나 이름이 같지 않은 경우는 수정 할 수 없게 처리
             Button b = findViewById(R.id.change_btn);
             b.setVisibility(Button.GONE);
         }
-        if(isTrainer == 1) {
+        if (isTrainer == 1) {
             Button b = findViewById(R.id.apply_btn);
             b.setVisibility(Button.GONE);
         }
 
-        applybtn = (Button)findViewById(R.id.apply_btn);
-        changebtn = (Button)findViewById(R.id.change_btn);
+        applybtn = (Button) findViewById(R.id.apply_btn);
+        changebtn = (Button) findViewById(R.id.change_btn);
 
         applybtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"신청 완료!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "신청 완료!", Toast.LENGTH_SHORT).show();
                 int period = exrProgram.getPeriod();
                 int rating = 0;
-                putData(id, mem_id+"", rating+"", period+"");//DB에 정보 삽입
+                putData(id, mem_id + "", rating + "", period + "");//DB에 정보 삽입
                 Button b = findViewById(R.id.apply_btn);
                 b.setVisibility(Button.GONE);
             }
@@ -180,7 +179,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             final ArrayList<String> listv = new ArrayList<>();
                             Log.d("response", response);
                             int len = peoples.length();
-                            String [][] arr = new String[len][2];
+                            String[][] arr = new String[len][2];
                             JSONObject c2 = peoples.getJSONObject(0);
                             int cnt = c2.getInt("cnt");
                             for (int i = 1; i < peoples.length(); i++) {
@@ -201,70 +200,76 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                 dayintro = c.getString(TAG_DAYINTRO);
                                 image = c.getString(TAG_IMAGE);
                                 persons = new HashMap<String, String>();
-                                if(!daytitle.equals("null")||!dayintro.equals("null")) {
+                                if (!daytitle.equals("null") || !dayintro.equals("null")) {
                                     daily += daytitle + "\n\t\t" + dayintro + "\n";
                                     Log.d("출력", daytitle);
-                                    persons.put(TAG_DAYTITLE,daytitle);
-                                    persons.put(TAG_DAYID,day_id);
+                                    persons.put(TAG_DAYTITLE, daytitle);
+                                    persons.put(TAG_DAYID, day_id);
                                     dayList.add(persons);
                                 }
-                                if(isRegister.equals("")){ isRegister += c.getString(TAG_EID);}
+                                if (isRegister.equals("")) {
+                                    isRegister += c.getString(TAG_EID);
+                                }
                             }
 
-                            DetailAdapter adapter = new DetailAdapter(getApplicationContext(),dayList,persons);
+                            DetailAdapter adapter = new DetailAdapter(getApplicationContext(), dayList, persons);
 
                             TextView txt;
-                            txt = (TextView)findViewById(R.id.level);
-                            txt.setText("LV. "+level);
-                            txt = (TextView)findViewById(R.id.gender);
-                            if(gender.equals("A")){ txt.setText("모 두");}
-                            if(gender.equals("F")){ txt.setText("여 성");}
-                            if(gender.equals("M")){ txt.setText("남 성");}
-                            txt = (TextView)findViewById(R.id.period);
+                            txt = (TextView) findViewById(R.id.level);
+                            txt.setText("LV. " + level);
+                            txt = (TextView) findViewById(R.id.gender);
+                            if (gender.equals("A")) {
+                                txt.setText("모 두");
+                            }
+                            if (gender.equals("F")) {
+                                txt.setText("여 성");
+                            }
+                            if (gender.equals("M")) {
+                                txt.setText("남 성");
+                            }
+                            txt = (TextView) findViewById(R.id.period);
                             txt.setText(period + " 일");
-                            txt = (TextView)findViewById(R.id.mem_cnt);
-                            if(mem_cnt.equals("null")){mem_cnt = "0";}
+                            txt = (TextView) findViewById(R.id.mem_cnt);
+                            if (mem_cnt.equals("null")) {
+                                mem_cnt = "0";
+                            }
                             txt.setText(mem_cnt + "명");
-                            txt = (TextView)findViewById(R.id.max);
+                            txt = (TextView) findViewById(R.id.max);
                             txt.setText(max + "명");
-                            txt = (TextView)findViewById(R.id.star);
+                            txt = (TextView) findViewById(R.id.star);
                             //txt.setText(rating);
-                            txt = (TextView)findViewById(R.id.equip);
+                            txt = (TextView) findViewById(R.id.equip);
                             txt.setText(equip);
-                            txt = (TextView)findViewById(R.id.intro);
+                            txt = (TextView) findViewById(R.id.intro);
                             txt.setText(intro);
-                            txt = (TextView)findViewById(R.id.day_id);
+                            txt = (TextView) findViewById(R.id.day_id);
                             txt.setText(day_id);
-                            ImageView img = (ImageView)findViewById(R.id.pic);
+                            ImageView img = (ImageView) findViewById(R.id.pic);
                             ImageViewTask task = new ImageViewTask(img);
                             task.execute(image);
 
 
-
                             Log.d("등록됬는지 확인", isRegister);
-                            if(!(isRegister.equals("null"))) {
+                            if (!(isRegister.equals("null"))) {
                                 Button b = findViewById(R.id.apply_btn);
                                 b.setVisibility(Button.GONE);
                                 list.setAdapter(adapter);
                                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                        String lst_txt = adapterView.getItemAtPosition(i).toString();
-                                        lst_txt = lst_txt.substring(1, lst_txt.length() - 1);
+                                        String lst_txt = ((HashMap<String, String>) adapterView.getItemAtPosition(i)).get("day_id");
+                                       // lst_txt = lst_txt.substring(1, lst_txt.length() - 1);
                                         Log.d("정보", lst_txt);
                                         String[] array = lst_txt.split(",");
-                                        if(i < cnt)
-                                        {
+                                        if (i < cnt) {
                                             //Toast.makeText(getApplicationContext(),array[1].substring(8),Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(getApplicationContext(), AfterDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
-                                            int day_id = Integer.parseInt(array[1].substring(8));
+                                            int day_id = Integer.parseInt(lst_txt);
                                             int m_id = Integer.parseInt(mem_id);
                                             intent.putExtra("day_id", day_id);
                                             intent.putExtra("id", m_id);
                                             startActivity(intent); // 다음 화면으로 넘어간다
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             Intent intent = new Intent(getApplicationContext(), BeforeDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
                                             int day_id = Integer.parseInt(array[1].substring(8));
                                             intent.putExtra("day_id", day_id);
@@ -273,10 +278,8 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
 
                                     }
                                 });
-                            }
-                            else
-                            {
-                                txt = (TextView)findViewById(R.id.day_list);
+                            } else {
+                                txt = (TextView) findViewById(R.id.day_list);
                                 txt.setText(daily);
                             }
                             //String으로 받았던 변수들 형변환
@@ -288,7 +291,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                             int levelint = Integer.parseInt(level);
                             int maxint = Integer.parseInt(max);
 
-                            exrProgram = new ExrProgram(trainer_id,title,periodint,equip,genderchar,levelint,maxint,intro);
+                            exrProgram = new ExrProgram(trainer_id, title, periodint, equip, genderchar, levelint, maxint, intro);
 
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -39,7 +39,8 @@ public class URLs {
 
     public static final String URL_VIDEO = ROOT_URL + "/video/read_tr_video";
     public static final String URL_DELETE_VIDEO = ROOT_URL + "/video/delete_tr_video";
-    public static final String URL_CREATE_VIDEO = ROOT_URL + "/video/create_tr_video";
+    public static final String URL_CREATE_TR_VIDEO = ROOT_URL + "/video/create_tr_video";
+    public static final String URL_CREATE_MEM_VIDEO = ROOT_URL + "/video/create_mem_video";
     public static final String URL_UPDATE_VIDEO_TITLE = ROOT_URL + "/video/update_tr_video";
 
     public static final String URL_READ_ANALYSIS = ROOT_URL + "/member/read_analysis";

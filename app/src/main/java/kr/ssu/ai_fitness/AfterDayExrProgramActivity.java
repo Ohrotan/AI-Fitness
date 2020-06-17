@@ -50,6 +50,8 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 
     TextView textViewIntro;
     TextView textViewTotalTime;
+    TextView exr_title_tv;
+    TextView day_exr_title_tv;
     RecyclerView recyclerView;
 
     AfterDayExrProgramAdapter adapter;
@@ -70,20 +72,21 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (isTrainer == 1) {//*****트레이너인 경우는 mem_id를 이전 액티비티에서 넘겨줘야 한다.
             mem_id = intent.getIntExtra("id", -1);
-        }
-        else {//일반회원은 자신의 uid를 얻어온다.
+        } else {//일반회원은 자신의 uid를 얻어온다.
             mem_id = SharedPrefManager.getInstance(this).getUser().getId();
         }
 
-        Log.d("member_id", ""+mem_id);
+        Log.d("member_id", "" + mem_id);
         //*****db 검색을 위해 day_program_id를 이전 액티비티에서 넘겨줘야 한다.
-        day_program_id = intent.getIntExtra("day_id", -1);
+        day_program_id = intent.getIntExtra("day_id", 57);
 
         Toast.makeText(this, "member_id: "+mem_id + " / day_program_id : " + day_program_id, Toast.LENGTH_SHORT).show();
 
         textViewIntro = findViewById(R.id.activity_after_day_exr_program_intro_content);
         textViewTotalTime = findViewById(R.id.activity_after_day_exr_program_time);
         recyclerView = findViewById(R.id.activity_after_day_exr_program_rv);
+        day_exr_title_tv = findViewById(R.id.day_exr_title_tv);
+        exr_title_tv = findViewById(R.id.exr_title_tv);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -148,13 +151,12 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 
                             if (isFound == 0) {
                                 Toast.makeText(AfterDayExrProgramActivity.this, "day_program_id is not valid", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
+                            } else {
 
                                 //화면에 보이는 피드백 부분을 바꿔줌
                                 MemberExrVideoModel temp = adapter.getItem(position);
                                 temp.setFeedback(feedback);
-                                adapter.setItem(position,temp);
+                                adapter.setItem(position, temp);
                                 adapter.notifyDataSetChanged();
 
                                 Toast.makeText(AfterDayExrProgramActivity.this, "피드백 등록 완료", Toast.LENGTH_SHORT).show();
@@ -176,7 +178,7 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
                 //서버가 요청하는 파라미터를 담는 부분
                 Map<String, String> params = new HashMap<>();
                 params.put("member_exr_history_id", String.valueOf(member_exr_history_id));
-                params.put("feedback",feedback);
+                params.put("feedback", feedback);
                 return params;
             }
         };
@@ -202,13 +204,13 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
                             JSONArray obj = new JSONArray(response);
                             int isFound = obj.getInt(0);
 
+                            Log.d("AFTERXXXXX", "" + obj);
                             Log.d("After~Activity_response", response);
                             Log.d("AFTERXXXXX", ""+obj);
 
                             if (isFound == 0) {
                                 Toast.makeText(AfterDayExrProgramActivity.this, "day_program_id is not valid", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
+                            } else {
                                 JSONObject dayProgramObj = obj.getJSONObject(1);
 
                                 //일별 프로그램의 제목과 운동소개를 받아옴.
@@ -217,11 +219,13 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 
                                 //*****상단 추가하면 일별 프로그램 제목도 title로 변경시켜줘야 함.
                                 textViewIntro.setText(intro);
+                                //exr_title_tv.setText();
+                                day_exr_title_tv.setText(title);
 
                                 int videoCount = obj.getInt(2);
 
-                                for (int i =0; i < videoCount; i++) {
-                                    JSONObject videoObj = obj.getJSONObject(3+i);
+                                for (int i = 0; i < videoCount; i++) {
+                                    JSONObject videoObj = obj.getJSONObject(3 + i);
                                     MemberExrVideoModel temp = new MemberExrVideoModel(
                                             videoObj.getInt("id"),
                                             videoObj.getInt("counts"),
