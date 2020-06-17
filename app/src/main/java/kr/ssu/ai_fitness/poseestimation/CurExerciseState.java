@@ -5,12 +5,14 @@ public class CurExerciseState {
     int curSet;
     int curExr;
     int state;
+    String grade;
 
-    public CurExerciseState(int curNum, int curSet, int curExr, int state){
+    public CurExerciseState(int curNum, int curSet, int curExr, int state, String grade){
         this.curNum = curNum;
         this.curSet = curSet;
         this.curExr = curExr;
         this.state = state;
+        this.grade = grade;
     }
 
     public int getCurNum() {
@@ -43,5 +45,13 @@ public class CurExerciseState {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }
