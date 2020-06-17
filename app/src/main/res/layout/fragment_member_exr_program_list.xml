@@ -50,5 +50,13 @@
         android:id="@+id/listView"
         android:layout_margin="10dp"
         />
-
+    <TextView
+        android:id="@+id/empty_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="아직 등록된 프로그램이 없어요."
+        android:textColor="@color/lightGray"
+        android:textSize="30dp"
+        android:visibility="gone"/>
 </LinearLayout>

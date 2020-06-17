@@ -1,5 +1,6 @@
 package kr.ssu.ai_fitness.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +62,9 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        Log.d("xxxxxxx_position", ""+position);
         MemberExrVideoModel item = items.get(position);
-        holder.setItem(item);
+        holder.setItem(item, items);
 
         ImageViewTask task = new ImageViewTask(holder.image);
         task.execute(item.getThumb_img());
@@ -90,7 +92,7 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return 1;//****현재는 무조건 회원 영상이 하나이기 때문에 갯수는 1개이다.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -111,13 +113,18 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
             buttonRegisterFeedback = itemView.findViewById(R.id.item_after_day_exr_program_button);
         }
 
-        public void setItem(MemberExrVideoModel item) {
-            //*****item에서 사진 데이터 빼내서 profile에 세팅해줘야함
-            title.setText(item.getTitle()+" "+item.getCounts()+"회 "+item.getSets()+"세트");
-            date.setText(item.getDate().substring(0,20));
-            if(item.getFeedback()==null){
-                item.setFeedback("피드백을 기다리고 있습니다.");
+        public void setItem(MemberExrVideoModel item, ArrayList<MemberExrVideoModel> items) {
+            //****현재는 회원 영상이 무조건 하나이기 때문에 동작의 횟수랑 세트를 하나의 스트링에 합쳐서 출력한다.
+            String str = "";
+            for (MemberExrVideoModel tmp : items) {
+                str = str + tmp.getTitle()+" "+tmp.getCounts()+"회 "+tmp.getSets()+"세트\n";
             }
+            title.setText(str);
+
+            //title.setText(item.getTitle()+" "+item.getCounts()+"회 "+item.getSets()+"세트");
+
+
+            date.setText(item.getDate());
             feedback.setText(item.getFeedback());
         }
     }

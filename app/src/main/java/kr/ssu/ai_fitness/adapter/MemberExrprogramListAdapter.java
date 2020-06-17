@@ -2,6 +2,7 @@ package kr.ssu.ai_fitness.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import kr.ssu.ai_fitness.BeforeDayExrProgramActivity;
 import kr.ssu.ai_fitness.ExrProgramDetailActivity;
@@ -29,12 +33,14 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
     Context context;
     ArrayList<HashMap<String, String>> items;
     HashMap<String, String> persons;
+    int cnt;
 
-    public MemberExrprogramListAdapter(Context context, ArrayList<HashMap<String, String>> items, HashMap<String, String> persons)
+    public MemberExrprogramListAdapter(Context context, ArrayList<HashMap<String, String>> items, HashMap<String, String> persons, int cnt)
     {
         this.context = context;
         this.items = items;
         this.persons = persons;
+        this.cnt = cnt;
     }
 
     @Override
@@ -54,9 +60,32 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, final ViewGroup viewGroup) {
+
+        CustomViewHolder holder;
+        final int pos = i;
+
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.member_exr_program_listview, null);
+
+            ImageView img = (ImageView) view.findViewById(R.id.pic);
+
+            /*String path = items.get(pos).get("image");
+            Log.d("경로", path);
+            ImageViewTask task = new ImageViewTask(img);
+            task.execute(path);*/
+            //final View finalView = view;
+            //final String finalPath = items.get(i).get("image");
+
+
+            holder = new CustomViewHolder();
+            holder.m_ImageView = img;
+            view.setTag(holder);
+
         }
+        else{
+            holder = (CustomViewHolder)view.getTag();
+        }
+        String path = "";
         TextView name = view.findViewById(R.id.name);
         final TextView title = view.findViewById(R.id.title);
         TextView start_date = view.findViewById(R.id.period_date);
@@ -64,8 +93,11 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         TextView mem_cnt = view.findViewById(R.id.mem_cnt);
         TextView day_title = view.findViewById(R.id.day_title);
         TextView day_intro = view.findViewById(R.id.day_intro);
+        TextView ttt = view.findViewById(R.id.ttt);
         final TextView day_id = view.findViewById(R.id.day_id);
         ImageButton button = view.findViewById(R.id.button);
+        RelativeLayout relativeLayout = view.findViewById(R.id.member_exr_program_listview_relativelayout1);
+        LinearLayout linearLayout = view.findViewById(R.id.member_exr_program_listview_linearlayout1);
         ProgressBar p = view.findViewById(R.id.ProgBar);
         name.setText(items.get(i).get("name"));
         title.setText(items.get(i).get("title"));
@@ -75,16 +107,40 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         day_title.setText(items.get(i).get("day_title"));
         day_intro.setText(items.get(i).get("day_intro"));
         day_id.setText((items.get(i).get("day_id")));
-        int prog = Integer.parseInt(items.get(i).get("time"));
-        String path = items.get(i).get("image");
-        ImageView profile = view.findViewById(R.id.pic);
-        ImageViewTask task = new ImageViewTask(profile);
+        ttt.setText(items.get(i).get("image"));
+        ImageView img = (ImageView) view.findViewById(R.id.pic);
+        path = items.get(pos).get("image");
+        ImageViewTask task = new ImageViewTask(img);
         task.execute(path);
+        try {
+            Bitmap bm = task.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        int prog = Integer.parseInt(items.get(i).get("time"));
+        path += ttt.getText().toString();
+
         p.setProgress(prog);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {//day_id를 날려준다.
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ExrProgramDetailActivity.class);
+                intent.putExtra("exr_id", items.get(i).get("exr_id"));
+                intent.putExtra("title", items.get(i).get("title")); //"title"문자 받아옴
+                intent.putExtra("name", items.get(i).get("name"));
+                //intent.putExtra("rating_star", );
+
+                context.startActivity(intent);
+            }
+        });
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Toast.makeText(context, day_id.getText(),Toast.LENGTH_SHORT).show();
                 String str;
                 if(day_id.getText().toString().equals("null"))
@@ -96,11 +152,15 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
                 }
                 int day_id_num = Integer.parseInt(str);
                 Intent intent = new Intent(context, BeforeDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
-                intent.putExtra("day_id", day_id_num);
-               context.startActivity(intent);
+                intent.putExtra("day_program_id", day_id_num);
+                context.startActivity(intent);
             }
         });
 
         return view;
+    }
+
+    public class CustomViewHolder{
+        public ImageView m_ImageView;
     }
 }

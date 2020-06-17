@@ -1,6 +1,8 @@
 package kr.ssu.ai_fitness.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -11,11 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +26,9 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -92,14 +88,13 @@ public class MemberExrProgramListFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://20200611t202812-dot-ai-fitness-369.an.r.appspot.com/member/memberexrprogram",
                 new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(final String response) {
                         //서버에서 요청을 받았을 때 수행되는 부분
 
                         try {
                             JSONObject jsonObj = new JSONObject(response);
                             peoples = jsonObj.getJSONArray(TAG_RESULTS);
                             /*
-
                             String exr_id = "";
                             String name = "";
                             String title = "";
@@ -137,13 +132,15 @@ public class MemberExrProgramListFragment extends Fragment {
 
                             int [] check_last_idx = check_same_idx(arr,last_of_len);//중복된 exr_id중 하나만 추출
                             int cnt_idx = cnt_idx(arr,last_of_len);
+                            int cnt = 0;
 
                             for (int j = 0; j < cnt_idx*2; j+=2) {
                                 int i = check_last_idx[j];
                                 int time = check_last_idx[j+1];
                                 Log.d("index",i+"");
                                 persons = new HashMap<String, String>();
-                                arr[i][1] = arr[i][1] + " - ";
+                                persons.put(TAG_EXRID, arr[i][0]);
+                                arr[i][1] = arr[i][1];
                                 persons.put(TAG_NAME, arr[i][1]);
                                 persons.put(TAG_TITLE, arr[i][2]);
                                 arr[i][3] = arr[i][3] + " - " + arr[i][4];
@@ -155,12 +152,16 @@ public class MemberExrProgramListFragment extends Fragment {
                                 persons.put("day_id", arr[i][9]);
                                 persons.put("image", arr[i][10]);
                                 personList.add(persons);
+                                cnt++;
                             }
+                            Log.d("갯수",cnt+"");
+                            MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons,cnt);
 
-                            MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons);
+                            //MemberExrprogramListAdapter adapter = new MemberExrprogramListAdapter(getActivity(), personList, persons);
                             //클릭 안됨....
 
                             list.setAdapter(adapter);
+                            Log.d("끝","끝남");
 
                             //adapter에 data값
                             //adapter.addItem(new Member_reg_program(ddd[0], "★★★★☆","★★★★☆","30 명","","","",""));
@@ -264,6 +265,40 @@ public class MemberExrProgramListFragment extends Fragment {
         }
         return cnt_idx;
     }
+//    private class CheckTypesTask extends AsyncTask<Void, Void, Void> {
+//
+//        ProgressDialog asyncDialog = new ProgressDialog(
+//                getActivity());
+//
+//        @Override
+//        protected void onPreExecute() {
+//            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//            asyncDialog.setMessage("로딩중입니다..");
+//
+//            // show dialog
+//            asyncDialog.show();
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... arg0) {
+//            try {
+//                for (int i = 0; i < 5; i++) {
+//                    //asyncDialog.setProgress(i * 30);
+//                    Thread.sleep(500);
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) {
+//            asyncDialog.dismiss();
+//            super.onPostExecute(result);
+//        }
+//    }
 
 
 }

@@ -65,8 +65,6 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_day_exr_program);
 
-
-
         //isTrainer를 이용해서 트레이너인 경우만 피드백 틍록 버튼 보이게 해준다
         isTrainer = SharedPrefManager.getInstance(this).getUser().getTrainer();
 
@@ -81,6 +79,8 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
         Log.d("member_id", "" + mem_id);
         //*****db 검색을 위해 day_program_id를 이전 액티비티에서 넘겨줘야 한다.
         day_program_id = intent.getIntExtra("day_id", 57);
+
+        Toast.makeText(this, "member_id: "+mem_id + " / day_program_id : " + day_program_id, Toast.LENGTH_SHORT).show();
 
         textViewIntro = findViewById(R.id.activity_after_day_exr_program_intro_content);
         textViewTotalTime = findViewById(R.id.activity_after_day_exr_program_time);
@@ -129,7 +129,6 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView.setAdapter(adapter);
 
         requestReadDayProgramAfter();
 
@@ -206,6 +205,8 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
                             int isFound = obj.getInt(0);
 
                             Log.d("AFTERXXXXX", "" + obj);
+                            Log.d("After~Activity_response", response);
+                            Log.d("AFTERXXXXX", ""+obj);
 
                             if (isFound == 0) {
                                 Toast.makeText(AfterDayExrProgramActivity.this, "day_program_id is not valid", Toast.LENGTH_SHORT).show();
@@ -260,6 +261,8 @@ public class AfterDayExrProgramActivity extends AppCompatActivity {
 //                                    textViewTotalTime.setText("운동시간: "+resultTime);
 
                                 }
+
+                                recyclerView.setAdapter(adapter);
                             }
 
                         } catch (JSONException e) {
