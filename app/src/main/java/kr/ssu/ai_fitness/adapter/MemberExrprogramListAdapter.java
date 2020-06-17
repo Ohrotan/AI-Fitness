@@ -102,7 +102,9 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         name.setText(items.get(i).get("name"));
         title.setText(items.get(i).get("title"));
         start_date.setText(items.get(i).get("start_date"));
-        time.setText(items.get(i).get("time"));
+        int num = Integer.parseInt(items.get(i).get("time"));
+        if(num >= 100){num = num/100;}
+        time.setText(num+"");
         mem_cnt.setText(items.get(i).get("mem_cnt"));
         day_title.setText(items.get(i).get("day_title"));
         day_intro.setText(items.get(i).get("day_intro"));
@@ -123,7 +125,7 @@ public class MemberExrprogramListAdapter extends BaseAdapter {
         int prog = Integer.parseInt(items.get(i).get("time"));
         path += ttt.getText().toString();
 
-        p.setProgress(prog);
+        p.setProgress(num);
 
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
