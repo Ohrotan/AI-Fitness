@@ -439,7 +439,7 @@ public class Camera2VideoFragment extends Fragment
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                textView.setText(text);
+              //  textView.setText(text);
                 drawView.invalidate();
             }
         });
@@ -970,12 +970,14 @@ public class Camera2VideoFragment extends Fragment
 
         String textToShow = classifier.classifyFrame(bitmap);
         bitmap.recycle();
+        textView.setText("사이드 크런치");
         // if (classifier.getMPrintPointArray() != null)
         //    drawView.setDrawPoint(classifier.getMPrintPointArray(), 0.5f);
         if (System.currentTimeMillis() - startMotionTime > 4000) {
             startMotionTime = System.currentTimeMillis();
             if (motionCnt < tmpExrStates.size()) {
                 if (motionCnt == 5) {
+                    textView.setText("런지");
                     stopRecordingVideo(false);
                     //   startRecordingVideo();
                 }
