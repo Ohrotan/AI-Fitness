@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="운동시간 25:10"
+        android:text="운동시간 00:21"
         android:textSize="18sp"
         android:layout_marginTop="10dp"/>
 

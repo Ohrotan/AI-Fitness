@@ -271,7 +271,7 @@ public class ExrProgramDetailActivity extends AppCompatActivity {
                                             startActivity(intent); // 다음 화면으로 넘어간다
                                         } else {
                                             Intent intent = new Intent(getApplicationContext(), BeforeDayExrProgramActivity.class); // 다음 넘어갈 클래스 지정
-                                            int day_id = Integer.parseInt(array[1].substring(8));
+                                            int day_id = Integer.parseInt(lst_txt);
                                             intent.putExtra("day_id", day_id);
                                             startActivity(intent); // 다음 화면으로 넘어간다
                                         }

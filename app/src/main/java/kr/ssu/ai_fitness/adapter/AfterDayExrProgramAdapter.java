@@ -124,9 +124,9 @@ public class AfterDayExrProgramAdapter extends RecyclerView.Adapter<AfterDayExrP
             //title.setText(item.getTitle()+" "+item.getCounts()+"회 "+item.getSets()+"세트");
 
 
-            date.setText(item.getDate());
-            if (item.getFeedback() == null) {
-                item.setFeedback("");
+            date.setText(item.getDate().substring(0, 19));
+            if (item.getFeedback() == null || item.getFeedback().equals("NULL") || item.getFeedback().equals("null")) {
+                item.setFeedback("피드백을 기다리고 있습니다.");
             }
             feedback.setText(item.getFeedback());
         }
